@@ -1,4 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+} from "axios";
 import { message } from "ant-design-vue";
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL + "/",
@@ -39,7 +44,7 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   // 请求失败
-  (error: any) => {
+  (error: AxiosError) => {
     return Promise.reject(error);
   }
 );
@@ -53,7 +58,7 @@ axiosInstance.interceptors.request.use(
     // }
     return config;
   },
-  (error: any) => {
+  (error: AxiosError) => {
     return Promise.reject(error);
   }
 );

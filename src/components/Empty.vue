@@ -1,6 +1,8 @@
 <template>
   <div class="empty">
-    <div class="img"><img src="../assets/images/empty.png" height="200" alt=""/></div>
+    <div class="img">
+      <img src="../assets/images/empty.png" height="200" alt="" />
+    </div>
     <div class="txt">
       <slot name="title">数据空空的</slot>
     </div>
