@@ -1,2 +1,2 @@
-import Empty from "./Empty.vue"
-export default [Empty]
+import Empty from "./Empty.vue";
+export default [Empty];
