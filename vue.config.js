@@ -1,6 +1,6 @@
 module.exports = {
-    lintOnSave: true,
-    assetsDir: "assets",
-    publicPath: "/h5-designer",
-    productionSourceMap: false
-}
+  lintOnSave: true,
+  assetsDir: "assets",
+  publicPath: "./",
+  productionSourceMap: false,
+};
