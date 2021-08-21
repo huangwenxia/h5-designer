@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-
+import LayoutPersonal from "@/components/layout/LayoutPersonal.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/home",
@@ -16,10 +16,34 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "@/views/login/index.vue"),
   },
   {
+    path: "/register",
+    name: "Register",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "@/views/register/index.vue"),
+  },
+  {
     path: "/personal",
     name: "PersonalCenter",
+    component: LayoutPersonal,
+    redirect: "/personal/myWorks",
+    meta: { title: "personal", icon: "user", noCache: true },
+    children: [
+      {
+        path: "myWorks",
+        component: () => import("@/views/personal/index.vue"),
+        name: "myWorks",
+        meta: { title: "myWorks", icon: "myWorks", noCache: true },
+      },
+    ],
+  },
+  {
+    path: "/editor",
+    name: "Editor",
     component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/personal/index.vue"),
+      import(/* webpackChunkName: "about" */ "@/views/editor/index.vue"),
   },
 ];
 

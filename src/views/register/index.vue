@@ -1,20 +1,23 @@
 <template>
   <div class="login-container">
     <div class="wrapper">
-      <h2 class="title">欢迎登录</h2>
+      <h2 class="title">欢迎注册</h2>
       <div class="login-form">
         <a-form :model="formState">
           <a-form-item>
-            <a-input placeholder="请输入账号" v-model:value="formState.name">
+            <a-input placeholder="请输入邮箱" v-model:value="formState.name">
               <template #prefix>
                 <user-outlined type="user" />
+              </template>
+              <template #suffix>
+                <a-button size="small" @click="onSubmit">发送验证码 </a-button>
               </template>
             </a-input>
           </a-form-item>
           <a-form-item>
             <a-input
               v-model:value="formState.password"
-              placeholder="请输入密码"
+              placeholder="请输入验证码"
             >
               <template #prefix>
                 <lock-outlined />
@@ -28,11 +31,21 @@
             </a-input>
           </a-form-item>
           <a-form-item>
-            <a-button type="primary" block @click="onSubmit">登录</a-button>
+            <a-input
+              v-model:value="formState.password"
+              placeholder="请输入密码"
+            >
+              <template #prefix>
+                <lock-outlined />
+              </template>
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" block @click="onSubmit">注册</a-button>
           </a-form-item>
           <a-form-item class="footer">
             <a-button type="link" class="btn1 color-gray" @click="onSubmit"
-              >立即注册
+              >返回
             </a-button>
             <a-button type="link" class="btn2 color-blue">忘记密码 </a-button>
           </a-form-item>
@@ -61,7 +74,7 @@ interface FormState {
 }
 
 export default defineComponent({
-  name: "Login",
+  name: "Register",
   components: {
     UserOutlined,
     EyeOutlined,

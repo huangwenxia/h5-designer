@@ -1,5 +1,9 @@
 <template>
-  <div class="home">这是首页</div>
+  <div class="container">
+    <section class=""></section>
+    <section></section>
+    <section></section>
+  </div>
 </template>
 
 <script lang="ts">

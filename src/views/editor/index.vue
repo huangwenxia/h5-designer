@@ -1,12 +1,12 @@
 <template>
-  <div class="my-works">我的作品</div>
+  <div class="home">这是编辑页面</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "MyWorks",
+  name: "Editor",
   components: {},
 });
 </script>
