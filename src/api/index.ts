@@ -1,3 +1,3 @@
-import login from "@/api/login/index"
+import userApi from "@/api/user/index"
 
-export default { login }
+export default { userApi }

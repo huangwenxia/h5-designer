@@ -1,5 +1,5 @@
-import * as otherApiInterface from "./otherApiInterfaceExample"
 import * as common from "./common"
-import * as login from "./login"
+import * as user from "./user"
 
-export { otherApiInterface as otherApiInterface, common as common, login as login }
+// export { otherApiInterface as otherApiInterface, common as common, user as user }
+export { common as common, user as user }
