@@ -2,6 +2,7 @@
     <div class="header-container clearfix">
         <div class="logo" @click="testLogin">
             <a-image :width="40" :src="loginUrl" />
+            <span class="txt">H5设计平台</span>
         </div>
         <div class="no-login" v-if="isLogin">
             <a-button type="link">登录</a-button>
@@ -75,6 +76,10 @@ export default defineComponent({
 
 .header-container .logo {
     float: left;
+    .txt {
+        margin-left: 30px;
+        color: #666;
+    }
 }
 
 .header-container .no-login {
