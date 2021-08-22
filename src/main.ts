@@ -6,10 +6,7 @@ import compos from "@/components/global"
 import Antd from "ant-design-vue"
 import "@/assets/css/common.scss" // global css
 import "ant-design-vue/dist/antd.css"
-import api from "@/api/index"
 const app = createApp(App)
-
-app.config.globalProperties.$api = api
 
 compos.forEach((a) => {
     app.component(a.name, a)

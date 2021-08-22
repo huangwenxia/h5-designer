@@ -17,10 +17,10 @@
                                 <lock-outlined />
                             </template>
                             <template #suffix>
-                                <div @click="onShowPassword">
+                                <a-button type="link" size="small" @click="onShowPassword">
                                     <eye-invisible-outlined v-if="!formState.isShowPwd" />
                                     <eye-outlined v-if="formState.isShowPwd" />
-                                </div>
+                                </a-button>
                             </template>
                         </a-input>
                     </a-form-item>
@@ -37,9 +37,9 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, toRefs, UnwrapRef, getCurrentInstance } from "vue"
+import { defineComponent, reactive, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
-import * as I from "@/api/interface/index"
+import api from "@/api/index"
 interface FormState {
     name: string
     password: string
@@ -59,12 +59,12 @@ export default defineComponent({
         EyeInvisibleOutlined
     },
     setup: function () {
-        const internalInstance = getCurrentInstance() as any
-        const $api = internalInstance.appContext.config.globalProperties.$api
-
+        // const internalInstance = getCurrentInstance() as any
+        // const $api = internalInstance.appContext.config.globalProperties.$api
         // const { ctx } = getCurrentInstance() as any
         // const internalInstance = getCurrentInstance() // 有效
         // console.log(ctx.$api, "===========internalInstance")
+
         const formState: UnwrapRef<FormState> = reactive({
             name: "",
             password: "",
@@ -73,9 +73,15 @@ export default defineComponent({
         })
 
         const onSubmit = () => {
-            $api.userApi.login({ name: formState.name, password: formState.password }).then((res: I.user.ILoginResponse) => {
-                formState.token = res.result
-            })
+            api.userApi
+                .login({ name: formState.name, password: formState.password })
+                .then((res) => {
+                    console.log(res, "========ad")
+                    formState.token = res.result
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
             // console.log("submit!", toRaw(formState))
         }
         const onShowPassword = () => {

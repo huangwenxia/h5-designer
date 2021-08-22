@@ -2,7 +2,7 @@
 
 /**用户登录 */
 export interface ILogin {
-    username: string
+    name: string
     password: string
 }
 export interface ILoginResponse {
