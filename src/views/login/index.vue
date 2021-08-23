@@ -12,7 +12,7 @@
                         </a-input>
                     </a-form-item>
                     <a-form-item>
-                        <a-input v-model:value="formState.password" placeholder="请输入密码">
+                        <a-input v-model:value="formState.password" :type="formState.isShowPwd ? 'text' : 'password'" placeholder="请输入密码">
                             <template #prefix>
                                 <lock-outlined />
                             </template>
@@ -28,7 +28,7 @@
                         <a-button type="primary" block @click="onSubmit">登录</a-button>
                     </a-form-item>
                     <a-form-item class="footer">
-                        <a-button type="link" class="btn1 color-gray" @click="onSubmit">立即注册 </a-button>
+                        <a-button type="link" class="btn1 color-gray" @click="goRegister">立即注册 </a-button>
                         <a-button type="link" class="btn2 color-blue">忘记密码</a-button>
                     </a-form-item>
                 </a-form>
@@ -37,16 +37,14 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, UnwrapRef } from "vue"
+import { defineComponent, reactive, UnwrapRef, inject } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
 import api from "@/api/index"
+import * as IGlobal from "@/types/global"
 interface FormState {
     name: string
     password: string
-    // region: string | undefined;
     isShowPwd: boolean
-    // type: string[];
-    // resource: string;
     token: string
 }
 
@@ -59,6 +57,7 @@ export default defineComponent({
         EyeInvisibleOutlined
     },
     setup: function () {
+        const { message, router } = inject("$ctx") as IGlobal.$ctx
         // const internalInstance = getCurrentInstance() as any
         // const $api = internalInstance.appContext.config.globalProperties.$api
         // const { ctx } = getCurrentInstance() as any
@@ -76,8 +75,9 @@ export default defineComponent({
             api.userApi
                 .login({ name: formState.name, password: formState.password })
                 .then((res) => {
-                    console.log(res, "========ad")
+                    if (!res.result) return
                     formState.token = res.result
+                    message.success("登录成功")
                 })
                 .catch((err) => {
                     console.error(err)
@@ -87,12 +87,16 @@ export default defineComponent({
         const onShowPassword = () => {
             formState.isShowPwd = !formState.isShowPwd
         }
+        const goRegister = () => {
+            router.push("/register")
+        }
         return {
             // labelCol: { span: 4 },
             // wrapperCol: { span: 14 },
             formState,
             onSubmit,
-            onShowPassword
+            onShowPassword,
+            goRegister
         }
     }
 })

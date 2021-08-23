@@ -7,7 +7,8 @@ export interface ILogin {
 }
 export interface ILoginResponse {
     status: number
-    result: string
+    result?: string
+    message?: string
 }
 export interface IRegister {
     email: string

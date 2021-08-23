@@ -70,7 +70,7 @@
 <script lang="ts">
 import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
-import { defineComponent, reactive, ref } from "vue"
+import { defineComponent, reactive, ref, inject } from "vue"
 import { EyeOutlined } from "@ant-design/icons-vue"
 export default defineComponent({
     name: "Home",
@@ -79,7 +79,10 @@ export default defineComponent({
         Footer,
         EyeOutlined
     },
+
     setup() {
+        const { message } = inject("$ctx") as any
+        message.info("1111")
         const onChange = (current: number) => {
             console.log(current)
         }

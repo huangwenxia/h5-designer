@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from "axios"
-import { message } from "ant-design-vue"
+import { checkStatus } from "./checkStatus"
 // import router from "@/router"
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: "",
@@ -12,27 +12,7 @@ const axiosInstance: AxiosInstance = axios.create({
 // axios实例拦截响应
 axiosInstance.interceptors.response.use(
     (response: AxiosResponse) => {
-        let pass = true
-        let mes = "获取数据失败"
-        if (response.data.status != 200 && response.config.responseType != "blob") {
-            pass = false
-            mes = response.data.message
-            // checkStatus(response.data.status, response);
-            return Promise.reject(response.data)
-        }
-
-        if (response.config.responseType == "blob" && !response.data.size) {
-            pass = false
-            mes = "文件不存在"
-        }
-        if (response.data.status == 500 && response.data.result && (response.data.result.format || response.data.result.repeat)) {
-            //这里调用错误提示面板
-            return Promise.reject(response.data)
-        }
-        if (!pass) {
-            message.warning(mes)
-            return Promise.reject(response.data)
-        }
+        if (checkStatus(response)) return
         return response.data
     },
     // 请求失败
