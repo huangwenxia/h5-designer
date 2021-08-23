@@ -75,10 +75,6 @@ export default defineComponent({
                 &.active{
                     color: #fff;//#fe714b;
                 }
-                &:hover{
-                     color: #fff;
-                     background: #1593FF;
-                }
             }
             .item-active {
                 margin: 0;
