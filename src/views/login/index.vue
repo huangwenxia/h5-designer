@@ -37,10 +37,9 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, UnwrapRef, inject } from "vue"
+import $ctx from "@/utils/useGlobal"
+import { defineComponent, reactive, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
-import api from "@/api/index"
-import * as IGlobal from "@/types/global"
 interface FormState {
     name: string
     password: string
@@ -57,7 +56,6 @@ export default defineComponent({
         EyeInvisibleOutlined
     },
     setup: function () {
-        const { message, router } = inject("$ctx") as IGlobal.$ctx
         // const internalInstance = getCurrentInstance() as any
         // const $api = internalInstance.appContext.config.globalProperties.$api
         // const { ctx } = getCurrentInstance() as any
@@ -72,12 +70,12 @@ export default defineComponent({
         })
 
         const onSubmit = () => {
-            api.userApi
+            $ctx.api.userApi
                 .login({ name: formState.name, password: formState.password })
                 .then((res) => {
                     if (!res.result) return
                     formState.token = res.result
-                    message.success("登录成功")
+                    $ctx.message.success("登录成功")
                 })
                 .catch((err) => {
                     console.error(err)
@@ -88,7 +86,7 @@ export default defineComponent({
             formState.isShowPwd = !formState.isShowPwd
         }
         const goRegister = () => {
-            router.push("/register")
+            $ctx.router.push("/register")
         }
         return {
             // labelCol: { span: 4 },
