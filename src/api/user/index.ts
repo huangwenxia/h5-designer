@@ -13,7 +13,7 @@ const register = (params: I.user.IRegister): Promise<I.user.IRegisterResponse> =
     return axios.post("/api/system/user/regist", params)
 }
 const getCode = (params: I.user.IGetCode): Promise<I.user.IGetCodeResponse> => {
-    return axios.get("/api/system/user/getcode", { params })
+    return axios.post("/api/system/user/getcode", params)
 }
 const getUserInfo = (): Promise<I.user.IUserInfoResponse> => {
     return axios.get("/api/system/user/info")

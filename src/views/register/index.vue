@@ -5,24 +5,32 @@
             <div class="login-form">
                 <a-form :model="formState">
                     <a-form-item>
-                        <a-input placeholder="请输入邮箱" v-model:value="formState.name">
+                        <a-input placeholder="请输入用户名" v-model:value="formState.username">
                             <template #prefix>
                                 <user-outlined type="user" />
-                            </template>
-                            <template #suffix>
-                                <a-button size="small" @click="onSubmit">发送验证码</a-button>
                             </template>
                         </a-input>
                     </a-form-item>
                     <a-form-item>
-                        <a-input v-model:value="formState.password" placeholder="请输入验证码">
+                        <a-input placeholder="请输入邮箱" v-model:value="formState.email">
+                            <template #prefix>
+                                <MailOutlined />
+                            </template>
+                            <template #suffix>
+                                <a-button v-if="formState.wait == '-1'" size="small" @click="getCode">发送验证码</a-button>
+                                <a-button v-else size="small">{{ formState.wait }}秒后再次获取</a-button>
+                            </template>
+                        </a-input>
+                    </a-form-item>
+                    <a-form-item>
+                        <a-input :type="formState.isShowCode ? 'text' : 'password'" v-model:value="formState.code" placeholder="请输入验证码">
                             <template #prefix>
                                 <lock-outlined />
                             </template>
                             <template #suffix>
-                                <div @click="onShowPassword">
-                                    <eye-invisible-outlined v-if="!formState.isShowPwd" />
-                                    <eye-outlined v-if="formState.isShowPwd" />
+                                <div @click="onShowCode">
+                                    <eye-invisible-outlined v-if="!formState.isShowCode" />
+                                    <eye-outlined v-if="formState.isShowCode" />
                                 </div>
                             </template>
                         </a-input>
@@ -38,7 +46,7 @@
                         <a-button type="primary" block @click="onSubmit">注册</a-button>
                     </a-form-item>
                     <a-form-item class="footer">
-                        <a-button type="link" class="btn1 color-gray" @click="onSubmit">返回 </a-button>
+                        <a-button type="link" class="btn1 color-gray" @click="onBack">返回 </a-button>
                         <a-button type="link" class="btn2 color-blue">忘记密码</a-button>
                     </a-form-item>
                 </a-form>
@@ -47,17 +55,17 @@
     </div>
 </template>
 <script lang="ts">
+import $ctx from "@/utils/useGlobal"
 import { defineComponent, reactive, toRaw, UnwrapRef } from "vue"
-import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
+import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined, MailOutlined } from "@ant-design/icons-vue"
 
 interface FormState {
-    name: string
+    code: string
     password: string
-    // region: string | undefined;
-    isShowPwd: boolean
-    // type: string[];
-    // resource: string;
-    // desc: string;
+    username: string
+    email: string
+    isShowCode: boolean
+    wait: number
 }
 
 export default defineComponent({
@@ -66,26 +74,63 @@ export default defineComponent({
         UserOutlined,
         EyeOutlined,
         LockOutlined,
+        MailOutlined,
         EyeInvisibleOutlined
     },
     setup: function () {
         const formState: UnwrapRef<FormState> = reactive({
-            name: "",
+            email: "",
+            username: "",
+            code: "",
             password: "",
-            isShowPwd: true
+            isShowCode: true,
+            wait: -1
         })
         const onSubmit = () => {
-            console.log("submit!", toRaw(formState))
+            $ctx.api.userApi
+                .register(toRaw(formState))
+                .then((res) => {
+                    if (!res) return
+                    $ctx.message.success("注册成功")
+
+                    $ctx.router.push("/login")
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
         }
-        const onShowPassword = () => {
-            formState.isShowPwd = !formState.isShowPwd
+
+        const onShowCode = () => {
+            formState.isShowCode = !formState.isShowCode
+        }
+        const onBack = () => {
+            $ctx.router.push("/login")
+        }
+        const getCode = () => {
+            if (!formState.email) return $ctx.message.warning("请输入邮箱")
+            $ctx.api.userApi
+                .getCode({ email: formState.email })
+                .then((res) => {
+                    if (!res) return
+                    formState.wait = 60
+                    let timer = setInterval(function () {
+                        if (formState.wait == -1) {
+                            clearInterval(timer)
+                        } else {
+                            formState.wait--
+                        }
+                    }, 1000)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
         }
         return {
-            // labelCol: { span: 4 },
-            // wrapperCol: { span: 14 },
             formState,
             onSubmit,
-            onShowPassword
+            onBack,
+            getCode,
+            onShowCode
         }
     }
 })

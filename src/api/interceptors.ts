@@ -24,10 +24,11 @@ axiosInstance.interceptors.response.use(
 // axios实例拦截请求
 axiosInstance.interceptors.request.use(
     (config: AxiosRequestConfig) => {
-        // const { user } = store.state
-        // if (token) {
-        //   config.headers.Authorization = `Bearer ${token}`
-        // }
+        const token = localStorage.getItem("token")
+        if (token) {
+            // config.headers.Authorization = `Bearer ${token}`
+            config.headers.Authorization = token
+        }
         return config
     },
     (error: AxiosError) => {

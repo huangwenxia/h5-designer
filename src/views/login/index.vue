@@ -75,6 +75,8 @@ export default defineComponent({
                 .then((res) => {
                     if (!res.result) return
                     formState.token = res.result
+                    localStorage.setItem("token", formState.token)
+                    $ctx.router.push("/home")
                     $ctx.message.success("登录成功")
                 })
                 .catch((err) => {
