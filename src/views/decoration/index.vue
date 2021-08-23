@@ -3,37 +3,68 @@
         <div class="decoration-header">
             <div class="logo"><span class="txt">H5设计平台</span></div>
             <ul class="header-list">
-                <li class="header-item" :class="{ active: index == menutab }" @click="menutab = index" v-for="(item, index) in menuArray" :key="index">
+                <li class="header-item" @click="headerItem(item)" v-for="(item, index) in menuArray" :key="index">
                     <component :is="item.icon" class="icon"></component>
                     <div>{{ item.name }}</div>
                 </li>
-                <li class="item item-active" :style="{ transform: 'translateY(' + menutab * 100 + '%)' }"><div class="active-border"></div></li>
+                <!-- <li class="item item-active" :style="{ transform: 'translateY(' + menutab * 100 + '%)' }"><div class="active-border"></div></li> -->
             </ul>
         </div>
         <SiderBar></SiderBar>
         <MobileBox></MobileBox>
+        <editPanels></editPanels>
     </div>
 </template>
 
 <script lang="ts">
-import SiderBar from './containers/SiderBar/index.vue';
-import MobileBox from './containers/MobileBox.vue';
-import { defineComponent, ref } from 'vue';
-import { FontSizeOutlined, PictureOutlined, PlaySquareOutlined } from '@ant-design/icons-vue';
+import SiderBar from "./containers/SiderBar/index.vue"
+import MobileBox from "./containers/MobileBox.vue"
+import { defineComponent, ref, Ref } from "vue"
+import { useStore, Store } from "vuex"
+import { FontSizeOutlined, PictureOutlined, PlaySquareOutlined } from "@ant-design/icons-vue"
+import { GlobalDataProps } from "@/store"
+import * as Utils from "@/utils"
+import moduledata from "./moduledata"
+import editPanels from "./editPanels/index.vue"
+
+interface MenuItemType {
+    name: string
+    icon: string
+    value: string
+}
+type MenuType = Array<MenuItemType>
+
 export default defineComponent({
-    components: { SiderBar, MobileBox, FontSizeOutlined, PictureOutlined, PlaySquareOutlined },
+    components: { SiderBar, MobileBox, FontSizeOutlined, PictureOutlined, PlaySquareOutlined, editPanels },
     setup() {
-        const menuArray = ref([
-            { name: '文本', icon: 'FontSizeOutlined' },
-            { name: '图片', icon: 'PictureOutlined' },
-            { name: '视频', icon: 'PlaySquareOutlined' },
-            { name: '音乐', icon: 'PlaySquareOutlined' }
-        ]);
+        const menuArray: Ref<MenuType> = ref([
+            { name: "文本", icon: "FontSizeOutlined", value: "text" },
+            { name: "图片", icon: "PictureOutlined", value: "img" },
+            { name: "视频", icon: "PlaySquareOutlined", value: "video" },
+            { name: "音乐", icon: "PlaySquareOutlined", value: "music" }
+        ])
+        const modules = ref([])
+        var headerItem = (e: MenuItemType) => {
+            // console.log("sss", e)
+            if (e.value == "text") {
+                let data = Utils.deepClone(moduledata.text)
+                data.id = "element_" + Utils.genNonDuplicateID(6)
+                store.commit("elementAdd", data)
+            }
+        }
+        const store: Store<GlobalDataProps> = useStore()
+        const moduleList = store.state.page.elements //computed(() => store.state.page.elements)
+        // const currentElement = computed(() => store.getters.getCurrentElement)
+
         return {
-            menuArray
-        };
+            menuArray,
+            modules,
+            headerItem,
+            moduleList
+            // currentElement
+        }
     }
-});
+})
 </script>
 
 <style scoped lang="scss">
@@ -65,18 +96,20 @@ export default defineComponent({
             left: 50%;
             transform: translateX(-50%);
             .header-item {
+                height: 60px;
                 display: inline-block;
                 vertical-align: top;
                 line-height: 1.5;
-                padding:10px 20px;
+                padding: 10px 20px;
                 font-weight: bold;
                 color: #464646;
                 text-align: center;
-                .icon{
+                cursor: pointer;
+                .icon {
                     font-size: 20px;
                 }
-                &:hover{
-                    background-color: #1593FF;
+                &:hover {
+                    background-color: #1593ff;
                     color: #fff;
                 }
             }
