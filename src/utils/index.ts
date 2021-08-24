@@ -27,3 +27,43 @@ export function deepClone<T extends Array<T> | any>(sourceData: T): T {
     }
     return obj
 }
+
+export function styleToString(style: any): string {
+    if (style == null || style == undefined) return ""
+    return Object.keys(style)
+        .map((a) => {
+            var value = style[a]
+            if (
+                [
+                    "fontSize",
+                    "borderRadius",
+                    "width",
+                    "height",
+                    "right",
+                    "lineHeight",
+                    "top",
+                    "left",
+                    "marginBottom",
+                    "marginTop",
+                    "marginLeft",
+                    "marginRight",
+                    "paddingBottom",
+                    "paddingTop",
+                    "paddingLeft",
+                    "paddingRight",
+                    "borderTopWidth",
+                    "borderRightWidth",
+                    "borderBottomWidth",
+                    "borderLeftWidth",
+                    "borderBottomRightRadius",
+                    "borderTopLeftRadius",
+                    "borderBottomLeftRadius",
+                    "borderTopRightRadius"
+                ].indexOf(a) > -1
+            ) {
+                value = +parseFloat(value).toFixed(2) + "px"
+            }
+            return a.replace(/([A-Z])/g, "-$1".toLocaleLowerCase()).toLocaleLowerCase() + ":" + value
+        })
+        .join(";")
+}
