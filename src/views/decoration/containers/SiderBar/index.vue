@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent,ref } from 'vue';
-import { FileTextOutlined, SwitcherOutlined } from '@ant-design/icons-vue';
+import { defineComponent, ref } from "vue"
+import { FileTextOutlined, SwitcherOutlined } from "@ant-design/icons-vue"
 export default defineComponent({
     components: {
         FileTextOutlined,
@@ -24,15 +24,16 @@ export default defineComponent({
     },
     setup() {
         const menutab = ref(0)
-        const menuArray = ref([{ name: '页面', icon: 'FileTextOutlined' }, { name: '图层', icon: 'SwitcherOutlined' }])
-        const fun = ()=>{}
+        const menuArray = ref([
+            { name: "页面", icon: "FileTextOutlined" },
+            { name: "图层", icon: "SwitcherOutlined" }
+        ])
         return {
             menutab,
-            menuArray,
-            fun
-        };
+            menuArray
+        }
     }
-});
+})
 </script>
 
 <style scoped lang="scss">
@@ -72,8 +73,8 @@ export default defineComponent({
                     font-size: 26px;
                     margin-top: 5px;
                 }
-                &.active{
-                    color: #fff;//#fe714b;
+                &.active {
+                    color: #fff; //#fe714b;
                 }
             }
             .item-active {
@@ -86,7 +87,7 @@ export default defineComponent({
                 position: absolute;
                 height: 84px;
                 width: 64px;
-                background: #1593FF;
+                background: #1593ff;
 
                 .active-border {
                     background: 0 0;

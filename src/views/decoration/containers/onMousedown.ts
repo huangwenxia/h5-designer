@@ -5,6 +5,7 @@ import { number } from "vue-types"
 
 let store: Store<GlobalDataProps>
 let moduleList: Array<ElementsType>
+
 interface eventType {
     startX: number
     startY: number
@@ -73,9 +74,12 @@ function onMousedown(e: MouseEvent): void {
             startH: startH
         }
     ]
+
+    store.commit("setCurrent", ele.id)
     document.addEventListener("mousemove", onMousemove, false)
     document.addEventListener("mouseup", onMouseup, false)
 }
+
 type ReturnType = {
     onMousedown: (e: MouseEvent) => void
 }
@@ -83,10 +87,14 @@ const mouseHook = (): ReturnType => {
     store = useStore()
     moduleList = store.state.page.elements
 
+    let app: HTMLElement | null = document.getElementById("app")
+    app && app.addEventListener("mousedown", docMousedown)
     return { onMousedown }
 }
 export default mouseHook
-
+function docMousedown() {
+    store.commit("setCurrent", "")
+}
 function onMousemove(e: MouseEvent) {
     if (!dragEvent.moveable) return
     e.preventDefault()

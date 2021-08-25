@@ -4,6 +4,7 @@ import { GlobalDataProps } from "./index"
 export interface PageStateProps {
     elements: Array<ElementsType>
     currentElementsId: string
+    currentElement: ElementsType
 }
 export interface ElementsType {
     style: StyleType
@@ -32,11 +33,17 @@ export interface StyleType {
     textDecoration?: string
     zIndex?: number
     boxShadow?: string
+    textAlignLast?: string
 }
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {
         elements: [],
-        currentElementsId: ""
+        currentElementsId: "",
+        currentElement: {
+            id: "",
+            type: "",
+            style: {}
+        }
     },
     mutations: {
         elementAdd: (state: PageStateProps, data: ElementsType) => {
@@ -45,6 +52,9 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         },
         setCurrent: (state: PageStateProps, id: string) => {
             state.currentElementsId = id
+            if (id) {
+                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {} }
+            }
         }
     },
     getters: {

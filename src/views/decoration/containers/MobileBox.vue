@@ -1,7 +1,7 @@
 <template>
     <div class="mobile-box">
         <div class="edit-element" v-for="(item, index) in elements" :class="{ active: currentId == item.id }" :key="index" :style="getElementStyle(item.style)">
-            <div class="element" @click="setCurrent(item.id)" @mousedown.stop :style="getTextStyle(item.style)">
+            <div class="element" @mousedown.stop :style="getTextStyle(item.style)">
                 <div v-if="item.type == 'text'">
                     {{ item.text }}
                 </div>
@@ -32,9 +32,6 @@ export default defineComponent({
     setup() {
         const store = useStore()
         const elements = computed(() => store.state.page.elements)
-        const setCurrent = (id: string) => {
-            store.commit("setCurrent", id)
-        }
         const excludes = ["top", "left"]
         const getElementStyle = (style: StyleType) => {
             let opt = { left: style.left, top: style.top }
@@ -52,7 +49,6 @@ export default defineComponent({
         return {
             excludes,
             elements,
-            setCurrent,
             currentId,
             getElementStyle,
             getTextStyle,

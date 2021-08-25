@@ -1,80 +1,113 @@
-@import './variables.scss';
-@import './icons.scss';
+@import "./variables.scss";
+@import "./icons.scss";
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body, textarea ,input, textarea,button{
-    font: 14px/1.8 'Microsoft YaHei',"华文细黑","Myriad Pro","Myriad", 'Heiti',"Simhei","黑体";
+body,
+textarea,
+input,
+textarea,
+button {
+    font: 14px/1.8 "Microsoft YaHei", "华文细黑", "Myriad Pro", "Myriad", "Heiti", "Simhei", "黑体";
 }
-body{
+body {
     color: $black-light;
     min-width: 900px;
 }
-img{border: 0;}
+img {
+    border: 0;
+}
 
-i{font-style: normal}
+i {
+    font-style: normal;
+}
 
-li{
+li {
     list-style: none;
 }
-::-webkit-scrollbar{width:6px;height:6px}
-::-webkit-scrollbar-button{display:none}
-::-webkit-scrollbar-track:vertical{background-color:black}
-::-webkit-scrollbar-track-piece{background:#FFF}
-::-webkit-scrollbar-thumb{background-color: rgba(0,0,0,.3);border-radius:5px}
-::-webkit-scrollbar-thumb:hover{background-color:#999}
-::-webkit-scrollbar-corner{background-color:#535353}
-::-webkit-scrollbar-resizer{background-color:#FF6E00}
-
-.clearfix:before,.clearfix:after {
-  content: "";
-  display: block;
-  clear: both;
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
-textarea{
+::-webkit-scrollbar-button {
+    display: none;
+}
+::-webkit-scrollbar-track:vertical {
+    background-color: black;
+}
+::-webkit-scrollbar-track-piece {
+    background: #fff;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+}
+::-webkit-scrollbar-corner {
+    background-color: #535353;
+}
+::-webkit-scrollbar-resizer {
+    background-color: #ff6e00;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+textarea {
     resize: none;
 }
 
 /*通用*/
-.empty{
+.empty {
     text-align: center;
     padding: 30px 0;
     color: $gray-2;
-    &.border{
+    &.border {
         border: 1px solid $gray-3;
     }
 }
-.disabled{
-  cursor: not-allowed;
-  opacity: .4;
-  .events{
-   pointer-events: none;
-  }
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+    .events {
+        pointer-events: none;
+    }
 }
-.color-base{
+.color-base {
     color: $base-color;
 }
-.color-green{
+.color-green {
     color: $green-auto;
 }
-.color-gray{
+.color-gray {
     color: $gray-1;
 }
-.color-red{
+.color-red {
     color: $red-auto;
 }
-.color-orange{
+.color-orange {
     color: $orange-auto;
 }
-.color-blue{
+.color-blue {
     color: $blue-auto;
 }
-.color-gray-light{
-    color: $gray-2
+.color-gray-light {
+    color: $gray-2;
 }
-.zZindex{
-    z-index: 3000!important;
+.zZindex {
+    z-index: 3000 !important;
+}
+.pull-left {
+    float: left;
+}
+.pull-right {
+    float: right;
 }
