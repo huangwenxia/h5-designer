@@ -91,6 +91,7 @@ export default defineComponent({
         }
         .element {
             position: relative;
+            overflow: hidden;
         }
         .ele-control {
             display: none;

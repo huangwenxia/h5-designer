@@ -34,6 +34,7 @@ export interface StyleType {
     zIndex?: number
     boxShadow?: string
     textAlignLast?: string
+    fontStyle?: string
 }
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {
@@ -49,6 +50,7 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         elementAdd: (state: PageStateProps, data: ElementsType) => {
             state.elements.push(data)
             state.currentElementsId = data.id
+            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {} }
         },
         setCurrent: (state: PageStateProps, id: string) => {
             state.currentElementsId = id

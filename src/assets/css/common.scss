@@ -111,3 +111,22 @@ textarea {
 .pull-right {
     float: right;
 }
+
+// 编辑面板编辑格式
+.edit-item {
+    overflow: hidden;
+    margin-bottom: 10px;
+    .label {
+        width: 100px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .value {
+        display: inline-block;
+        vertical-align: middle;
+        width: calc(100% - 100px);
+        /deep/.ant-input {
+            width: 100%;
+        }
+    }
+}

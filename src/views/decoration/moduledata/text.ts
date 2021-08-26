@@ -1,6 +1,6 @@
 export default {
     type: "text",
-    text: "双击编辑文本",
+    text: "文本内容",
     id: "",
     style: {
         top: 100,
