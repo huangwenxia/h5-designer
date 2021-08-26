@@ -12,5 +12,4 @@ const app = createApp(App)
 compos.forEach((a) => {
     app.component(a.name, a)
 })
-
 app.use(Antd).use(store).use(router).mount("#app")

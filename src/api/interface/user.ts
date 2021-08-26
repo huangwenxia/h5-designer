@@ -27,19 +27,19 @@ export interface IGetCodeResponse {
 }
 
 export interface InfoResponseResult {
-    id: number
+    id: string | number
     username: string
     email: string
-    name: null
-    sex: number
-    type: number
-    phone: null
-    status: number
-    lastLoginTime: "2021-08-20 20:18:10"
-    lastLoginIp: string
-    createdAt: string
-    updatedAt: string
-    avatar: null
+    name: string
+    sex: string | number
+    type: string | number
+    phone: string | number
+    status: string | number
+    lastLoginTime: string | number
+    lastLoginIp: string | number
+    createdAt: string | number
+    updatedAt: string | number
+    avatar: string
 }
 
 export interface IUserInfoResponse {

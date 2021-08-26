@@ -38,7 +38,7 @@
 </template>
 <script lang="ts">
 import $ctx from "@/utils/useGlobal"
-import { defineComponent, reactive, UnwrapRef } from "vue"
+import { defineComponent, reactive, UnwrapRef, computed } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
 interface FormState {
     name: string
@@ -76,8 +76,12 @@ export default defineComponent({
                     if (!res.result) return
                     formState.token = res.result
                     localStorage.setItem("token", formState.token)
-                    $ctx.router.push("/home")
-                    $ctx.message.success("登录成功")
+                    // const { getUserInfo } = $ctx.mapActions($ctx.store, ["getUserInfo"])
+                    // console.log(getUserInfo, "==========getUersInfo")
+                    // const getUserInfo = computed(() => ({ ...$ctx.mapActions(["getUserInfo"]) })).value.getUserInfo.bind({ $store: $ctx.store })
+                    // getUserInfo()
+                    // console.log(getUserInfo, "==========getUersInfo")
+                    $ctx.store.dispatch("getUserInfo")
                 })
                 .catch((err) => {
                     console.error(err)
