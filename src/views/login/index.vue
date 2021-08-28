@@ -38,6 +38,7 @@
 </template>
 <script lang="ts">
 import $ctx from "@/utils/useGlobal"
+import store from "@/store"
 import { defineComponent, reactive, UnwrapRef, computed } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
 interface FormState {
@@ -68,7 +69,7 @@ export default defineComponent({
             isShowPwd: true,
             token: ""
         })
-
+        console.log(store, "=============store")
         const onSubmit = () => {
             $ctx.api.userApi
                 .login({ name: formState.name, password: formState.password })
@@ -76,12 +77,8 @@ export default defineComponent({
                     if (!res.result) return
                     formState.token = res.result
                     localStorage.setItem("token", formState.token)
-                    // const { getUserInfo } = $ctx.mapActions($ctx.store, ["getUserInfo"])
-                    // console.log(getUserInfo, "==========getUersInfo")
-                    // const getUserInfo = computed(() => ({ ...$ctx.mapActions(["getUserInfo"]) })).value.getUserInfo.bind({ $store: $ctx.store })
-                    // getUserInfo()
-                    // console.log(getUserInfo, "==========getUersInfo")
-                    $ctx.store.dispatch("getUserInfo")
+                    store.dispatch("user/GET_USER_INFO")
+                    // $ctx.store.dispatch("getUserInfo")
                 })
                 .catch((err) => {
                     console.error(err)
