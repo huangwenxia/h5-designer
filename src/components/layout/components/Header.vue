@@ -14,19 +14,19 @@
                 <template #overlay>
                     <a-menu @click="handleMenuClick">
                         <a-menu-item key="1">
-                            <router-link tag="div" to="''">我的作品</router-link>
+                            <router-link tag="div" to="/personal/design/myWorks">我的作品</router-link>
                         </a-menu-item>
                         <a-menu-item key="2">
-                            <router-link tag="div" to="''">素材</router-link>
+                            <router-link tag="div" to="/personal/design/material">素材</router-link>
                         </a-menu-item>
                         <a-menu-item key="3">
-                            <router-link tag="div" to="''">我的资料 </router-link>
+                            <router-link tag="div" to="/personal/account/myMaterial">我的资料 </router-link>
                         </a-menu-item>
                         <a-menu-item key="4">
-                            <router-link tag="div" to="''">我的收藏 </router-link>
+                            <router-link tag="div" to="/personal/account/myCollect">我的收藏 </router-link>
                         </a-menu-item>
                         <a-menu-item key="5">
-                            <router-link tag="div" to="''">退出</router-link>
+                            <router-link tag="div" to="/login">退出</router-link>
                         </a-menu-item>
                     </a-menu>
                 </template>
@@ -57,7 +57,7 @@ export default defineComponent({
     setup() {
         const { api, store, router } = useGlobalHook()
         const handleMenuClick = (e: Event) => {
-            console.log("click", e)
+            // console.log("click", e)
         }
         const loginUrl = require("@/assets/logo.png")
         const login = () => {

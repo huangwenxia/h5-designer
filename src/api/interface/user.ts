@@ -7,7 +7,7 @@ export interface ILogin {
 }
 export interface ILoginResponse {
     status: number
-    result?: string
+    result?: string | undefined
     message?: string
 }
 export interface IRegister {
