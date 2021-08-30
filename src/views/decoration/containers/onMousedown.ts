@@ -150,6 +150,13 @@ function onMousemove(e: MouseEvent) {
                 newStyle.height = height
                 break
         }
+        if (newStyle.width) {
+            newStyle.width = Number(newStyle.width?.toFixed(2))
+        }
+        if (newStyle.height) {
+            newStyle.height = Number(newStyle.height?.toFixed(2))
+        }
+
         return newStyle
     }
 

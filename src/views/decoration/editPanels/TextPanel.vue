@@ -9,8 +9,30 @@
                     </div>
                 </div>
                 <Font></Font>
+                <div class="edit-item">
+                    <span class="label"> 行高： </span>
+                    <div class="value">
+                        <a-slider id="test" v-model:value="data.style.lineHeight" :min="16" :max="parseInt(data.style.height) * 2" />
+                    </div>
+                </div>
                 <Opacity></Opacity>
             </template>
+            <template v-slot:尺寸与位置>
+                <Align></Align>
+                <div class="edit-item">
+                    <span class="label"> 宽度： </span>
+                    <div class="value">
+                        <a-input v-model:value="data.style.width" aria-placeholder="" />
+                    </div>
+                </div>
+                <div class="edit-item">
+                    <span class="label"> 高度： </span>
+                    <div class="value">
+                        <a-input v-model:value="data.style.height" aria-placeholder="" />
+                    </div>
+                </div>
+            </template>
+
             <template v-slot:边框>
                 <Border></Border>
             </template>
@@ -27,6 +49,7 @@ import { ElementsType } from "@/store/page"
 import Font from "./components/Font.vue"
 import Border from "./components/Border.vue"
 import Opacity from "./components/Opacity.vue"
+import Align from "./components/Align.vue"
 
 interface valueType {
     label: string
@@ -34,7 +57,7 @@ interface valueType {
 type MenuType = Array<valueType>
 
 export default defineComponent({
-    components: { Panel, Collapse, Font, Opacity, Border },
+    components: { Panel, Collapse, Font, Opacity, Border, Align },
 
     setup() {
         const store = useStore()

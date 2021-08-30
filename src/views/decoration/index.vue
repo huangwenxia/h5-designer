@@ -10,6 +10,9 @@
                 <!-- <li class="item item-active" :style="{ transform: 'translateY(' + menutab * 100 + '%)' }"><div class="active-border"></div></li> -->
             </ul>
         </div>
+        <a-modal v-model:visible="visible" title="图片上传" @ok="handleOk">
+            <file></file>
+        </a-modal>
         <SiderBar></SiderBar>
         <MobileBox></MobileBox>
         <editPanels></editPanels>
@@ -26,6 +29,7 @@ import { GlobalDataProps } from "@/store"
 import * as Utils from "@/utils"
 import moduledata from "./moduledata"
 import editPanels from "./editPanels/index.vue"
+import file from "./components/file.vue"
 
 interface MenuItemType {
     name: string
@@ -35,8 +39,9 @@ interface MenuItemType {
 type MenuType = Array<MenuItemType>
 
 export default defineComponent({
-    components: { SiderBar, MobileBox, FontSizeOutlined, PictureOutlined, PlaySquareOutlined, editPanels },
+    components: { SiderBar, MobileBox, FontSizeOutlined, PictureOutlined, PlaySquareOutlined, editPanels, file },
     setup() {
+        const visible = ref<boolean>(false)
         const menuArray: Ref<MenuType> = ref([
             { name: "文本", icon: "FontSizeOutlined", value: "text" },
             { name: "图片", icon: "PictureOutlined", value: "img" },
@@ -45,23 +50,26 @@ export default defineComponent({
         ])
         const modules = ref([])
         var headerItem = (e: MenuItemType) => {
-            // console.log("sss", e)
             if (e.value == "text") {
                 let data = Utils.deepClone(moduledata.text)
                 data.id = "element_" + Utils.genNonDuplicateID(6)
                 store.commit("elementAdd", data)
+            } else if (e.value == "img") {
+                visible.value = true
             }
         }
         const store: Store<GlobalDataProps> = useStore()
-        const moduleList = store.state.page.elements //computed(() => store.state.page.elements)
-        // const currentElement = computed(() => store.getters.getCurrentElement)
-
+        const moduleList = store.state.page.elements
+        const handleOk = () => {
+            visible.value = false
+        }
         return {
             menuArray,
             modules,
             headerItem,
-            moduleList
-            // currentElement
+            moduleList,
+            visible,
+            handleOk
         }
     }
 })

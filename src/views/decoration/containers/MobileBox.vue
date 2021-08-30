@@ -1,7 +1,7 @@
 <template>
-    <div class="mobile-box">
+    <div class="mobile-box" id="mobileBox">
         <div class="edit-element" v-for="(item, index) in elements" :class="{ active: currentId == item.id }" :key="index" :style="getElementStyle(item.style)">
-            <div class="element" @mousedown.stop :style="getTextStyle(item.style)">
+            <div class="element" :id="item.id" @mousedown.stop :style="getTextStyle(item.style)">
                 <div v-if="item.type == 'text'">
                     {{ item.text }}
                 </div>
@@ -46,6 +46,7 @@ export default defineComponent({
         }
         const currentId = computed(() => store.state.page.currentElementsId)
         const { onMousedown } = mouseHook()
+
         return {
             excludes,
             elements,
