@@ -35,6 +35,7 @@ export interface StyleType {
     boxShadow?: string
     textAlignLast?: string
     fontStyle?: string
+    transform?: string
 }
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {

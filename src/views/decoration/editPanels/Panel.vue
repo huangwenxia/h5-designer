@@ -49,7 +49,6 @@ export default defineComponent({
 }
 
 .panel-body {
-    overflow: auto;
     position: absolute;
     width: 100%;
     // top: 50px;

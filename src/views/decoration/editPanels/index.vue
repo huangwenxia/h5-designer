@@ -1,5 +1,5 @@
 <template>
-    <div class="edit-panel" @mousedown.stop>
+    <div class="edit-panel" id="edit-panel-content" @mousedown.stop>
         <div class="element-panel" :class="{ 'element-active': currentElement && currentElement.id }" ref="panel">
             <component :is="map[currentElement && currentElement.type]"></component>
         </div>

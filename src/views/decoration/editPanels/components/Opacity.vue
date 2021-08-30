@@ -22,7 +22,7 @@ export default defineComponent({
     setup() {
         const store = useStore()
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
-        const inputValue = ref(0)
+        const inputValue = ref(data.value.style.opacity ? 100 - data.value.style.opacity * 100 : 0)
         const inputChenge = () => {
             data.value.style.opacity = (100 - inputValue.value) / 100
         }

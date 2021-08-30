@@ -22,13 +22,26 @@
                 <div class="edit-item">
                     <span class="label"> 宽度： </span>
                     <div class="value">
-                        <a-input v-model:value="data.style.width" aria-placeholder="" />
+                        <a-input-number v-model:value="data.style.width" aria-placeholder="" style="width: 100%" :min="1" />
                     </div>
                 </div>
                 <div class="edit-item">
                     <span class="label"> 高度： </span>
                     <div class="value">
-                        <a-input v-model:value="data.style.height" aria-placeholder="" />
+                        <a-input-number v-model:value="data.style.height" aria-placeholder="" style="width: 100%" :min="1" />
+                    </div>
+                </div>
+                <div class="edit-item">
+                    <span class="label"> 旋转： </span>
+                    <div class="value">
+                        <a-row>
+                            <a-col :span="10">
+                                <a-slider v-model:value="rotate" :min="0" :max="360" @change="inputChenge" />
+                            </a-col>
+                            <a-col :span="2">
+                                <a-input-number v-model:value="rotate" :min="0" @change="inputChenge" :max="360" style="margin-left: 10px" />
+                            </a-col>
+                        </a-row>
                     </div>
                 </div>
             </template>
@@ -63,9 +76,19 @@ export default defineComponent({
         const store = useStore()
         const munList: Ref<MenuType> = ref([{ label: "常规设置" }, { label: "尺寸与位置" }, { label: "边框" }, { label: "阴影" }])
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
+        const rotate = ref(0)
+        const inputChenge = () => {
+            if (rotate.value) {
+                data.value.style.transform = "rotate(" + rotate.value + "deg)"
+            } else {
+                delete data.value.style.transform
+            }
+        }
         return {
             munList,
-            data
+            data,
+            rotate,
+            inputChenge
         }
     }
 })

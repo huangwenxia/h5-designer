@@ -42,6 +42,9 @@ export default defineComponent({
                 border: none;
             }
         }
+        .ant-collapse-content {
+            overflow: unset;
+        }
     }
 }
 </style>

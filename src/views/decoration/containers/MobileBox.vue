@@ -32,9 +32,9 @@ export default defineComponent({
     setup() {
         const store = useStore()
         const elements = computed(() => store.state.page.elements)
-        const excludes = ["top", "left"]
+        const excludes = ["top", "left", "transform"]
         const getElementStyle = (style: StyleType) => {
-            let opt = { left: style.left, top: style.top }
+            let opt = { left: style.left, top: style.top, transform: style.transform }
             return styleToString(opt)
         }
         const getTextStyle = (style: StyleType) => {
