@@ -55,7 +55,7 @@
     </div>
 </template>
 <script lang="ts">
-import $ctx from "@/utils/useGlobal"
+import { useGlobalHook } from "@/utils/useGlobalHook"
 import { defineComponent, reactive, toRaw, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined, MailOutlined } from "@ant-design/icons-vue"
 
@@ -77,7 +77,8 @@ export default defineComponent({
         MailOutlined,
         EyeInvisibleOutlined
     },
-    setup: function () {
+    setup() {
+        const { api, router, message } = useGlobalHook()
         const formState: UnwrapRef<FormState> = reactive({
             email: "",
             username: "",
@@ -87,13 +88,13 @@ export default defineComponent({
             wait: -1
         })
         const onSubmit = () => {
-            $ctx.api.userApi
+            api.userApi
                 .register(toRaw(formState))
                 .then((res) => {
                     if (!res) return
-                    $ctx.message.success("注册成功")
+                    message.success("注册成功")
 
-                    $ctx.router.push("/login")
+                    router.push("/login")
                 })
                 .catch((err) => {
                     console.error(err)
@@ -104,11 +105,11 @@ export default defineComponent({
             formState.isShowCode = !formState.isShowCode
         }
         const onBack = () => {
-            $ctx.router.push("/login")
+            router.push("/login")
         }
         const getCode = () => {
-            if (!formState.email) return $ctx.message.warning("请输入邮箱")
-            $ctx.api.userApi
+            if (!formState.email) return message.warning("请输入邮箱")
+            api.userApi
                 .getCode({ email: formState.email })
                 .then((res) => {
                     if (!res) return

@@ -37,10 +37,10 @@
     </div>
 </template>
 <script lang="ts">
-import $ctx from "@/utils/useGlobal"
-import store from "@/store"
-import { defineComponent, reactive, UnwrapRef, computed } from "vue"
+import { useGlobalHook } from "@/utils/useGlobalHook"
+import { defineComponent, reactive, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
+
 interface FormState {
     name: string
     password: string
@@ -62,34 +62,34 @@ export default defineComponent({
         // const { ctx } = getCurrentInstance() as any
         // const internalInstance = getCurrentInstance() // 有效
         // console.log(ctx.$api, "===========internalInstance")
-
+        const { api, store, router, message } = useGlobalHook()
         const formState: UnwrapRef<FormState> = reactive({
             name: "",
             password: "",
             isShowPwd: true,
             token: ""
         })
-        console.log(store, "=============store")
         const onSubmit = () => {
-            $ctx.api.userApi
+            api.userApi
                 .login({ name: formState.name, password: formState.password })
                 .then((res) => {
                     if (!res.result) return
                     formState.token = res.result
                     localStorage.setItem("token", formState.token)
-                    store.dispatch("user/GET_USER_INFO")
-                    // $ctx.store.dispatch("getUserInfo")
+                    store.dispatch("GET_USER_INFO").then(() => {
+                        message.success("登录成功")
+                        router.push("/home")
+                    })
                 })
                 .catch((err) => {
                     console.error(err)
                 })
-            // console.log("submit!", toRaw(formState))
         }
         const onShowPassword = () => {
             formState.isShowPwd = !formState.isShowPwd
         }
         const goRegister = () => {
-            $ctx.router.push("/register")
+            router.push("/register")
         }
         return {
             // labelCol: { span: 4 },
