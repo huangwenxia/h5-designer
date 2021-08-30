@@ -1,32 +1,22 @@
-import { Module, ActionTree } from "vuex"
-import { GlobalDataProps } from "./index"
+import { Module, ActionTree, Commit } from "vuex"
 import * as I from "@/api/interface/index"
-import $ctx from "@/utils/useGlobal"
+import { GlobalDataProps } from "@/store/index"
+import api from "@/api/index"
 
 export interface UserStateProps {
     info: I.user.InfoResponseResult
 }
-
-export interface UserActionsProps {
-    info: I.user.InfoResponseResult
+export interface Actions {
+    // // 用户登录
+    // [Action.SING_IN](
+    //     { commit }: { commit: Commit; state: State },
+    //     payload: SignupRequest
+    // ): Promise<string>
+    // 用户登出
+    // [Action.SING_OUT]({ commit }: { commit: Commit; state: State }): Promise<void>
+    // 用户信息
+    ["GET_USER_INFO"]({ commit }: { commit: Commit; state: UserStateProps }): Promise<I.user.InfoResponseResult>
 }
-export const userActions: ActionTree<UserStateProps, any> = {
-    getUserInfo({ commit }) {
-        $ctx.api.userApi
-            .getUserInfo()
-            .then((res) => {
-                commit("SET_USER", res.result)
-                $ctx.message.success("登录成功")
-                console.log("===========11111")
-
-                $ctx.router.push("/home")
-            })
-            .catch((err) => {
-                console.error(err)
-            })
-    }
-}
-
 const userModule: Module<UserStateProps, GlobalDataProps> = {
     state: {
         info: {
@@ -55,20 +45,19 @@ const userModule: Module<UserStateProps, GlobalDataProps> = {
             return state.info
         }
     },
-    // actions:userActions,
-    actions: {
-        getUserInfo(context) {
-            $ctx.api.userApi
-                .getUserInfo()
-                .then((res) => {
-                    context.commit("SET_USER", res.result)
-                    $ctx.message.success("登录成功")
-                    console.log("===========11111")
-                    $ctx.router.push("/home")
-                })
-                .catch((err) => {
-                    console.error(err)
-                })
+    actions: <ActionTree<UserStateProps, GlobalDataProps> & Actions>{
+        GET_USER_INFO({ commit }) {
+            return new Promise((resolve, reject) => {
+                api.userApi
+                    .getUserInfo()
+                    .then((res) => {
+                        commit("SET_USER", res.result)
+                        resolve(res.result)
+                    })
+                    .catch((err) => {
+                        reject(err)
+                    })
+            })
         }
     }
 }

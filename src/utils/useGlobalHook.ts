@@ -1,8 +1,8 @@
 import { message } from "ant-design-vue"
-import router from "@/router"
+import { useRouter, useRoute } from "vue-router"
+import { useStore } from "vuex"
 import api from "@/api/index"
-import { Store, useStore, mapActions } from "vuex"
-import { GlobalDataProps } from "@/store"
+
 interface messageConfig {
     top: string
     duration: number
@@ -14,5 +14,11 @@ const messageConfig = <messageConfig>{
     maxCount: 3
 }
 message.config(messageConfig)
-const store: Store<GlobalDataProps> = useStore()
-export default { message, router, api, store, Store, mapActions }
+
+export const useGlobalHook = () => {
+    const store = useStore()
+    const router = useRouter()
+    const route = useRoute()
+
+    return { api, store, router, route, message }
+}

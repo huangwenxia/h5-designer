@@ -1,15 +1,15 @@
 <template>
     <div class="header-container clearfix">
-        <div class="logo" @click="testLogin">
+        <div class="logo">
             <a-image :width="40" :src="loginUrl" />
             <span class="txt">H5设计平台</span>
         </div>
-        <div class="no-login" v-if="isLogin">
-            <a-button type="link">登录</a-button>
+        <div class="no-login" v-if="!userInfo.id">
+            <a-button type="link" @click="login">登录</a-button>
             |
-            <a-button type="link">注册</a-button>
+            <a-button type="link" @click="register">注册</a-button>
         </div>
-        <div class="logged" v-if="!isLogin">
+        <div class="logged" v-if="userInfo.id">
             <a-dropdown>
                 <template #overlay>
                     <a-menu @click="handleMenuClick">
@@ -36,7 +36,7 @@
                             <UserOutlined icon="" />
                         </template>
                     </a-avatar>
-                    <span class="user-name">张三</span>
+                    <span class="user-name">{{ userInfo.username }}</span>
                 </a-button>
             </a-dropdown>
         </div>
@@ -44,27 +44,35 @@
 </template>
 
 <script lang="ts">
+import { useGlobalHook } from "@/utils/useGlobalHook"
 import { UserOutlined } from "@ant-design/icons-vue"
-import { defineComponent, ref } from "vue"
+import { computed, defineComponent, ref } from "vue"
+import { useStore } from "vuex"
+
 export default defineComponent({
     name: "Header",
     components: {
         UserOutlined
     },
     setup() {
+        const { api, store, router } = useGlobalHook()
         const handleMenuClick = (e: Event) => {
             console.log("click", e)
         }
-        const isLogin = ref<boolean>(false)
         const loginUrl = require("@/assets/logo.png")
-        const testLogin = () => {
-            isLogin.value = !isLogin.value
+        const login = () => {
+            router.push("/login")
         }
+        const register = () => {
+            router.push("/register")
+        }
+        const userInfo = computed(() => store.getters.getUserInfo)
         return {
-            isLogin,
             loginUrl,
             handleMenuClick,
-            testLogin
+            login,
+            register,
+            userInfo
         }
     }
 })

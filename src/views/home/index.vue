@@ -68,11 +68,11 @@
 </template>
 
 <script lang="ts">
-import $ctx from "@/utils/useGlobal"
 import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
-import { computed, defineComponent, reactive, ref } from "vue"
+import { defineComponent, reactive, ref } from "vue"
 import { EyeOutlined } from "@ant-design/icons-vue"
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -90,16 +90,13 @@ export default defineComponent({
             { img: "", text: "海量 H5 模板", desc: "一键生成，一分钟轻松制作" },
             { img: "", text: "极致体验", desc: "用户的一致选择" }
         ])
-        const userInfo = computed(() => $ctx.store.getters.getUserInfo)
-        console.log(userInfo, "=============useInfo")
         let data = new Array(8).fill({ img: require("@/assets/images/prd.png"), title: "互联网科技邀请函", username: "用户A", number: 66, avatar: require("@/assets/images/prd.png") })
         const part3Data = reactive(data)
         return {
             part2Data,
             part3Data,
             onChange,
-            current: 2,
-            userInfo
+            current: 2
         }
     }
 })
