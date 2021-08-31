@@ -1,7 +1,7 @@
 <template>
     <div class="mobile-box" id="mobileBox">
         <div class="edit-element" v-for="(item, index) in elements" :class="{ active: currentId == item.id }" :key="index" :style="getElementStyle(item.style)">
-            <div class="element" :id="item.id" @mousedown.stop :style="getTextStyle(item.style)">
+            <div class="element" :id="'element-' + item.id" @mousedown.stop :style="getTextStyle(item.style)">
                 <div v-if="item.type == 'text'">
                     {{ item.text }}
                 </div>
@@ -27,6 +27,7 @@ import { useStore } from "vuex"
 import { StyleType } from "@/store/page"
 import { deepClone, styleToString } from "@/utils"
 import mouseHook from "./onMousedown"
+import "animate.css"
 
 export default defineComponent({
     setup() {

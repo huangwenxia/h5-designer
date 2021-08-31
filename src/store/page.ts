@@ -12,6 +12,7 @@ export interface ElementsType {
     id: string
     text?: string
     attrs?: { src: string }
+    animateList: Array<AnimateType>
 }
 export interface StyleType {
     [key: string]: string | number | undefined
@@ -37,6 +38,17 @@ export interface StyleType {
     fontStyle?: string
     transform?: string
 }
+
+export interface AnimateType {
+    animateName: string
+    label: string
+    icon?: string
+    id?: string
+    delay?: string //动画延迟时间
+    duration?: string //动画完成时间
+    iterationCount?: string //动画播放次数
+    direction?: string //动画播放次数
+}
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {
         elements: [],
@@ -44,19 +56,20 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         currentElement: {
             id: "",
             type: "",
-            style: {}
+            style: {},
+            animateList: []
         }
     },
     mutations: {
         elementAdd: (state: PageStateProps, data: ElementsType) => {
             state.elements.push(data)
             state.currentElementsId = data.id
-            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {} }
+            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {}, animateList: [] }
         },
         setCurrent: (state: PageStateProps, id: string) => {
             state.currentElementsId = id
             if (id) {
-                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {} }
+                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [] }
             }
         }
     },

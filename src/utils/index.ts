@@ -1,3 +1,5 @@
+import { ElementsType } from "@/store/page"
+
 /**
  * 生成一个用不重复的ID
  */
@@ -67,4 +69,22 @@ export function styleToString(style: any): string {
             return a.replace(/([A-Z])/g, "-$1".toLocaleLowerCase()).toLocaleLowerCase() + ":" + value
         })
         .join(";")
+}
+
+export function startAnimate(element: ElementsType) {
+    var dom = document.getElementById("element-" + element.id)
+    var animations = element.animateList
+    var index = 0
+    var action = () => {
+        dom?.classList.add("animate__animated")
+        dom?.classList.add(animations[index].animateName)
+
+        setTimeout(() => {
+            index++
+            dom?.classList.remove(animations[index - 1].animateName)
+            action()
+        }, Number(animations[index].delay) + Number(animations[index].duration))
+    }
+
+    action()
 }

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@tucy/vue3-color": "^0.1.1",
+    "animate.css": "^4.1.1",
     "ant-design-vue": "^2.2.6",
     "vue": "^3.2.4",
     "vue-router": "^4.0.11",

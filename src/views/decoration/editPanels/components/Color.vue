@@ -7,27 +7,33 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, Ref, computed } from "vue"
+import { defineComponent, ref } from "vue"
 import "@tucy/vue3-color/lib/vue3-color.css"
 import { Sketch } from "@tucy/vue3-color"
-import { useStore } from "vuex"
-import { ElementsType } from "@/store/page"
 interface colorType {
     rgba: string
     hex: string
 }
+const PropsType = {
+    color: {
+        type: String,
+        default: ""
+    }
+}
 export default defineComponent({
     components: { Sketch },
-    setup() {
-        const store = useStore()
-        const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
-        let colors = ref(data.value.style.borderColor || "")
+    emits: ["color-chenge"],
+    props: PropsType,
+    setup(props, context) {
+        let colors = ref(props.color)
         let hiden = ref(false)
         const onChange = (color: colorType) => {
-            data.value.style.borderColor = color.hex
+            context.emit("color-chenge", color)
         }
         const colorDown = () => {
             hiden.value = true
+            console.log(1111, hiden.value)
+
             let app: HTMLElement | null = document.getElementById("app")
             let panel: HTMLElement | null = document.getElementById("edit-panel-content")
             app && app.addEventListener("mousedown", colorMousedown)
@@ -40,7 +46,6 @@ export default defineComponent({
             colors,
             hiden,
             onChange,
-            data,
             colorMousedown,
             colorDown
         }
