@@ -58,7 +58,8 @@ export function styleToString(style: any): string {
                     "borderBottomRightRadius",
                     "borderTopLeftRadius",
                     "borderBottomLeftRadius",
-                    "borderTopRightRadius"
+                    "borderTopRightRadius",
+                    "borderWidth"
                 ].indexOf(a) > -1
             ) {
                 value = +parseFloat(value).toFixed(2) + "px"
