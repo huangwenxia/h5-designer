@@ -18,5 +18,7 @@ const getCode = (params: I.user.IGetCode): Promise<I.user.IGetCodeResponse> => {
 const getUserInfo = (): Promise<I.user.IUserInfoResponse> => {
     return axios.get("/api/system/user/info")
 }
-
-export default { login, register, getCode, getUserInfo }
+const userUpdate = (params: I.user.IUserUpdate): Promise<I.user.IUserUpdateResponse> => {
+    return axios.post("/api/system/user/update", params)
+}
+export default { login, register, getCode, getUserInfo, userUpdate }

@@ -115,7 +115,6 @@ router.beforeEach((to, from, next) => {
         // 在免登录白名单，直接进入
         next()
     } else {
-        next()
         if (!store.getters.getUserInfo.id) {
             // 判断页面是否刷新
             store

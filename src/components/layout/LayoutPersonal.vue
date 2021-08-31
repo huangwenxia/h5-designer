@@ -15,7 +15,7 @@
                             </template>
                             <a-menu-item v-for="child in item.children" :key="child.sortIndex">
                                 <router-link tag="div" :to="child.path">
-                                    {{ child.icon }}
+                                    <component :is="child.icon"></component>
                                     {{ child.name }}
                                 </router-link>
                             </a-menu-item>
@@ -69,15 +69,15 @@
 </template>
 
 <script lang="ts">
-// import { UserOutlined, LaptopOutlined, NotificationOutlined } from "@ant-design/icons-vue"
+import { UserOutlined, LaptopOutlined, NotificationOutlined } from "@ant-design/icons-vue"
 import Header from "./components/Header.vue"
 import { defineComponent, reactive, ref } from "vue"
 export default defineComponent({
     name: "PersonalCenter",
     components: {
-        // UserOutlined,
-        // LaptopOutlined,
-        // NotificationOutlined,
+        UserOutlined,
+        LaptopOutlined,
+        NotificationOutlined,
         Header
     },
     setup() {
@@ -90,8 +90,8 @@ export default defineComponent({
                     sortIndex: "01",
                     path: "/personal/design",
                     children: [
-                        { path: "/personal/design/myWorks", icon: "", name: "我的作品", level: "1", sortIndex: "0111" },
-                        { path: "/personal/design/material", icon: "", name: "素材", level: "1", sortIndex: "0112" }
+                        { path: "/personal/design/myWorks", icon: "UserOutlined", name: "我的作品", level: "1", sortIndex: "0111" },
+                        { path: "/personal/design/material", icon: "UserOutlined", name: "素材", level: "1", sortIndex: "0112" }
                     ]
                 },
                 {
@@ -100,7 +100,7 @@ export default defineComponent({
                     path: "/personal/analyze",
                     level: "0",
                     sortIndex: "02",
-                    children: [{ path: "/personal/analyze/data", icon: "", name: "传播数据", level: "1", sortIndex: "0211" }]
+                    children: [{ path: "/personal/analyze/data", icon: "LaptopOutlined", name: "传播数据", level: "1", sortIndex: "0211" }]
                 },
                 {
                     name: "账号管理",
@@ -109,8 +109,8 @@ export default defineComponent({
                     level: "0",
                     sortIndex: "03",
                     children: [
-                        { path: "/personal/account/myMaterial", icon: "", name: "我的资料", level: "1", sortIndex: "0311" },
-                        { path: "/personal/account/myCollect", icon: "", name: "我的收藏", level: "1", sortIndex: "0312" }
+                        { path: "/personal/account/myMaterial", icon: "NotificationOutlined", name: "我的资料", level: "1", sortIndex: "0311" },
+                        { path: "/personal/account/myCollect", icon: "NotificationOutlined", name: "我的收藏", level: "1", sortIndex: "0312" }
                     ]
                 }
             ]),
