@@ -73,8 +73,8 @@ export default defineComponent({
             api.userApi
                 .login({ name: formState.name, password: formState.password })
                 .then((res) => {
-                    if (!res.result) return
-                    formState.token = res.result
+                    if (!res) return
+                    formState.token = res.result || ""
                     localStorage.setItem("token", formState.token)
                     store.dispatch("GET_USER_INFO").then(() => {
                         message.success("登录成功")

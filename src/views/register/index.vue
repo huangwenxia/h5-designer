@@ -93,7 +93,6 @@ export default defineComponent({
                 .then((res) => {
                     if (!res) return
                     message.success("注册成功")
-
                     router.push("/login")
                 })
                 .catch((err) => {

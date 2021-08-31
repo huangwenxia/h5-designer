@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
+import store from "@/store"
 import LayoutPersonal from "@/components/layout/LayoutPersonal.vue"
+import LayoutContent from "@/components/layout/LayoutContent.vue"
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/home",
@@ -19,15 +21,66 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/personal",
         name: "PersonalCenter",
-        component: LayoutPersonal,
-        redirect: "/personal/myWorks",
-        meta: { title: "personal", icon: "user", noCache: true },
+        component: LayoutContent,
+        redirect: "personal/design",
+        meta: { title: "personal", icon: "personal", noCache: true },
         children: [
             {
-                path: "myWorks",
-                component: () => import("@/views/personal/index.vue"),
-                name: "myWorks",
-                meta: { title: "myWorks", icon: "myWorks", noCache: true }
+                path: "design",
+                component: LayoutPersonal,
+                redirect: "personal/design/myWorks",
+                name: "design",
+                meta: { title: "design", icon: "design", noCache: true },
+                children: [
+                    {
+                        path: "myWorks",
+                        component: () => import("@/views/personal/design/myWorks.vue"),
+                        name: "myWorks",
+                        meta: { title: "myWorks", icon: "myWorks", noCache: true }
+                    },
+                    {
+                        path: "material",
+                        component: () => import("@/views/personal/design/material.vue"),
+                        name: "material",
+                        meta: { title: "material", icon: "material", noCache: true }
+                    }
+                ]
+            },
+            {
+                path: "analyze",
+                name: "analyze",
+                component: LayoutPersonal,
+                redirect: "personal/analyze/data",
+                meta: { title: "analyze", icon: "analyze", noCache: true },
+                children: [
+                    {
+                        path: "data",
+                        component: () => import("@/views/personal/analyze/data.vue"),
+                        name: "data",
+                        meta: { title: "data", icon: "data", noCache: true }
+                    }
+                ]
+            },
+            {
+                path: "account",
+                name: "account",
+                component: LayoutPersonal,
+                redirect: "personal/account/myMaterial",
+                meta: { title: "account", icon: "account", noCache: true },
+                children: [
+                    {
+                        path: "myMaterial",
+                        component: () => import("@/views/personal/account/myMaterial.vue"),
+                        name: "myMaterial",
+                        meta: { title: "myMaterial", icon: "myMaterial", noCache: true }
+                    },
+                    {
+                        path: "myCollect",
+                        component: () => import("@/views/personal/account/myCollect.vue"),
+                        name: "myCollect",
+                        meta: { title: "myCollect", icon: "myCollect", noCache: true }
+                    }
+                ]
             }
         ]
     },
@@ -63,30 +116,30 @@ router.beforeEach((to, from, next) => {
         next()
     } else {
         next()
-        // if (!store.getters.user.id) {
-        //     // 判断页面是否刷新
-        //     store
-        //         .dispatch("GetUserInfo", true)
-        //         .then(() => {
-        //             // 拉取user_info
-        //             next({
-        //                 path: to.path,
-        //                 query: to.query,
-        //                 params: to.params,
-        //                 replace: false
-        //             })
-        //         })
-        //         .catch(() => {
-        //             const path = "/login"
-        //             next({
-        //                 path: path,
-        //                 query: { redirect: to.fullPath },
-        //                 replace: true
-        //             })
-        //         })
-        // } else {
-        //     next()
-        // }
+        if (!store.getters.getUserInfo.id) {
+            // 判断页面是否刷新
+            store
+                .dispatch("GET_USER_INFO")
+                .then(() => {
+                    // 拉取user_info
+                    next({
+                        path: to.path,
+                        query: to.query,
+                        params: to.params,
+                        replace: false
+                    })
+                })
+                .catch(() => {
+                    const path = "/login"
+                    next({
+                        path: path,
+                        query: { redirect: to.fullPath },
+                        replace: true
+                    })
+                })
+        } else {
+            next()
+        }
     }
 })
 export default router
