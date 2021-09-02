@@ -40,6 +40,8 @@ export interface InfoResponseResult {
     createdAt: string | number
     updatedAt: string | number
     avatar: string
+    birth?: string
+    address: string
 }
 
 export interface IUserInfoResponse {

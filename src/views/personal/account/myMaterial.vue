@@ -11,12 +11,12 @@
                     </a-avatar>
                 </a-form-item>
                 <a-form-item label="用户名">
-                    <a-input v-if="isModify" v-model:value="formState.name" />
+                    <a-input v-if="isModify" v-model:value="formState.username" />
                     <span v-else>{{ userInfo.username }}</span>
                 </a-form-item>
                 <a-form-item label="昵称">
                     <a-input v-if="isModify" v-model:value="formState.name" />
-                    <span v-else>{{ userInfo.username }}</span>
+                    <span v-else>{{ userInfo.name }}</span>
                 </a-form-item>
                 <a-form-item label="电话">
                     <a-input v-if="isModify" v-model:value="formState.phone" />
@@ -35,11 +35,11 @@
                 </a-form-item>
                 <a-form-item label="生日">
                     <a-input v-if="isModify" v-model:value="formState.birth" />
-                    <span v-else>{{ "--" }}</span>
+                    <span v-else>{{ userInfo.birth || "--" }}</span>
                 </a-form-item>
                 <a-form-item label="地址">
                     <a-input v-if="isModify" v-model:value="formState.address" />
-                    <span v-else>{{ "--" }}</span>
+                    <span v-else>{{ userInfo.address || "--" }}</span>
                 </a-form-item>
                 <a-form-item v-if="isModify" :wrapper-col="{ offset: 8 }">
                     <a-button @click="onCancel">取消</a-button>
@@ -56,6 +56,7 @@ import { UserOutlined } from "@ant-design/icons-vue"
 import { useGlobalHook } from "@/utils/useGlobalHook"
 interface FormState {
     name: string
+    username: string
     avatar: string
     phone: string | number
     sex: string | number //1、男，2、女
@@ -71,13 +72,14 @@ export default defineComponent({
         const { store, api, message } = useGlobalHook()
         const userInfo = computed(() => store.getters.getUserInfo)
         const formState: UnwrapRef<FormState> = reactive({
-            name: userInfo.value.username,
+            name: userInfo.value.name,
+            username: userInfo.value.username,
             avatar: userInfo.value.avatar,
             phone: userInfo.value.phone,
             sex: userInfo.value.sex, //1、男，2、女
-            address: "",
+            address: userInfo.value.address,
             email: userInfo.value.email,
-            birth: ""
+            birth: userInfo.value.birth
         })
         const isModify = ref<boolean>(false)
         const methods = reactive({
@@ -85,9 +87,10 @@ export default defineComponent({
                 isModify.value = true
             },
             onCancel() {
-                formState.name = userInfo.value.username
-                formState.avatar = userInfo.value.avatar
-                formState.phone = userInfo.value.phone
+                formState.name = userInfo.value.name
+                formState.username = userInfo.value.username
+                formState.avatar = userInfo.value.avatar || ""
+                formState.phone = userInfo.value.phone || ""
                 formState.sex = userInfo.value.sex
                 formState.email = userInfo.value.email
                 formState.address = userInfo.value.address || ""
