@@ -4,11 +4,9 @@
             <a-tab-pane key="1" tab="图片">12312</a-tab-pane>
             <a-tab-pane key="2" tab="视屏">Content of Tab Pane 2</a-tab-pane>
             <a-tab-pane key="3" tab="音乐">Content of Tab Pane 3</a-tab-pane>
-            <template #tabBarExtraContent>
+            <template #tabBarExtraContent style="line-height: 1">
                 素材空间
-                <a-upload :customRequest="onUpload">
-                    <a-button type="primary">上传</a-button>
-                </a-upload>
+                <BtnUpload></BtnUpload>
             </template>
         </a-tabs>
     </div>
@@ -16,17 +14,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
-import { useFileUploadEffect } from "@/views/personal/design/hooks/useFileUploadEffect"
-
+import BtnUpload from "@/components/upload/BtnUpload.vue"
 export default defineComponent({
-    name: "MyWorks",
-    components: {},
+    name: "material",
+    components: { BtnUpload },
     setup() {
-        const { loading, onUpload } = useFileUploadEffect()
         return {
-            activeKey: ref("1"),
-            loading,
-            onUpload
+            activeKey: ref("1")
         }
     }
 })
