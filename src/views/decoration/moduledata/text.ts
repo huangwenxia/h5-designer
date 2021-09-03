@@ -9,5 +9,6 @@ export default {
         height: 30,
         textAlign: "center",
         lineHeight: 30
-    }
+    },
+    animateList: []
 }

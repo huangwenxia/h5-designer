@@ -1,3 +1,5 @@
+import { ElementsType, AnimateType } from "@/store/page"
+
 /**
  * 生成一个用不重复的ID
  */
@@ -16,6 +18,9 @@ export function genNonDuplicateID(randomLength: number | undefined) {
 export function deepClone<T extends Array<T> | any>(sourceData: T): T {
     if (Array.isArray(sourceData)) {
         return sourceData.map((item) => deepClone(item)) as T
+    }
+    if (typeof sourceData !== "object" || sourceData === null) {
+        return sourceData
     }
     const obj: T = {} as T
     for (const key in sourceData) {
@@ -67,4 +72,41 @@ export function styleToString(style: any): string {
             return a.replace(/([A-Z])/g, "-$1".toLocaleLowerCase()).toLocaleLowerCase() + ":" + value
         })
         .join(";")
+}
+
+export function startAnimate(element: ElementsType) {
+    if (!element.id) return
+
+    var dom = document.getElementById("element-" + element.id)
+    var animations: Array<AnimateType> = element.animateList
+    var index = 0
+    dom?.classList.add("animate__animated")
+    var action = () => {
+        dom?.classList.add(animations[index].animateName)
+        if (dom) {
+            if (animations[index].delay) {
+                dom.style.animationDelay = animations[index].delay + "s"
+            }
+            if (animations[index].duration) {
+                dom.style.animationDuration = animations[index].duration + "s"
+            }
+            if (animations[index].infinite) {
+                dom.style.animationIterationCount = "infinite"
+            } else if (animations[index].iterationCount) {
+                dom.style.animationIterationCount = animations[index].iterationCount + ""
+            }
+        }
+        let delay = animations[index].delay || 0
+        let duration = animations[index].duration || 0
+        let time = (Number(duration) + Number(delay)) * 1000
+        setTimeout(() => {
+            index++
+            dom?.classList.remove(animations[index - 1].animateName)
+            if (index != animations.length) {
+                action()
+            }
+        }, time)
+    }
+
+    action()
 }
