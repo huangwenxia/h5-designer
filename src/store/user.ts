@@ -32,7 +32,9 @@ const userModule: Module<UserStateProps, GlobalDataProps> = {
             lastLoginIp: "",
             createdAt: "",
             updatedAt: "",
-            avatar: ""
+            avatar: "",
+            birth: "",
+            address: ""
         }
     },
     mutations: {

@@ -12,7 +12,7 @@
         <div class="logged" v-if="userInfo.id">
             <a-dropdown>
                 <template #overlay>
-                    <a-menu @click="handleMenuClick">
+                    <a-menu>
                         <a-menu-item key="1">
                             <router-link tag="div" to="/personal/design/myWorks">我的作品</router-link>
                         </a-menu-item>
@@ -46,8 +46,7 @@
 <script lang="ts">
 import { useGlobalHook } from "@/utils/useGlobalHook"
 import { UserOutlined } from "@ant-design/icons-vue"
-import { computed, defineComponent, ref } from "vue"
-import { useStore } from "vuex"
+import { computed, defineComponent } from "vue"
 
 export default defineComponent({
     name: "Header",
@@ -55,10 +54,10 @@ export default defineComponent({
         UserOutlined
     },
     setup() {
-        const { api, store, router } = useGlobalHook()
-        const handleMenuClick = (e: Event) => {
-            // console.log("click", e)
-        }
+        const { store, router } = useGlobalHook()
+        // const handleMenuClick = (e: Event) => {
+        //     // console.log("click", e)
+        // }
         const loginUrl = require("@/assets/logo.png")
         const login = () => {
             router.push("/login")
@@ -69,7 +68,7 @@ export default defineComponent({
         const userInfo = computed(() => store.getters.getUserInfo)
         return {
             loginUrl,
-            handleMenuClick,
+            // handleMenuClick,
             login,
             register,
             userInfo

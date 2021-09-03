@@ -40,9 +40,22 @@ export interface InfoResponseResult {
     createdAt: string | number
     updatedAt: string | number
     avatar: string
+    birth?: string
+    address: string
 }
 
 export interface IUserInfoResponse {
     status: number
     result: InfoResponseResult
+}
+export interface IUserUpdate {
+    name: string
+    avatar: string
+    phone: string | number
+    sex: string | number //1、男，2、女
+    address: string
+    birth: string | number
+}
+export interface IUserUpdateResponse {
+    status: number | string | undefined
 }
