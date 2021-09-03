@@ -22,10 +22,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue"
+import { defineComponent, computed, onMounted } from "vue"
 import { useStore } from "vuex"
 import { StyleType } from "@/store/page"
-import { deepClone, styleToString } from "@/utils"
+import { ElementsType } from "@/store/page"
+
+import { deepClone, styleToString, startAnimate } from "@/utils"
 import mouseHook from "./onMousedown"
 import "animate.css"
 
@@ -48,13 +50,22 @@ export default defineComponent({
         const currentId = computed(() => store.state.page.currentElementsId)
         const { onMousedown } = mouseHook()
 
+        const getAnimate = async () => {
+            elements.value.forEach((item: ElementsType) => {
+                startAnimate(item)
+            })
+        }
+        onMounted(() => {
+            getAnimate()
+        })
         return {
             excludes,
             elements,
             currentId,
             getElementStyle,
             getTextStyle,
-            onMousedown
+            onMousedown,
+            getAnimate
         }
     }
 })

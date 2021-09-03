@@ -42,12 +42,11 @@ export interface StyleType {
 export interface AnimateType {
     animateName: string
     label: string
-    icon?: string
     id?: string
-    delay?: string //动画延迟时间
-    duration?: string //动画完成时间
-    iterationCount?: string //动画播放次数
-    direction?: string //动画播放次数
+    delay?: number //动画延迟时间
+    duration?: number //动画完成时间
+    iterationCount?: number //动画播放次数
+    infinite?: boolean //循环
 }
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {
