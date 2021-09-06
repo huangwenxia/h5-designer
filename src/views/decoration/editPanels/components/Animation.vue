@@ -4,7 +4,7 @@
             <a-button type="primary" @click="addition">
                 <template #icon><PlusOutlined /></template>添加动画
             </a-button>
-            <a-button type="primary" @click="preview">
+            <a-button type="primary" :disabled="!data.animateList.length" @click="preview" style="margin-left: 10px">
                 <template #icon><PlusOutlined /></template>预览动画
             </a-button>
         </div>
@@ -68,7 +68,37 @@ export default defineComponent({
         const list: AnimateListType = [
             { animateName: "animate__bounce", label: "弹跳" },
             { animateName: "animate__flash", label: "闪光" },
-            { animateName: "animate__pulse", label: "脉冲" }
+            { animateName: "animate__pulse", label: "脉冲" },
+            { animateName: "animate__rubberBand", label: "橡胶带" },
+            { animateName: "animate__shakeX", label: "沙克" },
+            { animateName: "animate__shakeY", label: "沙基" },
+            { animateName: "animate__headShake", label: "摇头" },
+            { animateName: "animate__wobble", label: "摆动" },
+            { animateName: "animate__swing", label: "秋千" },
+            { animateName: "animate__tada", label: "塔达" },
+            { animateName: "animate__heartBeat", label: "心跳" },
+            // 后入口
+            { animateName: "animate__backOutDown", label: "上后进" },
+            { animateName: "animate__backInLeft", label: "左后进" },
+            { animateName: "animate__backInRight", label: "又后进" },
+            { animateName: "animate__backInUp", label: "下回进" },
+            // 后出口
+            { animateName: "animate__backOutDown", label: "下回退" },
+            { animateName: "animate__backOutLeft", label: "左回退" },
+            { animateName: "animate__backOutRight", label: "右回退" },
+            { animateName: "animate__backOutUp", label: "上回退" },
+            // 弹跳入口
+            { animateName: "animate__bounceIn", label: "原地弹跳" },
+            { animateName: "animate__bounceInDown", label: "上弹跳" },
+            { animateName: "animate__bounceInLeft", label: "左弹跳" },
+            { animateName: "animate__bounceInRight", label: "右弹跳" },
+            { animateName: "animate__bounceInUp", label: "下弹跳" },
+            // 弹跳出口
+            { animateName: "animate__bounceOut", label: "原地弹出" },
+            { animateName: "animate__bounceOutDown", label: "下弹出" },
+            { animateName: "animate__bounceOutLeft", label: "左弹出" },
+            { animateName: "animate__bounceOutRight", label: "右弹出" },
+            { animateName: "animate__bounceOutUp", label: "上弹出" }
         ]
         const selectValue = ref("")
         const activeKey: Ref<Array<string | undefined>> = ref([])
