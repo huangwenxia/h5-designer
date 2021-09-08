@@ -22,7 +22,7 @@ export interface FormType {
 export default defineComponent({
     name: "BtnUpload",
     components: { LoadingOutlined },
-    setup() {
+    setup(props, context) {
         const { api, message } = useGlobalHook()
         const form = reactive<FormType>({
             percent: 0
@@ -40,7 +40,7 @@ export default defineComponent({
             }
             api.fileApi
                 .upload(formData, onUploadProgress)
-                .then(() => {
+                .then((res) => {
                     target.value = "" //同一个 input 选择同一张图片 不会触发 onchange事件
                     setTimeout(() => {
                         if (form.percent == 100) {
@@ -52,6 +52,7 @@ export default defineComponent({
                             form.percent = 0
                         }
                     })
+                    context.emit("success", res)
                 })
                 .catch(() => {
                     target.value = ""

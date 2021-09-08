@@ -30,6 +30,8 @@ import * as Utils from "@/utils"
 import moduledata from "./moduledata"
 import editPanels from "./editPanels/index.vue"
 import file from "./components/file.vue"
+import FileService from "@/components/FileService"
+import * as I from "@/api/interface/index"
 
 interface MenuItemType {
     name: string
@@ -44,9 +46,9 @@ export default defineComponent({
         const visible = ref<boolean>(false)
         const menuArray: Ref<MenuType> = ref([
             { name: "文本", icon: "FontSizeOutlined", value: "text" },
-            { name: "图片", icon: "PictureOutlined", value: "img" },
+            { name: "图片", icon: "PictureOutlined", value: "image" },
             { name: "视频", icon: "PlaySquareOutlined", value: "video" },
-            { name: "音乐", icon: "PlaySquareOutlined", value: "music" }
+            { name: "音乐", icon: "PlaySquareOutlined", value: "audio" }
         ])
         const modules = ref([])
         var headerItem = (e: MenuItemType) => {
@@ -54,8 +56,13 @@ export default defineComponent({
                 let data = Utils.deepClone(moduledata.text)
                 data.id = "element_" + Utils.genNonDuplicateID(6)
                 store.commit("elementAdd", data)
-            } else if (e.value == "img") {
-                visible.value = true
+            } else {
+                FileService({
+                    type: e.value,
+                    success: (files: Array<I.file.baseRow>) => {
+                        console.log("调了success", files)
+                    }
+                })
             }
         }
         const store: Store<GlobalDataProps> = useStore()

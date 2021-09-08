@@ -7,7 +7,7 @@ import { AxiosPromise } from "axios"
 //     return axios.post("/api/file/upload", params)
 // }
 
-const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => void): AxiosPromise<AxiosPromise> => {
+const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => void): AxiosPromise<I.file.UploadResponseResult> => {
     return axios({
         method: "post",
         url: "/api/file/upload?random=" + genNonDuplicateID(6),
@@ -20,7 +20,7 @@ const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => voi
 }
 
 const fileList = (params: I.file.IFileList): Promise<I.file.IFileListResponse> => {
-    return axios.post("/api/file/list", params)
+    return axios.get("/api/file/list", { params })
 }
 
 const remove = (fileId: string): Promise<void> => {

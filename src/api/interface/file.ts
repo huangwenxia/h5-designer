@@ -44,7 +44,7 @@ export interface baseRow {
 export interface IFileListResponse {
     status: number
     result: {
-        count: number | string
+        count: number
         rows: Array<baseRow>
     }
 }
