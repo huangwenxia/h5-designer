@@ -1,7 +1,7 @@
 <template>
     <Modal v-model:visible="visible" :title="'选择' + typeMap[type]" @ok="handleOk" :afterClose="close" :destroyOnClose="true" width="800px">
         <div class="header">
-            <BtnUpload @success="onUploadSuccuss" />
+            <BtnUpload @success="onUploadSuccess" />
         </div>
         <div class="file-content">
             <Spin :spinning="loading">
@@ -44,7 +44,7 @@ export default defineComponent({
         }
         // const { loading, list, loadData } = useLoadHook({ api: api.fileApi.fileList })
         const loading = ref(false)
-        const total = ref(0)
+        const total: Ref<number | string> = ref(0)
         const list: Ref<Array<I.file.baseRow>> = ref([])
         console.log("type", type.value)
         onMounted(() => {
@@ -64,6 +64,7 @@ export default defineComponent({
             api.fileApi
                 .fileList(listQuery.value)
                 .then((res) => {
+                    console.log(res, "===========res")
                     list.value = res.result.rows
                     total.value = res.result.count
                 })
@@ -71,7 +72,7 @@ export default defineComponent({
                     loading.value = false
                 })
         }
-        const onUploadSuccuss = () => {
+        const onUploadSuccess = () => {
             loadData()
         }
         const selectList: Ref<Array<I.file.baseRow>> = ref([])
@@ -91,7 +92,7 @@ export default defineComponent({
             loading,
             listQuery,
             loadData,
-            onUploadSuccuss,
+            onUploadSuccess,
             simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
             selectList,
             handleOk,
