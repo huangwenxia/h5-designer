@@ -26,7 +26,8 @@
                             <router-link tag="div" to="/personal/account/myCollect">我的收藏 </router-link>
                         </a-menu-item>
                         <a-menu-item key="5">
-                            <router-link tag="div" to="/login">退出</router-link>
+                            <a-button type="link" @click="logout"> 退出 </a-button>
+                            <!--<router-link tag="div" to="/login"></router-link>-->
                         </a-menu-item>
                     </a-menu>
                 </template>
@@ -47,6 +48,9 @@
 import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { UserOutlined } from "@ant-design/icons-vue"
 import { computed, defineComponent } from "vue"
+import router from "@/router"
+import store from "@/store"
+import { message } from "ant-design-vue"
 
 export default defineComponent({
     name: "Header",
@@ -54,11 +58,18 @@ export default defineComponent({
         UserOutlined
     },
     setup() {
-        const { store, router } = useGlobalHook()
+        const { store, router, message } = useGlobalHook()
         // const handleMenuClick = (e: Event) => {
         //     // console.log("click", e)
         // }
         const loginUrl = require("@/assets/logo.png")
+        const logout = () => {
+            store.commit("CLEAR_USER")
+            message.success("退出成功")
+            if (router.currentRoute.value.name != "home") {
+                router.replace("/home")
+            }
+        }
         const login = () => {
             router.push("/login")
         }
@@ -69,8 +80,10 @@ export default defineComponent({
         return {
             loginUrl,
             // handleMenuClick,
-            login,
             register,
+            login,
+
+            logout,
             userInfo
         }
     }

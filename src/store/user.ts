@@ -44,6 +44,7 @@ const userModule: Module<UserStateProps, GlobalDataProps> = {
         },
         CLEAR_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
             state.info = deepClone(useInfo)
+            localStorage.removeItem("token")
         }
     },
     getters: {

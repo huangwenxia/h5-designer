@@ -27,7 +27,6 @@ const checkStatus = function (status: number | string, response: AxiosResponse):
             // 401 用户未登录，清空本地缓存
             const RouterInfo = router.currentRoute.value
             store.commit("CLEAR_USER") // const store = useStore()
-            localStorage.removeItem("token")
             message.error(response.data.message || "未授权，请重新登录(401)")
             if (RouterInfo.name != "login") {
                 router.replace("/login").catch((err) => {
