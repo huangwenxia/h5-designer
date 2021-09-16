@@ -10,11 +10,6 @@ export interface UploadResponseResult {
     updatedAt: string
     createdAt: string
 }
-export interface IFileList {
-    page: string | number
-    pageSize: string | number
-    type: string
-}
 export interface baseRow {
     id: string | number
     title: string

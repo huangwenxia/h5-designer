@@ -31,37 +31,22 @@ import ImageList from "@/components/FileService/modules/ImageList.vue"
 import BtnUpload from "@/components/upload/BtnUpload.vue"
 import * as I from "@/api/interface"
 import api from "@/api"
-
+import { useListPageHook } from "@/hooks/useListPageHook"
 export default defineComponent({
     name: "material",
     components: { BtnUpload, Pagination, Empty, Spin, ImageList },
     setup() {
-        const loading = ref(false)
-        const total: Ref<number | string> = ref(0)
-        const list: Ref<Array<I.file.baseRow>> = ref([])
+        const { total, loading, list, listQuery, loadData } = useListPageHook<I.file.baseRow>({
+            api: api.fileApi.fileList,
+            params: {
+                type: "image"
+            }
+        })
         onMounted(() => {
             setTimeout(() => {
                 loadData()
             })
         })
-        const listQuery: Ref<I.file.IFileList> = ref({
-            page: 1,
-            pageSize: 12,
-            type: "image"
-        })
-
-        const loadData = () => {
-            loading.value = true
-            api.fileApi
-                .fileList(listQuery.value)
-                .then((res) => {
-                    list.value = res.result.rows
-                    total.value = res.result.count
-                })
-                .finally(() => {
-                    loading.value = false
-                })
-        }
         const selectList: Ref<Array<I.file.baseRow>> = ref([])
         return {
             tabActiveKey: ref("1"),

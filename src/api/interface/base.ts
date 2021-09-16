@@ -7,3 +7,9 @@ export interface ListPageType<T> {
     rows: Array<T>
     count: number
 }
+
+export interface ListQueryType {
+    page: string | number
+    pageSize: string | number
+    type?: string
+}

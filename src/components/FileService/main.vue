@@ -42,10 +42,10 @@ export default defineComponent({
         const close = () => {
             doClose.value()
         }
-        // const { loading, list, loadData } = useLoadHook({ api: api.fileApi.fileList })
+        // const { loading, list, loadData } = useListPageHook({ api: api.fileApi.fileList })
         const loading = ref(false)
-        const total: Ref<number | string> = ref(0)
-        const list: Ref<Array<I.file.baseRow>> = ref([])
+        const total: Ref<number | undefined> = ref(0)
+        const list: Ref<Array<I.file.baseRow> | undefined> = ref([])
         console.log("type", type.value)
         onMounted(() => {
             setTimeout(() => {
@@ -53,7 +53,7 @@ export default defineComponent({
                 loadData()
             })
         })
-        const listQuery: Ref<I.file.IFileList> = ref({
+        const listQuery: Ref<I.base.ListQueryType> = ref({
             page: 1,
             pageSize: 12,
             type: type.value
@@ -64,9 +64,8 @@ export default defineComponent({
             api.fileApi
                 .fileList(listQuery.value)
                 .then((res) => {
-                    console.log(res, "===========res")
-                    list.value = res.result.rows
-                    total.value = res.result.count
+                    list.value = res?.result?.rows
+                    total.value = res?.result?.count
                 })
                 .finally(() => {
                     loading.value = false

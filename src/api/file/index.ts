@@ -2,7 +2,7 @@ import * as I from "@/api/interface/index"
 import axios from "@/api/interceptors"
 import { genNonDuplicateID } from "@/utils"
 import { AxiosPromise } from "axios"
-import { BaseResponse, ListPageType } from "@/api/interface/base"
+import { BaseResponse, ListPageType, ListQueryType } from "@/api/interface/base"
 
 const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => void): AxiosPromise<BaseResponse<I.file.UploadResponseResult>> => {
     return axios({
@@ -16,7 +16,7 @@ const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => voi
     })
 }
 
-const fileList = (params: I.file.IFileList): Promise<BaseResponse<ListPageType<I.file.baseRow>>> => {
+const fileList = (params?: ListQueryType): Promise<BaseResponse<ListPageType<I.file.baseRow>>> => {
     return axios.get("/api/file/list", { params })
 }
 
