@@ -55,7 +55,7 @@
     </div>
 </template>
 <script lang="ts">
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { defineComponent, reactive, toRaw, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined, MailOutlined } from "@ant-design/icons-vue"
 

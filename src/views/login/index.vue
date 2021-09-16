@@ -37,7 +37,7 @@
     </div>
 </template>
 <script lang="ts">
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { defineComponent, reactive, UnwrapRef } from "vue"
 import { UserOutlined, LockOutlined, EyeOutlined, EyeInvisibleOutlined } from "@ant-design/icons-vue"
 

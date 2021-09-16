@@ -13,3 +13,9 @@ export interface ListQueryType {
     pageSize: string | number
     type?: string
 }
+export interface BaseMessageConfig {
+    content?: string
+    top?: string
+    duration?: number
+    maxCount?: number
+}

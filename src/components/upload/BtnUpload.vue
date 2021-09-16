@@ -13,7 +13,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { reactive } from "vue"
 import { LoadingOutlined } from "@ant-design/icons-vue"
 export interface FormType {
@@ -46,8 +46,7 @@ export default defineComponent({
                         if (form.percent == 100) {
                             message.info({
                                 type: "success",
-                                content: "上传成功",
-                                duration: 2000
+                                content: "上传成功"
                             })
                             form.percent = 0
                         }

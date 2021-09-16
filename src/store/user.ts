@@ -2,6 +2,7 @@ import { Module, ActionTree, Commit } from "vuex"
 import * as I from "@/api/interface/index"
 import { GlobalDataProps } from "@/store/index"
 import api from "@/api/index"
+import { deepClone } from "@/utils"
 export interface UserStateProps {
     info: I.user.InfoResponseResult
 }
@@ -16,29 +17,33 @@ export interface Actions {
     // 用户信息
     ["GET_USER_INFO"]({ commit }: { commit: Commit; state: UserStateProps }): Promise<I.user.InfoResponseResult | undefined>
 }
+const useInfo: I.user.InfoResponseResult = {
+    id: "",
+    username: "",
+    email: "",
+    name: "",
+    sex: "",
+    type: "",
+    phone: "",
+    status: "",
+    lastLoginTime: "",
+    lastLoginIp: "",
+    createdAt: "",
+    updatedAt: "",
+    avatar: "",
+    birth: "",
+    address: ""
+}
 const userModule: Module<UserStateProps, GlobalDataProps> = {
     state: {
-        info: {
-            id: "",
-            username: "",
-            email: "",
-            name: "",
-            sex: "",
-            type: "",
-            phone: "",
-            status: "",
-            lastLoginTime: "",
-            lastLoginIp: "",
-            createdAt: "",
-            updatedAt: "",
-            avatar: "",
-            birth: "",
-            address: ""
-        }
+        info: deepClone(useInfo)
     },
     mutations: {
         SET_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
             state.info = info
+        },
+        CLEAR_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
+            state.info = deepClone(useInfo)
         }
     },
     getters: {

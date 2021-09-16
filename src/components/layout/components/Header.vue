@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { UserOutlined } from "@ant-design/icons-vue"
 import { computed, defineComponent } from "vue"
 
