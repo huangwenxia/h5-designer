@@ -1,54 +1,63 @@
 <template>
     <div class="btn-upload-ceil">
         <div class="btn-primary">
-            <a-space v-if="form.loading">
+            <a-space v-if="form.percent">
                 <LoadingOutlined />
                 <span>上传中...</span>
             </a-space>
             <span v-else>上传</span>
             <input type="file" @change="onUpload" />
+            <div v-if="form.percent" class="bar" :style="{ width: form.percent + '%' }">{{ form.percent + " %" }}</div>
         </div>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { reactive } from "vue"
 import { LoadingOutlined } from "@ant-design/icons-vue"
 export interface FormType {
-    loading: boolean
+    percent: number
 }
 export default defineComponent({
     name: "BtnUpload",
     components: { LoadingOutlined },
-    setup() {
+    setup(props, context) {
         const { api, message } = useGlobalHook()
         const form = reactive<FormType>({
-            loading: false
+            percent: 0
         })
-        // const onUpload = (event: Event) => {
-        //     // const file = event.currentTarget.files[0]
-        //     // let file = (<HTMLInputElement>e.target).files[0];
-        //     // const target = event.target as HTMLInputElement
-        //     // const file = target.files[0]
-        //     if (!file) return
-        //     const formData = new FormData()
-        //     formData.append("files", file)
-        //     api.fileApi
-        //         .upload(formData)
-        //         .then(() => {
-        //             form.loading = false
-        //             message.info({
-        //                 type: "success",
-        //                 content: "上传成功",
-        //                 duration: 2000
-        //             })
-        //         })
-        //         .catch(() => {
-        //             form.loading = false
-        //         })
-        // }
-        // return { onUpload, form }
+        const onUpload = (event: Event) => {
+            let target = event.target as HTMLInputElement
+            const file = target.files && target.files[0]
+            if (!file) return
+            const formData = new FormData()
+            formData.append("files", file)
+
+            const onUploadProgress = (progressEvent = { loaded: 0, total: 0 }) => {
+                //hwx:ts校验存在any，所以加上初始值
+                form.percent = (progressEvent.loaded / progressEvent.total) * 100
+            }
+            api.fileApi
+                .upload(formData, onUploadProgress)
+                .then((res) => {
+                    target.value = "" //同一个 input 选择同一张图片 不会触发 onchange事件
+                    setTimeout(() => {
+                        if (form.percent == 100) {
+                            message.info({
+                                type: "success",
+                                content: "上传成功"
+                            })
+                            form.percent = 0
+                        }
+                    })
+                    context.emit("success", res)
+                })
+                .catch(() => {
+                    target.value = ""
+                })
+        }
+        return { onUpload, form }
     }
 })
 </script>
@@ -73,6 +82,15 @@ export default defineComponent({
         font-size: 14px;
         border-radius: 2px;
         color: #fff;
+        .bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1;
+            font-size: 10px;
+            height: 4px;
+            background-color: #52c41a;
+        }
     }
     input {
         display: block;

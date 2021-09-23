@@ -5,25 +5,16 @@ export interface ILogin {
     name: string
     password: string
 }
-export interface ILoginResponse {
-    status: number
-    result?: string | undefined
-    message?: string
+
+export interface IGetCode {
+    email: string
 }
+
 export interface IRegister {
     email: string
     code: string
     username: string
     password: string
-}
-export interface IRegisterResponse {
-    status: number
-}
-export interface IGetCode {
-    email: string
-}
-export interface IGetCodeResponse {
-    status: number
 }
 
 export interface InfoResponseResult {
@@ -44,10 +35,6 @@ export interface InfoResponseResult {
     address: string
 }
 
-export interface IUserInfoResponse {
-    status: number
-    result: InfoResponseResult
-}
 export interface IUserUpdate {
     name: string
     avatar: string
@@ -55,7 +42,4 @@ export interface IUserUpdate {
     sex: string | number //1、男，2、女
     address: string
     birth: string | number
-}
-export interface IUserUpdateResponse {
-    status: number | string | undefined
 }

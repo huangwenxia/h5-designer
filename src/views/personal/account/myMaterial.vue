@@ -53,7 +53,7 @@
 <script lang="ts">
 import { defineComponent, reactive, toRaw, UnwrapRef, ref, computed } from "vue"
 import { UserOutlined } from "@ant-design/icons-vue"
-import { useGlobalHook } from "@/utils/useGlobalHook"
+import { useGlobalHook } from "@/hooks/useGlobalHook"
 interface FormState {
     name: string
     username: string

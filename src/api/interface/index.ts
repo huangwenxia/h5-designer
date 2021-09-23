@@ -1,6 +1,5 @@
-import * as common from "./common"
+import * as base from "./base"
 import * as user from "./user"
 import * as file from "./file"
 
-// export { otherApiInterface as otherApiInterface, common as common, user as user }
-export { common as common, user as user, file as file }
+export { base as base, user as user, file as file }

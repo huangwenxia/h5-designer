@@ -108,7 +108,7 @@ const notfoundRoute: routeItem = {
 }
 router.addRoute(notfoundRoute)
 router.beforeEach((to, from, next) => {
-    const whiteList = ["/login", "/401", "/404", "/403", "/register"] // 不需要重定向白名单
+    const whiteList = ["/login", "/home", "/401", "/404", "/403", "/register"] // 不需要重定向白名单
     // next();return;//暂时去掉登录拦截
     // initSideBar(to.path)
     if (whiteList.indexOf(to.path) != -1 || to.path.indexOf("login") > -1) {
