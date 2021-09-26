@@ -3,7 +3,8 @@
         <div class="edit-item" style="overflow: unset">
             <span class="label"> 边框颜色： </span>
             <div class="value">
-                <Color :color="data.style.borderColor" @color-chenge="colorChenge"></Color>
+                <!-- <Color :color="data.style.borderColor" @color-chenge="colorChenge"></Color> -->
+                <ColorPicker  v-model="data.style.borderColor"></ColorPicker>
             </div>
         </div>
         <div class="edit-item">
@@ -37,12 +38,15 @@ import { defineComponent, ref, Ref, computed } from "vue"
 import { useStore } from "vuex"
 import { ElementsType } from "@/store/page"
 import Color from "./Color.vue"
+
+import { ColorPicker } from "@tucy/vue3-color";
+import "@tucy/vue3-color/lib/vue3-color.css";
 interface colorType {
     rgba: string
     hex: string
 }
 export default defineComponent({
-    components: { Color },
+    components: { Color ,ColorPicker},
     setup() {
         const store = useStore()
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
@@ -57,7 +61,7 @@ export default defineComponent({
         return {
             data,
             handleChange,
-            colorChenge
+            colorChenge,
         }
     }
 })

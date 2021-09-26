@@ -2,14 +2,14 @@
     <div class="color">
         <div class="color-main" :style="{ 'background-color': colors }" @mousedown.stop="colorDown"></div>
         <div class="color-sketch" v-if="hiden" @mousedown.stop>
-            <Sketch v-model="colors" @change="onChange" />
+            <!-- <Sketch v-model="colors" @change="onChange" /> -->
         </div>
     </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue"
 import "@tucy/vue3-color/lib/vue3-color.css"
-import { Sketch } from "@tucy/vue3-color"
+// import { Sketch } from "@tucy/vue3-color"
 interface colorType {
     rgba: string
     hex: string
@@ -21,7 +21,7 @@ const PropsType = {
     }
 }
 export default defineComponent({
-    components: { Sketch },
+    // components: { Sketch },
     emits: ["color-chenge"],
     props: PropsType,
     setup(props, context) {
