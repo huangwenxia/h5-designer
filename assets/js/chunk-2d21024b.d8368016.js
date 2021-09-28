@@ -1,1 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d21024b"],{b744:function(e,n,o){"use strict";o.r(n);var c=o("7a23");const t={class:"my-works"};function r(e,n,o,r,s,a){return Object(c["openBlock"])(),Object(c["createElementBlock"])("div",t,"我的收藏")}var s=Object(c["defineComponent"])({name:"MyWorks",components:{}});s.render=r;n["default"]=s}}]);
