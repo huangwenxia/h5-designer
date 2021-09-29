@@ -60,6 +60,7 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         }
     },
     mutations: {
+        // 修改 state数据     外部调用: store.commit('方法名','参数')
         elementAdd: (state: PageStateProps, data: ElementsType) => {
             state.elements.push(data)
             state.currentElementsId = data.id
