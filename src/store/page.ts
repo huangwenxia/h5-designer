@@ -5,6 +5,7 @@ export interface PageStateProps {
     elements: Array<ElementsType>
     currentElementsId: string
     currentElement: ElementsType
+    currentPageId: string
 }
 export interface ElementsType {
     style: StyleType
@@ -57,7 +58,8 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
             type: "",
             style: {},
             animateList: []
-        }
+        },
+        currentPageId: ""
     },
     mutations: {
         elementAdd: (state: PageStateProps, data: ElementsType) => {
@@ -70,6 +72,12 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
             if (id) {
                 state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [] }
             }
+        },
+        setElements: (state: PageStateProps, elements: Array<ElementsType>) => {
+            state.elements = elements
+        },
+        setPageId: (state: PageStateProps, id: string) => {
+            state.currentPageId = id
         }
     },
     getters: {

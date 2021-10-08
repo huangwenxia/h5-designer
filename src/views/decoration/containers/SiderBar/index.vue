@@ -9,7 +9,9 @@
                 <li class="item item-active" :style="{ transform: 'translateY(' + menutab * 100 + '%)' }"><div class="active-border"></div></li>
             </ul>
         </div>
-        <div class="module-content" v-if="menutab == 0">页面</div>
+        <div class="module-content" v-if="menutab == 0">
+            <Pages></Pages>
+        </div>
         <div class="module-content" v-if="menutab == 1">图层</div>
     </div>
 </template>
@@ -17,10 +19,12 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue"
 import { FileTextOutlined, SwitcherOutlined } from "@ant-design/icons-vue"
+import Pages from "./Pages.vue"
 export default defineComponent({
     components: {
         FileTextOutlined,
-        SwitcherOutlined
+        SwitcherOutlined,
+        Pages
     },
     setup() {
         const menutab = ref(0)
