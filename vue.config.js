@@ -3,6 +3,16 @@ module.exports = {
     assetsDir: "assets",
     publicPath: "./",
     productionSourceMap: false,
+    css: {
+        loaderOptions: {
+            sass: {
+                prependData: `
+                    @import '@/assets/css/variables.scss';
+                    @import '@/assets/css/mixins.scss';
+                `
+            }
+        }
+    },
     devServer: {
         open: true,
         proxy: {

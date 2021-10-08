@@ -17,7 +17,8 @@ export interface Actions {
     // 用户信息
     ["GET_USER_INFO"]({ commit }: { commit: Commit; state: UserStateProps }): Promise<I.user.InfoResponseResult | undefined>
 }
-const useInfo: I.user.InfoResponseResult = {
+const userInfo = localStorage.getItem("userInfo")
+const useInfo: I.user.InfoResponseResult = (userInfo && JSON.parse(userInfo)) || {
     id: "",
     username: "",
     email: "",
@@ -41,6 +42,7 @@ const userModule: Module<UserStateProps, GlobalDataProps> = {
     mutations: {
         SET_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
             state.info = info
+            localStorage.setItem("userInfo", JSON.stringify(info))
         },
         CLEAR_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
             state.info = deepClone(useInfo)

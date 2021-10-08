@@ -15,7 +15,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@tucy/vue3-color": "^0.1.6",
+    "@tucy/vue3-color": "^0.1.7",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
     "@vue/cli-plugin-eslint": "^4.5.13",
