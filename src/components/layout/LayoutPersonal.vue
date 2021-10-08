@@ -1,9 +1,7 @@
 <template>
     <div class="layout-container">
         <a-layout>
-            <a-layout-header class="header">
-                <Header></Header>
-            </a-layout-header>
+            <Header></Header>
             <a-layout class="aside">
                 <a-layout-sider width="200" theme="light" class="aside-slider">
                     <a-menu mode="inline" v-model:selectedKeys="selectedKeys2" v-model:openKeys="openKeys" :style="{ height: '100%', borderRight: 0 }">
@@ -124,14 +122,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .layout-container {
     height: calc(100vh - 27px);
-}
-
-.layout-container .header {
-    background: #ffffff;
-    position: relative;
-    z-index: 1110;
-    border-bottom: 1px solid #ddd;
-    padding: 0 25px;
 }
 .layout-container .aside {
     min-height: calc(100vh - 50px);

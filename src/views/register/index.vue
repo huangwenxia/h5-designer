@@ -142,9 +142,19 @@ export default defineComponent({
     height: 100%;
     left: 0;
     top: 0;
-    background: url(../../assets/images/login-bg.png) center no-repeat;
+    background: url(../../assets/images/login-bg.jpg) center no-repeat;
     background-size: cover;
     overflow: auto;
+    &:after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        position: absolute;
+    }
 }
 
 .login-container .wrapper {
@@ -154,6 +164,7 @@ export default defineComponent({
     transform: translate(-50%, -50%);
     width: 384px;
     padding: 20px;
+    z-index: 20;
 }
 
 .login-container .wrapper {
@@ -164,6 +175,7 @@ export default defineComponent({
         width: 100%;
         text-align: center;
         font-weight: 700;
+        margin-bottom: 40px;
     }
 
     .login-form {

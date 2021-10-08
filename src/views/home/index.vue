@@ -1,63 +1,86 @@
 <template>
     <div class="home-page">
         <a-layout>
-            <a-layout-header class="header">
-                <Header></Header>
-            </a-layout-header>
+            <Header></Header>
             <section class="home-carousel">
                 <a-carousel :after-change="onChange">
-                    <div style="height: 100%" v-for="i in [1, 2, 3, 4]" :key="i">
-                        <h3>{{ i }}</h3>
+                    <div v-for="i in [1, 2]" :key="i" style="vertical-align: top">
+                        <div class="carousel-item" :style="'background-image:url(' + require('@/assets/images/banner' + i + '.jpg') + ')'">
+                            <div class="content">
+                                <h2>免费好用的H5制作工具</h2>
+                                <h3>创意新颖，动画炫酷，制作简单</h3>
+                            </div>
+                        </div>
                     </div>
                 </a-carousel>
             </section>
             <section class="home-part2">
-                <a-row>
-                    <a-col class="box" v-for="(item, i) in part2Data" :span="8" :key="i">
-                        <div>
-                            <a-image
-                                :width="60"
-                                :height="80"
-                                :src="item.img"
-                                fallback="data:image/png;base64,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"
-                            />
-                        </div>
-                        <h1>{{ item.text }}</h1>
-                        <h4>{{ item.desc }}</h4>
-                    </a-col>
-                </a-row>
-            </section>
-            <section class="home-part3">
-                <h1 class="title">H5广场</h1>
-
-                <div class="list">
-                    <a-row type="flex" justify="center" :gutter="[16, 16]">
-                        <a-col :span="6" v-for="(item, i) in part3Data" :key="i">
-                            <div class="box">
-                                <div class="box-img">
-                                    <a-image width="100%" :src="item.img"></a-image>
-                                </div>
-                                <div class="box-info">
-                                    <h4 class="sub-title">{{ item.title }}</h4>
-                                    <div class="info clearfix">
-                                        <a-avatar class="username">
-                                            <template #icon>
-                                                <a-image :width="60" :height="80" :src="item.avatar"></a-image>
-                                            </template>
-                                            {{ item.username }}
-                                        </a-avatar>
-                                        <div class="number">
-                                            <eye-outlined />
-                                            {{ item.number }}
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="wrapper">
+                    <a-row>
+                        <a-col class="box" v-for="(item, i) in part2Data" :span="8" :key="i">
+                            <div>
+                                <svg v-if="i === 0" class="" data-icon="html5" width="1em" height="1em" fill="currentColor" aria-hidden="true" viewBox="64 64 896 896" focusable="false">
+                                    <path d="M145 96l66 746.6L511.8 928l299.6-85.4L878.7 96H145zm610.9 700.6l-244.1 69.6-245.2-69.6-56.7-641.2h603.8l-57.8 641.2z" fill="#1890ff"></path>
+                                    <path
+                                        d="M209.9 155.4l56.7 641.2 245.2 69.6 244.1-69.6 57.8-641.2H209.9zm530.4 117.9l-4.8 47.2-1.7 19.5H381.7l8.2 94.2H511v-.2h214.7l-3.2 24.3-21.2 242.2-1.7 16.3-187.7 51.7v.4h-1.7l-188.6-52-11.3-144.7h91l6.5 73.2 102.4 27.7h.8v-.2l102.4-27.7 11.4-118.5H511.9v.1H305.4l-22.7-253.5L281 249h461l-1.7 24.3z"
+                                        fill="#e6f7ff"
+                                    ></path>
+                                    <path d="M281 249l1.7 24.3 22.7 253.5h206.5v-.1h112.9l-11.4 118.5L511 672.9v.2h-.8l-102.4-27.7-6.5-73.2h-91l11.3 144.7 188.6 52h1.7v-.4l187.7-51.7 1.7-16.3 21.2-242.2 3.2-24.3H511v.2H389.9l-8.2-94.2h352.1l1.7-19.5 4.8-47.2L742 249H511z" fill="#1890ff"></path>
+                                </svg>
+                                <svg v-if="i === 1" class="" data-icon="build" width="1em" height="1em" fill="currentColor" aria-hidden="true" viewBox="64 64 896 896" focusable="false">
+                                    <path d="M144 546h200v200H144zm268-268h200v200H412z" fill="#e6f7ff"></path>
+                                    <path
+                                        d="M916 210H376c-17.7 0-32 14.3-32 32v236H108c-17.7 0-32 14.3-32 32v272c0 17.7 14.3 32 32 32h540c17.7 0 32-14.3 32-32V546h236c17.7 0 32-14.3 32-32V242c0-17.7-14.3-32-32-32zM344 746H144V546h200v200zm268 0H412V546h200v200zm0-268H412V278h200v200zm268 0H680V278h200v200z"
+                                        fill="#1890ff"
+                                    ></path>
+                                </svg>
+                                <svg v-if="i === 2" class="" data-icon="bulb" width="1em" height="1em" fill="currentColor" aria-hidden="true" viewBox="64 64 896 896" focusable="false">
+                                    <path d="M512 136c-141.4 0-256 114.6-256 256 0 92.5 49.4 176.3 128.1 221.8l35.9 20.8V752h184V634.6l35.9-20.8C718.6 568.3 768 484.5 768 392c0-141.4-114.6-256-256-256z" fill="#e6f7ff"></path>
+                                    <path
+                                        d="M632 888H392c-4.4 0-8 3.6-8 8v32c0 17.7 14.3 32 32 32h192c17.7 0 32-14.3 32-32v-32c0-4.4-3.6-8-8-8zM512 64c-181.1 0-328 146.9-328 328 0 121.4 66 227.4 164 284.1V792c0 17.7 14.3 32 32 32h264c17.7 0 32-14.3 32-32V676.1c98-56.7 164-162.7 164-284.1 0-181.1-146.9-328-328-328zm127.9 549.8L604 634.6V752H420V634.6l-35.9-20.8C305.4 568.3 256 484.5 256 392c0-141.4 114.6-256 256-256s256 114.6 256 256c0 92.5-49.4 176.3-128.1 221.8z"
+                                        fill="#1890ff"
+                                    ></path>
+                                </svg>
                             </div>
+                            <h1>{{ item.text }}</h1>
+                            <h4>{{ item.desc }}</h4>
                         </a-col>
                     </a-row>
                 </div>
-                <div class="pagination">
-                    <a-pagination v-model:current="current" :total="50" show-less-items />
+            </section>
+            <section class="home-part3">
+                <div class="wrapper">
+                    <h1 class="title">H5广场</h1>
+
+                    <div class="list">
+                        <a-row type="flex" justify="center" :gutter="[20, 20]">
+                            <a-col :span="6" v-for="(item, i) in part3Data" :key="i">
+                                <div class="box" @click="toDetail(item)">
+                                    <div class="box-img">
+                                        <a-image width="100%" :src="item.img" :preview="false"></a-image>
+                                    </div>
+                                    <div class="box-info">
+                                        <h4 class="sub-title">{{ item.title }}</h4>
+                                        <div class="info clearfix">
+                                            <a-avatar class="username">
+                                                <template #icon>
+                                                    <a-image :width="60" :height="80" :src="item.avatar" :preview="false"></a-image>
+                                                </template>
+                                                {{ item.username }}
+                                            </a-avatar>
+                                            <div class="number">
+                                                <eye-outlined />
+                                                {{ item.number }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a-col>
+                        </a-row>
+                    </div>
+                    <div class="pagination">
+                        <a-pagination v-model:current="current" :total="50" show-less-items />
+                    </div>
                 </div>
             </section>
             <a-layout-footer>
@@ -72,7 +95,15 @@ import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
 import { defineComponent, reactive, ref } from "vue"
 import { EyeOutlined } from "@ant-design/icons-vue"
-
+import { useRouter } from "vue-router"
+interface PosterItem {
+    id: number
+    img: string
+    title: string
+    username: string
+    number: number
+    avatar: string
+}
 export default defineComponent({
     name: "Home",
     components: {
@@ -82,21 +113,32 @@ export default defineComponent({
     },
 
     setup() {
+        const router = useRouter()
         const onChange = (current: number) => {
             console.log(current)
         }
         const part2Data = ref([
             { img: "", text: "专注H5始终如一", desc: "三年保持行业领先" },
-            { img: "", text: "海量 H5 模板", desc: "一键生成，一分钟轻松制作" },
+            { img: "", text: "丰富的动画", desc: "一键生成，一分钟轻松制作" },
             { img: "", text: "极致体验", desc: "用户的一致选择" }
         ])
         let data = new Array(8).fill({ img: require("@/assets/images/prd.png"), title: "互联网科技邀请函", username: "用户A", number: 66, avatar: require("@/assets/images/prd.png") })
         const part3Data = reactive(data)
+
+        const toDetail = (data: PosterItem): void => {
+            router.push({
+                path: "/detail",
+                query: {
+                    id: data.id
+                }
+            })
+        }
         return {
             part2Data,
             part3Data,
             onChange,
-            current: 2
+            current: 2,
+            toDetail
         }
     }
 })
@@ -106,31 +148,40 @@ export default defineComponent({
 .home-page {
     width: 100%;
 }
-.home-page .header {
-    background: #ffffff;
-    position: relative;
-    z-index: 1110;
-    border-bottom: 1px solid #ddd;
-    padding: 0 25px;
-}
 .home-page .home-part2 {
-    height: 200px;
-    background-color: $gray-3;
+    background-color: $gray-4;
+    padding: 40px 0;
     .box {
         text-align: center;
         margin-top: 20px;
+        svg {
+            width: 60px;
+            height: 60px;
+        }
+        h1 {
+            font-size: 20px;
+        }
+        h4 {
+            color: #777;
+        }
     }
 }
 .home-page .home-part3 {
     background-color: #ffffff;
-    padding: 0 200px 30px;
+    padding: 50px 0;
     .title {
-        padding: 40px;
         text-align: center;
+        margin-bottom: 50px;
+        font-size: 24px;
     }
     .list {
         .box {
             text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            &:hover {
+                transform: translateY(-10px);
+            }
             .sub-title {
                 padding: 16px 0;
             }
@@ -160,15 +211,40 @@ export default defineComponent({
 .ant-layout-footer {
     padding: 0;
 }
-.ant-carousel :deep(.slick-slide) {
-    text-align: center;
-    height: 400px;
-    line-height: 400px;
-    background: #364d79;
-    overflow: hidden;
-}
-
-.ant-carousel :deep(.slick-slide h3) {
-    color: #fff;
+.home-carousel {
+    .carousel-item {
+        height: 100%;
+        position: relative;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 400px;
+        &:after {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.5);
+            content: "";
+            display: block;
+        }
+        .content {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 80px 0;
+            color: #fff;
+            font-size: 30px;
+            position: relative;
+            z-index: 10;
+            h2,
+            h3 {
+                color: #fff;
+            }
+        }
+    }
+    :deep(.slick-slide div) {
+        vertical-align: top;
+    }
 }
 </style>

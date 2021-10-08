@@ -33,11 +33,14 @@ export function deepClone<T extends Array<T> | any>(sourceData: T): T {
     return obj
 }
 
-export function styleToString(style: any): string {
+interface Style {
+    [key: string]: string | number | undefined
+}
+export function styleToString(style: Style): string {
     if (style == null || style == undefined) return ""
     return Object.keys(style)
         .map((a) => {
-            var value = style[a]
+            let value = style[a]
             if (
                 [
                     "fontSize",
@@ -65,23 +68,24 @@ export function styleToString(style: any): string {
                     "borderBottomLeftRadius",
                     "borderTopRightRadius",
                     "borderWidth"
-                ].indexOf(a) > -1
+                ].indexOf(a) > -1 &&
+                value
             ) {
-                value = +parseFloat(value).toFixed(2) + "px"
+                value = +parseFloat(value + "").toFixed(2) + "px"
             }
             return a.replace(/([A-Z])/g, "-$1".toLocaleLowerCase()).toLocaleLowerCase() + ":" + value
         })
         .join(";")
 }
 
-export function startAnimate(element: ElementsType) {
+export function startAnimate(element: ElementsType): void {
     if (!element.id) return
 
-    var dom = document.getElementById("element-" + element.id)
-    var animations: Array<AnimateType> = element.animateList
-    var index = 0
+    const dom = document.getElementById("element-" + element.id)
+    const animations: Array<AnimateType> = element.animateList
+    let index = 0
     dom?.classList.add("animate__animated")
-    var action = () => {
+    const action = () => {
         dom?.classList.add(animations[index].animateName)
         if (dom) {
             if (animations[index].delay) {
@@ -96,9 +100,9 @@ export function startAnimate(element: ElementsType) {
                 dom.style.animationIterationCount = animations[index].iterationCount + ""
             }
         }
-        let delay = animations[index].delay || 0
-        let duration = animations[index].duration || 0
-        let time = (Number(duration) + Number(delay)) * 1000
+        const delay = animations[index].delay || 0
+        const duration = animations[index].duration || 0
+        const time = (Number(duration) + Number(delay)) * 1000
         setTimeout(() => {
             index++
             dom?.classList.remove(animations[index - 1].animateName)

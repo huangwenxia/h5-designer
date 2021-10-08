@@ -4,7 +4,7 @@ import LayoutPersonal from "@/components/layout/LayoutPersonal.vue"
 import LayoutContent from "@/components/layout/LayoutContent.vue"
 const routes: Array<RouteRecordRaw> = [
     {
-        path: "/home",
+        path: "/",
         name: "Home",
         component: () => import("@/views/home/index.vue")
     },
@@ -88,6 +88,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/decoration",
         name: "decoration",
         component: () => import("@/views/decoration/index.vue")
+    },
+    {
+        path: "/detail",
+        name: "detail",
+        component: () => import("@/views/detail/index.vue")
     }
 ]
 
@@ -98,20 +103,20 @@ const router = createRouter({
 interface routeItem {
     path: string
     name: string
-    redirect: string
+    component: () => Promise<typeof import("*.vue")>
 }
 //没有发现路由重定向
 const notfoundRoute: routeItem = {
-    path: "/",
-    name: "login",
-    redirect: "/login"
+    path: "/:catchAll(.*)",
+    name: "404",
+    component: () => import("@/views/public/404.vue")
 }
 router.addRoute(notfoundRoute)
 router.beforeEach((to, from, next) => {
     const whiteList = ["/login", "/home", "/401", "/404", "/403", "/register"] // 不需要重定向白名单
     // next();return;//暂时去掉登录拦截
     // initSideBar(to.path)
-    if (whiteList.indexOf(to.path) != -1 || to.path.indexOf("login") > -1) {
+    if (to.path === "/" || whiteList.indexOf(to.path) != -1 || to.path.indexOf("login") > -1) {
         // 在免登录白名单，直接进入
         next()
     } else {
@@ -128,7 +133,8 @@ router.beforeEach((to, from, next) => {
                         replace: false
                     })
                 })
-                .catch(() => {
+                .catch((e) => {
+                    console.log(e)
                     const path = "/login"
                     next({
                         path: path,

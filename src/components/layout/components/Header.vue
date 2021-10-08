@@ -1,33 +1,30 @@
 <template>
     <div class="header-container clearfix">
         <div class="logo">
-            <a-image :width="40" :src="loginUrl" />
-            <span class="txt">H5设计平台</span>
+            <router-link tag="span" to="/">
+                <a-image :width="40" :src="loginUrl" :preview="false" />
+                <span class="txt">H5设计平台</span>
+            </router-link>
         </div>
-        <div class="no-login" v-if="!userInfo.id">
-            <a-button type="link" @click="login">登录</a-button>
-            |
-            <a-button type="link" @click="register">注册</a-button>
-        </div>
+        <div class="no-login" v-if="!userInfo.id"><a-button type="link" @click="login">登录</a-button>|<a-button type="link" @click="register">注册</a-button></div>
         <div class="logged" v-if="userInfo.id">
             <a-dropdown>
                 <template #overlay>
-                    <a-menu>
+                    <a-menu class="menu">
                         <a-menu-item key="1">
-                            <router-link tag="div" to="/personal/design/myWorks">我的作品</router-link>
+                            <router-link class="link" tag="div" to="/personal/design/myWorks">我的作品</router-link>
                         </a-menu-item>
                         <a-menu-item key="2">
-                            <router-link tag="div" to="/personal/design/material">素材</router-link>
+                            <router-link class="link" tag="div" to="/personal/design/material">素材</router-link>
                         </a-menu-item>
                         <a-menu-item key="3">
-                            <router-link tag="div" to="/personal/account/myMaterial">我的资料 </router-link>
+                            <router-link class="link" tag="div" to="/personal/account/myMaterial">我的资料 </router-link>
                         </a-menu-item>
                         <a-menu-item key="4">
-                            <router-link tag="div" to="/personal/account/myCollect">我的收藏 </router-link>
+                            <router-link class="link" tag="div" to="/personal/account/myCollect">我的收藏 </router-link>
                         </a-menu-item>
                         <a-menu-item key="5">
-                            <a-button type="link" @click="logout"> 退出 </a-button>
-                            <!--<router-link tag="div" to="/login"></router-link>-->
+                            <a-button class="link" type="link" size="small" @click="logout"> 退出 </a-button>
                         </a-menu-item>
                     </a-menu>
                 </template>
@@ -48,9 +45,6 @@
 import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { UserOutlined } from "@ant-design/icons-vue"
 import { computed, defineComponent } from "vue"
-import router from "@/router"
-import store from "@/store"
-import { message } from "ant-design-vue"
 
 export default defineComponent({
     name: "Header",
@@ -92,13 +86,25 @@ export default defineComponent({
 <style lang="scss">
 .header-container {
     width: 100%;
+    padding: 10px 25px;
+    background: #ffffff;
+    position: relative;
+    z-index: 50;
+    border-bottom: 1px solid $color-border;
 }
 
 .header-container .logo {
     float: left;
+    .ant-image {
+        vertical-align: middle;
+    }
     .txt {
-        margin-left: 30px;
-        color: #666;
+        margin-left: 20px;
+        font-size: 18px;
+        vertical-align: middle;
+    }
+    a {
+        color: #444;
     }
 }
 
@@ -108,6 +114,12 @@ export default defineComponent({
 
 .header-container .logged {
     float: right;
+}
+.menu {
+    .link {
+        color: #444;
+        padding: 0 20px;
+    }
 }
 .header-container .logged-info {
     height: 100%;

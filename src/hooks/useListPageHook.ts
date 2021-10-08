@@ -25,7 +25,6 @@ export function useListPageHook<T>(opt: LoadParamsType<T>): ReturnType<T> {
         pageSize: 10,
         ...opt.params
     })
-
     const loadData = () => {
         loading.value = true
         opt.api(listQuery.value)
