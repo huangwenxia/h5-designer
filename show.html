@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="./favicon.ico">
+    <title>H5设计平台</title>
+    <link rel="stylesheet" href="./static/swiper-bundle.min.css">
+    <link rel="stylesheet" href="./static/animate.min.css" />
+    <script src="./static/swiper-bundle.min.js"></script>
+    <script>
+        const width = 375;
+        const winWidth = window.screen.width > 600 ? 600 : window.screen.width
+        var scale = winWidth / width
+        var marginTop = (window.screen.height / scale - 570) / 2
+        const viewport = document.getElementById('viewport')
+        document.write(`<meta name="viewport" id="viewport" content="width=${width}, initial-scale=${scale}, maximum-scale=${scale}, user-scalable=no">`)
+    </script>
+    <style>
+        html,
+        body {
+            position: relative;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .element-box {
+            position: absolute;
+        }
+
+
+        .element-box .element img {
+            width: 100%;
+        }
+
+        .page-content {
+            width: 375px;
+            height: 570px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+                Please enable it to continue.</strong>
+    </noscript>
+    <div class="swiper-container">
+        <div class="swiper-wrapper" id="swiperWrapper">
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <script src="./static/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        function getQueryString(key) {
+            var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURI(r[2]);
+            }
+            return "";
+        }
+        function styleToString(style) {
+            if (style == null || style == undefined) return ""
+            return Object.keys(style)
+                .map((a) => {
+                    let value = style[a]
+                    if (
+                        ["fontSize", "borderRadius", "width", "height", "right", "lineHeight", "top", "left", "marginBottom", "marginTop", "marginLeft", "marginRight", "paddingBottom", "paddingTop", "paddingLeft", "paddingRight", "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth", "borderBottomRightRadius", "borderTopLeftRadius", "borderBottomLeftRadius", "borderTopRightRadius", "borderWidth"
+                        ].indexOf(a) > -1 &&
+                        value
+                    ) {
+                        value = +parseFloat(value + "").toFixed(2) + "px"
+                    }
+                    return a.replace(/([A-Z])/g, "-$1".toLocaleLowerCase()).toLocaleLowerCase() + ":" + value
+                }).join(";")
+        }
+
+        const getElementStyle = (style) => {
+            let opt = { left: style.left, top: style.top, transform: style.transform }
+            return styleToString(opt)
+        }
+        const getTextStyle = (style) => {
+            const excludes = ["top", "left", "transform"]
+            let opt = style
+            excludes.forEach((a) => {
+                delete opt[a]
+            })
+            return styleToString(opt)
+        }
+
+        function getElement(element) {
+            const map = {
+                text: (ele) => ele.text,
+                image: (ele) => `<img src="${ele.attrs.src}" />`
+            }
+            return `<div class="element-box" style="${getElementStyle(element.style)}">
+                        <div class="element" id="element-${element.id}" style="${getTextStyle(element.style)}">${map[element.type] && map[element.type](element) || ""}</div>
+                    </div>`
+        }
+        const id = getQueryString('id')
+        const mode = getQueryString('mode')
+        var pages = []
+        function getDetail() {
+            axios.get("/api/scene/page/list", { params: { sceneId: id } }).then(res => {
+                console.log('res', res)
+                const wrapper = document.getElementById('swiperWrapper')
+                let pagesStr = ""
+                pages = res.data.result.map(page => {
+                    let elestr = ""
+                    try {
+                        const key = mode == 'edit' ? 'elements' : 'elementsPublish'
+                        page.elementList = page[key] && JSON.parse(page[key]) || []
+                        elestr = page.elementList.map(a => getElement(a)).join('')
+                    } catch (e) {
+                        page.elementList = []
+                        console.log('e', e)
+                    }
+                    pagesStr += `<div class="swiper-slide"><div class="page-content" style="margin-top: ${marginTop}px;">${elestr}</div></div>`
+                    return page;
+                });
+                wrapper.innerHTML = pagesStr
+
+                var swiper = new Swiper('.swiper-container', {
+                    direction: 'vertical',
+                    pagination: {
+                        el: '.swiper-pagination',
+                        clickable: true,
+                    },
+                    on: {
+                        transitionEnd: function (a, b, c) {
+                            pages[a.realIndex].elementList.forEach(item => {
+                                item.animateList && item.animateList.length && startAnimate(item)
+                            })
+                        },
+                    },
+                });
+                setTimeout(() => {
+                    pages[0].elementList.forEach(item => {
+                        item.animateList && item.animateList.length && startAnimate(item)
+                    })
+                })
+
+            })
+        }
+        getDetail()
+        function visit(id) {
+            axios.get('/api/scene/visit/' + id)
+        }
+        if (mode != 'edit') {
+            visit(id)
+        }
+        function startAnimate(element) {
+            if (!element.id) return
+
+            const dom = document.getElementById("element-" + element.id)
+            const animations = element.animateList
+            let index = 0
+            dom?.classList.add("animate__animated")
+            const action = () => {
+                dom?.classList.add(animations[index].animateName)
+                if (dom) {
+                    if (animations[index].delay) {
+                        dom.style.animationDelay = animations[index].delay + "s"
+                    }
+                    if (animations[index].duration) {
+                        dom.style.animationDuration = animations[index].duration + "s"
+                    }
+                    if (animations[index].infinite) {
+                        dom.style.animationIterationCount = "infinite"
+                    } else if (animations[index].iterationCount) {
+                        dom.style.animationIterationCount = animations[index].iterationCount + ""
+                    }
+                }
+                const delay = animations[index].delay || 0
+                const duration = animations[index].duration || 0
+                const time = (Number(duration) + Number(delay)) * 1000
+                setTimeout(() => {
+                    index++
+                    dom?.classList.remove(animations[index - 1].animateName)
+                    if (index != animations.length) {
+                        action()
+                    }
+                }, time)
+            }
+
+            action()
+        }
+
+    </script>
+</body>
+
+</html>
