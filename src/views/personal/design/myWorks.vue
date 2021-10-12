@@ -1,5 +1,6 @@
 <template>
     <div class="my-works">
+        <div class="filter-control"><a-button type="primary" @click="add">添加作品</a-button></div>
         <Spin :spinning="loading">
             <div class="content">
                 <div class="work-list" v-if="list.length">
@@ -26,15 +27,15 @@
                         <div class="modal">
                             <div class="bg"></div>
                             <div class="preview">
-                                <div class="pre-btn">预览</div>
+                                <div class="pre-btn" @click="preview(item)">预览</div>
                             </div>
                             <div class="actions">
-                                <a-button type="text">
+                                <a-button type="text" @click="edit(item)">
                                     <EditOutlined />
                                     <br />
                                     编辑
                                 </a-button>
-                                <a-button type="text">
+                                <a-button type="text" @click="remove(item)">
                                     <DeleteOutlined />
                                     <br />
                                     删除
@@ -50,32 +51,62 @@
             <Pagination v-model:current="listQuery.page" :total="total" @change="loadData" />
         </div>
     </div>
+    <addWorkDialog ref="addWorkDialogRef" @refresh="loadData" />
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, Ref } from "vue"
-import { Pagination, Empty, Spin, Image } from "ant-design-vue"
+import { useRouter } from "vue-router"
+import { Pagination, Empty, Spin, Image, Modal, message } from "ant-design-vue"
 import * as I from "@/api/interface"
 import api from "@/api"
 import { useListPageHook } from "@/hooks/useListPageHook"
 import { EyeOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons-vue"
+import addWorkDialog from "./addWorkDialog.vue"
+import { addWorkHook } from "./addWorkHook"
 
 export default defineComponent({
     name: "MyWorks",
-    components: { Pagination, Empty, Spin, Image, EyeOutlined, DeleteOutlined, EditOutlined },
+    components: { Pagination, Empty, Spin, Image, EyeOutlined, DeleteOutlined, EditOutlined, addWorkDialog },
     setup() {
+        const router = useRouter()
         const { total, loading, list, listQuery, loadData } = useListPageHook<I.personal.baseRow>({
             api: api.personalApi.list,
             params: {
                 // type: "image"
             }
         })
-        const actionShow = ref<boolean>(false)
+        const actionShow: Ref<boolean> = ref(false)
         onMounted(() => {
             setTimeout(() => {
                 loadData()
             })
         })
+        const { addWorkDialogRef, add } = addWorkHook()
+        const edit = (data: I.scene.listrow): void => {
+            var local = router.resolve({
+                path: "/decoration",
+                query: {
+                    id: data.id
+                }
+            })
+            window.open(local.href, "_blank")
+        }
+        const preview = (data: I.scene.listrow): void => {
+            const url = process.env.NODE_ENV == "production" ? "/show" : "/show.html"
+            window.open(url + "?id=" + data.id, "_blank")
+        }
+        const remove = (data: I.scene.listrow): void => {
+            Modal.confirm({
+                title: "确认删除[" + data.title + "]吗?",
+                onOk() {
+                    api.sceneApi.remove(data.id).then(() => {
+                        message.success("删除成功")
+                        loadData()
+                    })
+                }
+            })
+        }
         return {
             list,
             actionShow,
@@ -83,7 +114,12 @@ export default defineComponent({
             loading,
             listQuery,
             loadData,
-            simpleImage: Empty.PRESENTED_IMAGE_SIMPLE
+            simpleImage: Empty.PRESENTED_IMAGE_SIMPLE,
+            addWorkDialogRef,
+            preview,
+            add,
+            edit,
+            remove
         }
     }
 })
@@ -101,10 +137,12 @@ export default defineComponent({
     :deep(.ant-btn) {
         height: 0;
     }
-
+    @include clearfix;
     .item {
         width: 200px;
         position: relative;
+        float: left;
+        margin: 0 20px 20px 0;
         &:hover {
             cursor: pointer;
             .modal {
@@ -112,19 +150,23 @@ export default defineComponent({
                 .actions {
                     transform: translateY(0);
                 }
+                .bg {
+                    opacity: 1;
+                }
             }
         }
         .box {
+            border: 1px solid $color-border;
             .info {
-                border: 1px solid #ddd;
                 width: 100%;
+                border-top: 1px solid $color-border;
                 .title {
                     text-align: center;
                     padding: 5px 5px;
-                    border-bottom: 1px solid #ddd;
                 }
                 .other {
                     padding: 6px 5px;
+                    color: #999;
                     .createdAt {
                         float: left;
                         margin-left: 5px;
@@ -151,9 +193,10 @@ export default defineComponent({
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background-color: #e5e5ee;
-                opacity: 0.4;
+                background-color: rgba(0, 0, 0, 0.5);
                 z-index: 1;
+                transition: all 0.3s;
+                opacity: 0;
             }
 
             .preview {

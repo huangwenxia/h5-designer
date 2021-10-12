@@ -28,13 +28,13 @@
                         </a-menu-item>
                     </a-menu>
                 </template>
-                <a-button class="logged-info" type="link">
+                <a-button class="logged-info" type="link" @click.stop="toUser">
                     <a-avatar>
                         <template #icon>
                             <UserOutlined icon="" />
                         </template>
                     </a-avatar>
-                    <span class="user-name">{{ userInfo.username }}</span>
+                    <span class="user-name">{{ userInfo.name || userInfo.username }}</span>
                 </a-button>
             </a-dropdown>
         </div>
@@ -61,7 +61,7 @@ export default defineComponent({
             store.commit("CLEAR_USER")
             message.success("退出成功")
             if (router.currentRoute.value.name != "home") {
-                router.replace("/home")
+                router.replace("/")
             }
         }
         const login = () => {
@@ -71,6 +71,10 @@ export default defineComponent({
             router.push("/register")
         }
         const userInfo = computed(() => store.getters.getUserInfo)
+        const toUser = () => {
+            console.log("2222")
+            router.push("/personal")
+        }
         return {
             loginUrl,
             // handleMenuClick,
@@ -78,7 +82,8 @@ export default defineComponent({
             login,
 
             logout,
-            userInfo
+            userInfo,
+            toUser
         }
     }
 })

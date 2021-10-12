@@ -12,7 +12,7 @@ export interface ElementsType {
     type: string
     id: string
     text?: string
-    attrs?: { src: string }
+    attrs: { src?: string }
     animateList: Array<AnimateType>
 }
 export interface StyleType {
@@ -57,7 +57,8 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
             id: "",
             type: "",
             style: {},
-            animateList: []
+            animateList: [],
+            attrs: {}
         },
         currentPageId: ""
     },
@@ -66,12 +67,12 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         elementAdd: (state: PageStateProps, data: ElementsType) => {
             state.elements.push(data)
             state.currentElementsId = data.id
-            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {}, animateList: [] }
+            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
         },
         setCurrent: (state: PageStateProps, id: string) => {
             state.currentElementsId = id
             if (id) {
-                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [] }
+                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
             }
         },
         setElements: (state: PageStateProps, elements: Array<ElementsType>) => {

@@ -110,7 +110,6 @@ export default defineComponent({
     .module-content {
         width: 240px;
         background: #fff;
-        padding: 20px 10px;
         overflow: auto;
     }
 }

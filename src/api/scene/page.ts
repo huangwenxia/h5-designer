@@ -15,4 +15,7 @@ const update = (params: I.scenePage.updateparam): Promise<BaseResponse<undefined
     const { id, ...opt } = params
     return axios.post("/api/scene/page/update/" + id, opt)
 }
-export default { list, detail, save, update }
+const remove = (id: number): Promise<BaseResponse<undefined>> => {
+    return axios.delete("/api/scene/page/" + id)
+}
+export default { list, detail, save, update, remove }

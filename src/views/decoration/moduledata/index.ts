@@ -1,4 +1,6 @@
-import text from './text'
+import text from "./text"
+import image from "./image"
 export default {
-    text
+    text,
+    image
 }

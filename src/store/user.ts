@@ -18,7 +18,7 @@ export interface Actions {
     ["GET_USER_INFO"]({ commit }: { commit: Commit; state: UserStateProps }): Promise<I.user.InfoResponseResult | undefined>
 }
 const userInfo = localStorage.getItem("userInfo")
-const useInfo: I.user.InfoResponseResult = (userInfo && JSON.parse(userInfo)) || {
+const defaultUserInfo = {
     id: "",
     username: "",
     email: "",
@@ -35,6 +35,7 @@ const useInfo: I.user.InfoResponseResult = (userInfo && JSON.parse(userInfo)) ||
     birth: "",
     address: ""
 }
+const useInfo: I.user.InfoResponseResult = (userInfo && JSON.parse(userInfo)) || defaultUserInfo
 const userModule: Module<UserStateProps, GlobalDataProps> = {
     state: {
         info: deepClone(useInfo)
@@ -44,9 +45,10 @@ const userModule: Module<UserStateProps, GlobalDataProps> = {
             state.info = info
             localStorage.setItem("userInfo", JSON.stringify(info))
         },
-        CLEAR_USER: (state: UserStateProps, info: I.user.InfoResponseResult) => {
-            state.info = deepClone(useInfo)
+        CLEAR_USER: (state: UserStateProps) => {
+            state.info = deepClone(defaultUserInfo)
             localStorage.removeItem("token")
+            localStorage.removeItem("userInfo")
         }
     },
     getters: {

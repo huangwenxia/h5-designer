@@ -8,6 +8,9 @@ import { GlobalDataProps } from "@/store"
 interface ReturnType {
     save: () => void
     publish: () => void
+    preview: () => void
+    detail: Ref<I.scene.listrow>
+    previewVisible: Ref<boolean>
 }
 export default function (): ReturnType {
     const store: Store<GlobalDataProps> = useStore()
@@ -23,11 +26,22 @@ export default function (): ReturnType {
             message.success("保存成功")
         })
     }
+    const detail: Ref<I.scene.listrow> = ref({ id: 0, title: "", desc: "", cover: "", music: "", status: 1, properties: "{}", viewCount: 0, creator: 1, createdAt: "", updatedAt: "" })
     const publish = () => {
-        message.success("发布成功")
+        console.log("detail", detail.value)
+        api.sceneApi.publish(detail.value.id).then(() => {
+            message.success("发布成功")
+        })
+    }
+    const previewVisible = ref(false)
+    const preview = () => {
+        previewVisible.value = true
     }
     return {
         save,
-        publish
+        publish,
+        preview,
+        detail,
+        previewVisible
     }
 }

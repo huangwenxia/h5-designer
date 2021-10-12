@@ -21,6 +21,7 @@ const messageConfig = <I.base.BaseMessageConfig>{
 message.config(messageConfig)
 
 const checkStatus = function (status: number | string, response: AxiosResponse): Promise<AxiosResponse> {
+    message.destroy() //全局销毁，防止请求报错太多情况
     switch (status) {
         //hwx:不写花括号限定块级作用域,const let var 都会jslint报错
         case 401: {
@@ -39,7 +40,6 @@ const checkStatus = function (status: number | string, response: AxiosResponse):
             // return Promise.reject(error);
             break
         case 500: //500
-            message.destroy() //全局销毁，防止请求报错太多情况
             message.error(response.data.message || "服务器请求失败，请稍后重试")
             break
         default:

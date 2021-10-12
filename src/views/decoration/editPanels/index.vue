@@ -9,6 +9,7 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue"
 import TextPanel from "./TextPanel.vue"
+import ImagePanel from "./ImagePanel.vue"
 import { useStore } from "vuex"
 
 const PropsType = {
@@ -23,7 +24,8 @@ export default defineComponent({
     setup() {
         const store = useStore()
         const map = {
-            text: TextPanel
+            text: TextPanel,
+            image: ImagePanel
         }
         const currentElement = computed(() => store.getters.getCurrentElement)
         // console.log(elements, "elements")

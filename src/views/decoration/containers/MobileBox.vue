@@ -5,6 +5,9 @@
                 <div v-if="item.type == 'text'">
                     {{ item.text }}
                 </div>
+                <template v-if="item.type == 'image'">
+                    <img :src="item.attrs.src" />
+                </template>
             </div>
             <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m"></div>
             <div class="ele-control" @mousedown.stop>
@@ -52,7 +55,7 @@ export default defineComponent({
 
         const getAnimate = async () => {
             elements.value.forEach((item: ElementsType) => {
-                startAnimate(item)
+                item.animateList && item.animateList.length && startAnimate(item)
             })
         }
         onMounted(() => {
@@ -81,9 +84,9 @@ export default defineComponent({
     border: 1px solid #eee;
     display: inline-block;
     overflow: hidden;
-    width: 350px;
+    width: 375px;
     margin-left: -175px;
-    min-height: 600px;
+    min-height: 570px;
     background-color: #fff;
     .edit-element {
         position: absolute;
@@ -105,6 +108,10 @@ export default defineComponent({
         .element {
             position: relative;
             overflow: hidden;
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
         .ele-control {
             display: none;

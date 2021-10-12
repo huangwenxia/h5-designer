@@ -5,7 +5,7 @@ import LayoutContent from "@/components/layout/LayoutContent.vue"
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
-        name: "Home",
+        name: "home",
         component: () => import("@/views/home/index.vue")
     },
     {
@@ -22,13 +22,13 @@ const routes: Array<RouteRecordRaw> = [
         path: "/personal",
         name: "PersonalCenter",
         component: LayoutContent,
-        redirect: "personal/design",
+        redirect: "/personal/design",
         meta: { title: "personal", icon: "personal", noCache: true },
         children: [
             {
                 path: "design",
                 component: LayoutPersonal,
-                redirect: "personal/design/myWorks",
+                redirect: "/personal/design/myWorks",
                 name: "design",
                 meta: { title: "design", icon: "design", noCache: true },
                 children: [
@@ -50,7 +50,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: "analyze",
                 name: "analyze",
                 component: LayoutPersonal,
-                redirect: "personal/analyze/data",
+                redirect: "/personal/analyze/data",
                 meta: { title: "analyze", icon: "analyze", noCache: true },
                 children: [
                     {
@@ -65,7 +65,7 @@ const routes: Array<RouteRecordRaw> = [
                 path: "account",
                 name: "account",
                 component: LayoutPersonal,
-                redirect: "personal/account/myMaterial",
+                redirect: "/personal/account/myMaterial",
                 meta: { title: "account", icon: "account", noCache: true },
                 children: [
                     {

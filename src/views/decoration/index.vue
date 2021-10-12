@@ -1,6 +1,6 @@
 <template>
     <div class="decoration">
-        <HeaderBar />
+        <HeaderBar :detail="detail" />
         <a-modal v-model:visible="visible" title="图片上传" @ok="handleOk">
             <file></file>
         </a-modal>
@@ -58,7 +58,8 @@ export default defineComponent({
             modules,
             moduleList,
             visible,
-            handleOk
+            handleOk,
+            detail
         }
     }
 })
