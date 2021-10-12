@@ -46,7 +46,7 @@ export default defineComponent({
         const loading = ref(false)
         const total: Ref<number | undefined> = ref(0)
         const list: Ref<Array<I.file.baseRow> | undefined> = ref([])
-        console.log("type", type.value)
+        // console.log("type", type.value)
         onMounted(() => {
             setTimeout(() => {
                 listQuery.value.type = type.value
@@ -81,6 +81,7 @@ export default defineComponent({
                 return
             }
             success.value(selectList.value)
+            close()
         }
         return {
             close,

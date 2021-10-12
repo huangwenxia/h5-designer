@@ -2,18 +2,21 @@
     <Header></Header>
     <div class="container">
         <div class="wrapper">
-            <div class="post-content"></div>
+            <div class="post-content">
+                <iframe :src="url + '?id=' + detail.id" frameborder="0"></iframe>
+            </div>
             <div class="post-info">
-                <div class="title">互联网科技招聘</div>
-                <div class="desc">这里是简介内容</div>
+                <div class="title">{{ detail.title }}</div>
+                <div class="desc">{{ detail.desc }}</div>
                 <div class="control">
-                    <span><EyeOutlined /> 1023</span>
-                    <span class="btn"><PaperClipOutlined /> 复制链接</span>
-                    <span class="btn"><HeartOutlined /> <HeartFilled /> 收藏</span>
+                    <span><EyeOutlined /> {{ detail.viewCount }}</span>
+                    <span class="btn" @click="copy"><PaperClipOutlined /> 复制链接</span>
+                    <span class="btn" @click="addFav" v-if="!detail.isFav"><HeartOutlined /> 收藏</span>
+                    <span class="btn red" v-else><HeartFilled /> 已收藏</span>
                 </div>
                 <div class="qr">
                     <div class="tit">手机扫一扫即可预览</div>
-                    <div class="code"></div>
+                    <div class="code"><canvas id="code"></canvas></div>
                 </div>
                 <div class="btns">
                     <a-button size="large" type="primary" @click="use">使用该摸版</a-button>
@@ -24,11 +27,14 @@
     <Footer></Footer>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue"
+import { defineComponent, Ref, ref, onMounted } from "vue"
 import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
-import { useRouter } from "vue-router"
+import { useRouter, useRoute } from "vue-router"
+import api, { I } from "@/api"
 import { EyeOutlined, PaperClipOutlined, HeartOutlined, HeartFilled } from "@ant-design/icons-vue"
+import { message } from "ant-design-vue"
+import useClipboard from "vue-clipboard3"
 export default defineComponent({
     name: "Detail",
     components: {
@@ -40,14 +46,71 @@ export default defineComponent({
         HeartFilled
     },
     setup() {
+        const route = useRoute()
         const router = useRouter()
-        const use = () => {
-            router.push({
-                path: "/decoration"
+
+        const detail: Ref<I.scene.detailrow> = ref({
+            id: 0,
+            title: "",
+            desc: "",
+            cover: "",
+            music: "",
+            status: 1,
+            properties: "",
+            viewCount: 0,
+            isFav: false,
+            creator: 1,
+            createdAt: "",
+            updatedAt: ""
+        })
+        const getDetail = () => {
+            const id = route.query.id || ""
+            api.sceneApi.detail(+id).then((res) => {
+                detail.value = res.result
             })
         }
+        getDetail()
+        const use = () => {
+            router.push({
+                path: "/decoration",
+                query: {
+                    id: detail.value.id
+                }
+            })
+        }
+        const addFav = () => {
+            api.sceneApi.fav.save({ sceneId: detail.value.id }).then(() => {
+                detail.value.isFav = true
+                message.success("收藏成功")
+            })
+        }
+        const url = process.env.NODE_ENV == "production" ? "/show" : "/show.html"
+        const { toClipboard } = useClipboard()
+        const copy = async () => {
+            try {
+                await toClipboard(location.origin + url + "?id=" + detail.value.id)
+                message.success("复制成功")
+            } catch (e) {
+                message.info("复制失败，请尝试手动复制浏览器地址栏")
+            }
+        }
+        //生成二维码
+        const initQr = () => {
+            var QRCode = require("qrcode")
+            var canvas = document.getElementById("code")
+
+            QRCode.toCanvas(canvas, location.origin + url + "?id=" + detail.value.id, { width: 200, height: 200 })
+        }
+        onMounted(() => {
+            initQr()
+        })
+
         return {
-            use
+            use,
+            url,
+            detail,
+            addFav,
+            copy
         }
     }
 })
@@ -61,10 +124,14 @@ export default defineComponent({
         padding: 40px;
         @include clearfix;
         .post-content {
-            width: 450px;
+            width: 375px;
             float: left;
-            height: 600px;
+            height: 470px;
             background: #fafafa;
+            iframe {
+                width: 100%;
+                height: 100%;
+            }
         }
         .post-info {
             margin-left: 500px;
@@ -89,6 +156,9 @@ export default defineComponent({
                     cursor: pointer;
                     &:hover {
                         color: $color-primary;
+                    }
+                    &.red {
+                        color: $color-red;
                     }
                 }
             }

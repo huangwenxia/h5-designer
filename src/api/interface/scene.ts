@@ -31,3 +31,6 @@ export interface saveparam {
     music?: string
     properties?: string
 }
+export interface detailrow extends listrow {
+    isFav: boolean
+}

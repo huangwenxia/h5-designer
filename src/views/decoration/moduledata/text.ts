@@ -10,5 +10,6 @@ export default {
         textAlign: "center",
         lineHeight: 30
     },
-    animateList: []
+    animateList: [],
+    attrs: {}
 }

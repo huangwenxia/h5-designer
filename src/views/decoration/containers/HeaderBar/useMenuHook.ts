@@ -34,6 +34,10 @@ export default function (): ReturnType {
                 type: e.value,
                 success: (files: Array<I.file.baseRow>) => {
                     console.log("调了success", files)
+                    const data = Utils.deepClone(moduledata.image)
+                    data.id = "element_" + Utils.genNonDuplicateID(6)
+                    data.attrs.src = files[0].url
+                    store.commit("elementAdd", data)
                 }
             })
         }

@@ -8,12 +8,19 @@ const homelist = (params?: I.scene.homelistparam): Promise<BaseResponse<ListPage
 const list = (params?: I.scene.homelistparam): Promise<BaseResponse<ListPageType<I.scene.listrow>>> => {
     return axios.get("/api/scene/list", { params })
 }
-const detail = (id: number): Promise<BaseResponse<I.scene.listrow>> => {
+const detail = (id: number): Promise<BaseResponse<I.scene.detailrow>> => {
     return axios.get("/api/scene/" + id)
 }
 const save = (params: I.scene.saveparam): Promise<BaseResponse<undefined>> => {
     return axios.post("/api/scene/save", params)
 }
+const publish = (id: number): Promise<BaseResponse<undefined>> => {
+    return axios.post("/api/scene/publish/" + id)
+}
+const remove = (id: number): Promise<BaseResponse<undefined>> => {
+    return axios.delete("/api/scene/" + id)
+}
 
 import page from "./page"
-export default { homelist, list, detail, save, page }
+import fav from "./fav"
+export default { homelist, list, detail, save, page, remove, publish, fav }

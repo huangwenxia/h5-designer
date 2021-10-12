@@ -57,11 +57,6 @@ export default defineComponent({
         EyeInvisibleOutlined
     },
     setup: function () {
-        // const internalInstance = getCurrentInstance() as any
-        // const $api = internalInstance.appContext.config.globalProperties.$api
-        // const { ctx } = getCurrentInstance() as any
-        // const internalInstance = getCurrentInstance() // 有效
-        // console.log(ctx.$api, "===========internalInstance")
         const { api, store, router, message } = useGlobalHook()
         const formState: UnwrapRef<FormState> = reactive({
             name: "",
@@ -78,7 +73,7 @@ export default defineComponent({
                     localStorage.setItem("token", formState.token)
                     store.dispatch("GET_USER_INFO").then(() => {
                         message.success("登录成功")
-                        router.push("/home")
+                        router.push("/")
                     })
                 })
                 .catch((err) => {

@@ -12,14 +12,13 @@ export interface UploadResponseResult {
 }
 export interface baseRow {
     id: string | number
-    title: string
-    desc: string
-    cover: string
-    music: string
-    status: string | number
-    properties: string
-    viewCount: string | number
+    format: string
+    url: string
+    path: string
+    size: number
+    name: string
+    type: string
     creator: string | number
-    createdAt: string
     updatedAt: string
+    createdAt: string
 }

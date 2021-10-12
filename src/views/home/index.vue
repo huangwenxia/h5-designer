@@ -51,36 +51,38 @@
             <section class="home-part3">
                 <div class="wrapper">
                     <h1 class="title">H5广场</h1>
-
-                    <div class="list">
-                        <a-row type="flex" justify="center" :gutter="[20, 20]">
-                            <a-col :span="6" v-for="(item, i) in part3Data" :key="i">
-                                <div class="box" @click="toDetail(item)">
-                                    <div class="box-img">
-                                        <a-image width="100%" :src="item.img" :preview="false"></a-image>
-                                    </div>
-                                    <div class="box-info">
-                                        <h4 class="sub-title">{{ item.title }}</h4>
-                                        <div class="info clearfix">
-                                            <a-avatar class="username">
-                                                <template #icon>
-                                                    <a-image :width="60" :height="80" :src="item.avatar" :preview="false"></a-image>
-                                                </template>
-                                                {{ item.username }}
-                                            </a-avatar>
-                                            <div class="number">
-                                                <eye-outlined />
-                                                {{ item.number }}
+                    <a-spin :spinning="loading">
+                        <div class="list">
+                            <a-row type="flex" :gutter="[20, 20]">
+                                <a-col :span="6" v-for="(item, i) in list" :key="i">
+                                    <div class="box" @click="toDetail(item)">
+                                        <div class="box-img">
+                                            <img class="img" :src="item.cover" />
+                                        </div>
+                                        <div class="box-info">
+                                            <h4 class="sub-title">{{ item.title }}</h4>
+                                            <div class="info clearfix">
+                                                <a-avatar class="username">
+                                                    <template #icon>
+                                                        <a-image :width="60" :height="80" :src="item.user.avatar" v-if="item.user.avatar" :preview="false"></a-image>
+                                                        <UserOutlined v-else />
+                                                    </template>
+                                                </a-avatar>
+                                                <span class="name">{{ item.user.name || item.user.username }}</span>
+                                                <div class="number">
+                                                    <eye-outlined />
+                                                    {{ item.viewCount }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </a-col>
-                        </a-row>
-                    </div>
-                    <div class="pagination">
-                        <a-pagination v-model:current="current" :total="50" show-less-items />
-                    </div>
+                                </a-col>
+                            </a-row>
+                        </div>
+                        <div class="pagination">
+                            <a-pagination v-model:current="listQuery.page" :total="total" show-less-items @change="loadData" />
+                        </div>
+                    </a-spin>
                 </div>
             </section>
             <a-layout-footer>
@@ -93,9 +95,10 @@
 <script lang="ts">
 import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
-import { defineComponent, reactive, ref } from "vue"
-import { EyeOutlined } from "@ant-design/icons-vue"
+import { defineComponent, reactive, ref, Ref } from "vue"
+import { EyeOutlined, UserOutlined } from "@ant-design/icons-vue"
 import { useRouter } from "vue-router"
+import api, { I } from "@/api"
 interface PosterItem {
     id: number
     img: string
@@ -109,7 +112,8 @@ export default defineComponent({
     components: {
         Header,
         Footer,
-        EyeOutlined
+        EyeOutlined,
+        UserOutlined
     },
 
     setup() {
@@ -133,12 +137,38 @@ export default defineComponent({
                 }
             })
         }
+        const loading = ref(false)
+        const total: Ref<number> = ref(0)
+        const list: Ref<Array<I.scene.homelistrow>> = ref([])
+        const listQuery = ref({
+            page: 1,
+            pageSize: 10
+        })
+        const loadData = () => {
+            loading.value = true
+            api.sceneApi
+                .homelist(listQuery.value)
+                .then((res) => {
+                    list.value = res?.result?.rows
+                    total.value = res?.result?.count
+                })
+                .finally(() => {
+                    loading.value = false
+                })
+        }
+        loadData()
+
         return {
             part2Data,
             part3Data,
             onChange,
             current: 2,
-            toDetail
+            toDetail,
+            total,
+            loading,
+            list,
+            listQuery,
+            loadData
         }
     }
 })
@@ -176,17 +206,22 @@ export default defineComponent({
     }
     .list {
         .box {
-            text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            border: 1px solid $color-border;
+            border-radius: $radius;
             &:hover {
                 transform: translateY(-10px);
             }
             .sub-title {
-                padding: 16px 0;
+                padding: 15px;
+            }
+            .img {
+                width: 100%;
+                height: 300px;
             }
             .box-info {
-                border: 1px solid #dddddd;
+                border-top: 1px solid $color-border;
                 padding-bottom: 10px;
                 .info {
                     width: 100%;
@@ -198,6 +233,10 @@ export default defineComponent({
                         float: right;
                         margin-right: 16px;
                         font-size: 16px;
+                    }
+                    .name {
+                        vertical-align: middle;
+                        margin-left: 10px;
                     }
                 }
             }
