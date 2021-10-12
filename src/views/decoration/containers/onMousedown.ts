@@ -1,10 +1,9 @@
+import { computed, Ref } from "vue"
 import { useStore, Store } from "vuex"
 import { ElementsType, StyleType } from "@/store/page"
 import { GlobalDataProps } from "@/store"
-import { number } from "vue-types"
-
 let store: Store<GlobalDataProps>
-let moduleList: Array<ElementsType>
+let moduleList: Ref<Array<ElementsType>>
 
 interface eventType {
     startX: number
@@ -60,11 +59,11 @@ function onMousedown(e: MouseEvent): void {
     dragEvent.startY = e.pageY
     dragEvent.direction = target.getAttribute("data-direction")
     dragEvent.currentIndex = Number(target.getAttribute("data-index"))
-    let ele: ElementsType = moduleList[dragEvent.currentIndex]
-    let startL = ele.style?.left || 0
-    var startT = ele.style?.top || 0
-    var startW = ele.style?.width || 0
-    var startH = ele.style?.height || 0
+    const ele: ElementsType = moduleList.value[dragEvent.currentIndex]
+    const startL = ele.style?.left || 0
+    const startT = ele.style?.top || 0
+    const startW = ele.style?.width || 0
+    const startH = ele.style?.height || 0
     dragEvent.eles = [
         {
             ele: ele,
@@ -85,9 +84,9 @@ type ReturnType = {
 }
 const mouseHook = (): ReturnType => {
     store = useStore()
-    moduleList = store.state.page.elements
+    moduleList = computed(() => store.state.page.elements)
 
-    let app: HTMLElement | null = document.getElementById("app")
+    const app: HTMLElement | null = document.getElementById("app")
     app && app.addEventListener("mousedown", docMousedown)
     return { onMousedown }
 }
@@ -100,8 +99,8 @@ function onMousemove(e: MouseEvent) {
     e.preventDefault()
     dragEvent.endX = e.pageX
     dragEvent.endY = e.pageY
-    var getNewStyle = (item: elType) => {
-        var newStyle: newStyleType = {}
+    const getNewStyle = (item: elType) => {
+        const newStyle: newStyleType = {}
         switch (dragEvent.direction) {
             case "m":
                 newStyle.left = item.startL + dragEvent.endX - dragEvent.startX
@@ -121,34 +120,38 @@ function onMousemove(e: MouseEvent) {
                 newStyle.width = item.startW - dragEvent.endX + dragEvent.startX
                 newStyle.left = item.startL + dragEvent.endX - dragEvent.startX
                 break
-            case "nw":
+            case "nw": {
                 newStyle.left = item.startL + dragEvent.endX - dragEvent.startX
-                var width = item.startW - dragEvent.endX + dragEvent.startX
-                var height = (width * item.startH) / item.startW
+                const width = item.startW - dragEvent.endX + dragEvent.startX
+                const height = (width * item.startH) / item.startW
                 newStyle.width = width
                 newStyle.height = height
                 newStyle.top = item.startT - height + item.startH
                 break
-            case "ne":
-                var width = item.startW + dragEvent.endX - dragEvent.startX
-                var height = (width * item.startH) / item.startW
+            }
+            case "ne": {
+                const width = item.startW + dragEvent.endX - dragEvent.startX
+                const height = (width * item.startH) / item.startW
                 newStyle.width = width
                 newStyle.height = height
                 newStyle.top = item.startT - height + item.startH
                 break
-            case "se":
-                var width = item.startW + dragEvent.endX - dragEvent.startX
-                var height = (width * item.startH) / item.startW
+            }
+            case "se": {
+                const width = item.startW + dragEvent.endX - dragEvent.startX
+                const height = (width * item.startH) / item.startW
                 newStyle.width = width
                 newStyle.height = height
                 break
-            case "sw":
+            }
+            case "sw": {
                 newStyle.left = item.startL + dragEvent.endX - dragEvent.startX
-                var width = item.startW - dragEvent.endX + dragEvent.startX
-                var height = (width * item.startH) / item.startW
+                const width = item.startW - dragEvent.endX + dragEvent.startX
+                const height = (width * item.startH) / item.startW
                 newStyle.width = width
                 newStyle.height = height
                 break
+            }
         }
         if (newStyle.width) {
             newStyle.width = Number(newStyle.width?.toFixed(2))
@@ -161,8 +164,8 @@ function onMousemove(e: MouseEvent) {
     }
 
     dragEvent.eles.map((a) => {
-        var newStyle: newStyleType = getNewStyle(a)
-        for (let i in newStyle) {
+        const newStyle: newStyleType = getNewStyle(a)
+        for (const i in newStyle) {
             a.ele && (a.ele.style[i] = newStyle[i])
         }
     })

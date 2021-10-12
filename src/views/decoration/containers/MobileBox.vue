@@ -75,7 +75,6 @@ export default defineComponent({
 .mobile-box {
     position: relative;
     left: 50%;
-    transform: translateX(-50%);
     top: 0;
     margin-top: 114px;
     box-shadow: 0 0 5px rbga(0, 0, 0, 0.05);
@@ -83,6 +82,7 @@ export default defineComponent({
     display: inline-block;
     overflow: hidden;
     width: 350px;
+    margin-left: -175px;
     min-height: 600px;
     background-color: #fff;
     .edit-element {

@@ -5,6 +5,7 @@ export interface PageStateProps {
     elements: Array<ElementsType>
     currentElementsId: string
     currentElement: ElementsType
+    currentPageId: string
 }
 export interface ElementsType {
     style: StyleType
@@ -57,7 +58,8 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
             type: "",
             style: {},
             animateList: []
-        }
+        },
+        currentPageId: ""
     },
     mutations: {
         // 修改 state数据     外部调用: store.commit('方法名','参数')
@@ -71,6 +73,12 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
             if (id) {
                 state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [] }
             }
+        },
+        setElements: (state: PageStateProps, elements: Array<ElementsType>) => {
+            state.elements = elements
+        },
+        setPageId: (state: PageStateProps, id: string) => {
+            state.currentPageId = id
         }
     },
     getters: {
