@@ -8,6 +8,7 @@
     <title>H5设计平台</title>
     <link rel="stylesheet" href="./static/swiper-bundle.min.css">
     <link rel="stylesheet" href="./static/animate.min.css" />
+    <link rel="stylesheet" href="./static/animationOnAndOut.v1.css" />
     <script src="./static/swiper-bundle.min.js"></script>
     <script>
         const width = 375;
@@ -35,6 +36,9 @@
             position: absolute;
         }
 
+        .element-box .element {
+            overflow: hidden;
+        }
 
         .element-box .element img {
             width: 100%;
@@ -102,7 +106,7 @@
         function getElement(element) {
             const map = {
                 text: (ele) => ele.text,
-                image: (ele) => `<img src="${ele.attrs.src}" />`
+                image: (ele) => ele.attrs.src && `<img src="${ele.attrs.src}" />` || ""
             }
             return `<div class="element-box" style="${getElementStyle(element.style)}">
                         <div class="element" id="element-${element.id}" style="${getTextStyle(element.style)}">${map[element.type] && map[element.type](element) || ""}</div>
@@ -161,15 +165,19 @@
             visit(id)
         }
         function startAnimate(element) {
+            console.log('element', element)
             if (!element.id) return
 
             const dom = document.getElementById("element-" + element.id)
             const animations = element.animateList
             let index = 0
-            dom?.classList.add("animate__animated")
+            dom.classList.add("animate__animated")
             const action = () => {
-                dom?.classList.add(animations[index].animateName)
+                dom.classList.add(animations[index].animateName)
                 if (dom) {
+                    if (animations[index].animateName) {
+                        dom.style.animationName = animations[index].animateName
+                    }
                     if (animations[index].delay) {
                         dom.style.animationDelay = animations[index].delay + "s"
                     }
@@ -187,7 +195,7 @@
                 const time = (Number(duration) + Number(delay)) * 1000
                 setTimeout(() => {
                     index++
-                    dom?.classList.remove(animations[index - 1].animateName)
+                    dom.classList.remove(animations[index - 1].animateName)
                     if (index != animations.length) {
                         action()
                     }
