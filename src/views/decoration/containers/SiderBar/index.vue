@@ -12,7 +12,9 @@
         <div class="module-content" v-if="menutab == 0">
             <Pages></Pages>
         </div>
-        <div class="module-content" v-if="menutab == 1">图层</div>
+        <div class="module-content" v-if="menutab == 1">
+            <coverage></coverage>
+        </div>
     </div>
 </template>
 
@@ -20,11 +22,13 @@
 import { defineComponent, ref } from "vue"
 import { FileTextOutlined, SwitcherOutlined } from "@ant-design/icons-vue"
 import Pages from "./Pages.vue"
+import coverage from "./coverage.vue"
 export default defineComponent({
     components: {
         FileTextOutlined,
         SwitcherOutlined,
-        Pages
+        Pages,
+        coverage
     },
     setup() {
         const menutab = ref(0)

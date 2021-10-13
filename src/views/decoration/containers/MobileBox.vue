@@ -9,7 +9,7 @@
                     <img :src="item.attrs.src" />
                 </template>
             </div>
-            <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m"></div>
+            <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m" @contextmenu.stop="onContextMenu"></div>
             <div class="ele-control" @mousedown.stop>
                 <div class="ctl ele-control-n" @mousedown="onMousedown" :data-index="index" data-direction="n"></div>
                 <div class="ctl ele-control-e" @mousedown="onMousedown" :data-index="index" data-direction="e"></div>
@@ -29,7 +29,7 @@ import { defineComponent, computed, onMounted } from "vue"
 import { useStore } from "vuex"
 import { StyleType } from "@/store/page"
 import { ElementsType } from "@/store/page"
-
+import ContextMenu from "@/components/ContextMenu"
 import { deepClone, styleToString, startAnimate } from "@/utils"
 import mouseHook from "./onMousedown"
 import "animate.css"
@@ -61,6 +61,9 @@ export default defineComponent({
         onMounted(() => {
             getAnimate()
         })
+        const onContextMenu = (e: MouseEvent) => {
+            console.log(e, "e")
+        }
         return {
             excludes,
             elements,
@@ -68,7 +71,8 @@ export default defineComponent({
             getElementStyle,
             getTextStyle,
             onMousedown,
-            getAnimate
+            getAnimate,
+            onContextMenu
         }
     }
 })
