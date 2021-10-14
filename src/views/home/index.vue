@@ -79,6 +79,7 @@
                                 </a-col>
                             </a-row>
                         </div>
+                        <a-empty v-if="!loading && !list.length" />
                         <div class="pagination">
                             <a-pagination v-model:current="listQuery.page" :total="total" show-less-items @change="loadData" />
                         </div>
@@ -142,7 +143,7 @@ export default defineComponent({
         const list: Ref<Array<I.scene.homelistrow>> = ref([])
         const listQuery = ref({
             page: 1,
-            pageSize: 10
+            pageSize: 12
         })
         const loadData = () => {
             loading.value = true
@@ -215,10 +216,11 @@ export default defineComponent({
             }
             .sub-title {
                 padding: 15px;
+                @include word-wrap;
             }
             .img {
                 width: 100%;
-                height: 300px;
+                height: 360px;
             }
             .box-info {
                 border-top: 1px solid $color-border;
@@ -233,6 +235,7 @@ export default defineComponent({
                         float: right;
                         margin-right: 16px;
                         font-size: 16px;
+                        color: #999;
                     }
                     .name {
                         vertical-align: middle;

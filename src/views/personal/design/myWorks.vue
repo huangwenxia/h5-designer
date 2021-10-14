@@ -73,7 +73,7 @@ export default defineComponent({
         const { total, loading, list, listQuery, loadData } = useListPageHook<I.personal.baseRow>({
             api: api.personalApi.list,
             params: {
-                // type: "image"
+                // type: "image"，
             }
         })
         const actionShow: Ref<boolean> = ref(false)
@@ -161,7 +161,6 @@ export default defineComponent({
                 width: 100%;
                 border-top: 1px solid $color-border;
                 .title {
-                    text-align: center;
                     padding: 5px 5px;
                 }
                 .other {
