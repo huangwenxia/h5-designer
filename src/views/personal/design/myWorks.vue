@@ -70,11 +70,13 @@ export default defineComponent({
     components: { Pagination, Empty, Spin, Image, EyeOutlined, DeleteOutlined, EditOutlined, addWorkDialog },
     setup() {
         const router = useRouter()
-        const { total, loading, list, listQuery, loadData } = useListPageHook<I.personal.baseRow>({
+        const listQuery: Ref<I.scene.homelistparam> = ref({
+            page: 1,
+            pageSize: 10
+        })
+        const { total, loading, list, loadData } = useListPageHook<I.personal.baseRow, I.personal.baseRowParams>({
             api: api.personalApi.list,
-            params: {
-                // type: "image"
-            }
+            params: listQuery.value
         })
         const actionShow: Ref<boolean> = ref(false)
         onMounted(() => {

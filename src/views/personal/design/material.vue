@@ -36,17 +36,21 @@ export default defineComponent({
     name: "material",
     components: { BtnUpload, Pagination, Empty, Spin, ImageList },
     setup() {
-        const { total, loading, list, listQuery, loadData } = useListPageHook<I.file.baseRow>({
+        const listQuery: Ref<I.scene.homelistparam> = ref({
+            page: 1,
+            pageSize: 10
+        })
+
+        const { total, loading, list, loadData } = useListPageHook<I.file.baseRow, I.file.baseRowParams>({
             api: api.fileApi.fileList,
-            params: {
-                type: "image"
-            }
+            params: listQuery.value
         })
         onMounted(() => {
             setTimeout(() => {
                 loadData()
             })
         })
+
         const selectList: Ref<Array<I.file.baseRow>> = ref([])
         return {
             tabActiveKey: ref("1"),

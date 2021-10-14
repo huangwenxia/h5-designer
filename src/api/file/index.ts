@@ -16,7 +16,7 @@ const upload = (formData: FormData, onUploadProgress?: (e: ProgressEvent) => voi
     })
 }
 
-const fileList = (params?: ListQueryType): Promise<BaseResponse<ListPageType<I.file.baseRow>>> => {
+const fileList = (params?: I.file.baseRowParams | ListQueryType): Promise<BaseResponse<ListPageType<I.file.baseRow>>> => {
     return axios.get("/api/file/list", { params })
 }
 

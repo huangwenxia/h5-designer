@@ -95,10 +95,11 @@
 <script lang="ts">
 import Header from "@/components/layout/components/Header.vue"
 import Footer from "@/components/layout/components/Footer.vue"
-import { defineComponent, reactive, ref, Ref } from "vue"
+import { defineComponent, onMounted, reactive, ref, Ref } from "vue"
 import { EyeOutlined, UserOutlined } from "@ant-design/icons-vue"
 import { useRouter } from "vue-router"
 import api, { I } from "@/api"
+import { useListPageHook } from "@/hooks/useListPageHook"
 interface PosterItem {
     id: number
     img: string
@@ -137,27 +138,20 @@ export default defineComponent({
                 }
             })
         }
-        const loading = ref(false)
-        const total: Ref<number> = ref(0)
-        const list: Ref<Array<I.scene.homelistrow>> = ref([])
-        const listQuery = ref({
+        const listQuery: Ref<I.scene.homelistparam> = ref({
             page: 1,
             pageSize: 10
         })
-        const loadData = () => {
-            loading.value = true
-            api.sceneApi
-                .homelist(listQuery.value)
-                .then((res) => {
-                    list.value = res?.result?.rows
-                    total.value = res?.result?.count
-                })
-                .finally(() => {
-                    loading.value = false
-                })
-        }
-        loadData()
+        const { total, loading, list, loadData } = useListPageHook<I.scene.homelistrow, I.scene.homelistparam>({
+            api: api.sceneApi.homelist,
+            params: listQuery.value
+        })
 
+        onMounted(() => {
+            setTimeout(() => {
+                loadData()
+            })
+        })
         return {
             part2Data,
             part3Data,

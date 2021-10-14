@@ -1,3 +1,4 @@
+import { ListQueryType } from "@/api/interface/base"
 export interface UploadResponseResult {
     id: string | number
     format: string
@@ -21,4 +22,8 @@ export interface baseRow {
     creator: string | number
     updatedAt: string
     createdAt: string
+}
+
+export interface baseRowParams extends ListQueryType {
+    [key: string]: unknown
 }

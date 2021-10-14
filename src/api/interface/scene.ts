@@ -1,3 +1,5 @@
+import { ListQueryType } from "@/api/interface/base"
+
 export interface listrow {
     id: number
     title: string
@@ -19,9 +21,8 @@ export interface homelistrow extends listrow {
     }
 }
 
-export interface homelistparam {
-    page: number
-    pageSize: number
+export interface homelistparam extends ListQueryType {
+    [key: string]: unknown
 }
 
 export interface saveparam {

@@ -1,4 +1,4 @@
-// import { IResponse } from "@/api/interface/common"
+import { ListQueryType } from "@/api/interface/base"
 
 export interface baseRow {
     id: string | number
@@ -12,4 +12,7 @@ export interface baseRow {
     creator: string | number
     createdAt: string | number
     updatedAt: string | number
+}
+export interface baseRowParams extends ListQueryType {
+    [key: string]: unknown
 }

@@ -13,6 +13,11 @@ export interface ListQueryType {
     pageSize: string | number
     type?: string
 }
+
+// export interface ListQueryParams<T, S> {
+//     [key: string]: T & S
+// }
+
 export interface BaseMessageConfig {
     content?: string
     top?: string
