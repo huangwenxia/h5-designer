@@ -8,6 +8,7 @@
     <title>H5设计平台</title>
     <link rel="stylesheet" href="./static/swiper-bundle.min.css">
     <link rel="stylesheet" href="./static/animate.min.css" />
+    <link rel="stylesheet" href="./static/animationOnAndOut.v1.css" />
     <script src="./static/swiper-bundle.min.js"></script>
     <script>
         const width = 375;
@@ -31,10 +32,17 @@
             height: 100%;
         }
 
+        .swiper-slide {
+            overflow: hidden;
+        }
+
         .element-box {
             position: absolute;
         }
 
+        .element-box .element {
+            overflow: hidden;
+        }
 
         .element-box .element img {
             width: 100%;
@@ -102,10 +110,17 @@
         function getElement(element) {
             const map = {
                 text: (ele) => ele.text,
-                image: (ele) => `<img src="${ele.attrs.src}" />`
+                image: (ele) => ele.attrs.src && `<img src="${ele.attrs.src}" />` || ""
+            }
+            let animateClass = "", animateStyle = "";
+            if (element.animateList.length) {
+                // const animate = element.animateList[0]
+                // animateClass = "animate__animated " + animate.animateName
+                // const style = getAnimationStyle(animate)
+                // animateStyle = Object.keys(style).map(a => a.replace(/([A-Z])/, "-$1").toLocaleLowerCase() + ':' + style[a]).join(';')
             }
             return `<div class="element-box" style="${getElementStyle(element.style)}">
-                        <div class="element" id="element-${element.id}" style="${getTextStyle(element.style)}">${map[element.type] && map[element.type](element) || ""}</div>
+                        <div class="element ${animateClass}" id="element-${element.id}" style="${animateStyle};${getTextStyle(element.style)}">${map[element.type] && map[element.type](element) || ""}</div>
                     </div>`
         }
         const id = getQueryString('id')
@@ -113,7 +128,6 @@
         var pages = []
         function getDetail() {
             axios.get("/api/scene/page/list", { params: { sceneId: id } }).then(res => {
-                console.log('res', res)
                 const wrapper = document.getElementById('swiperWrapper')
                 let pagesStr = ""
                 pages = res.data.result.map(page => {
@@ -138,17 +152,15 @@
                         clickable: true,
                     },
                     on: {
-                        transitionEnd: function (a, b, c) {
+                        transitionStart: function (a, b, c) {
                             pages[a.realIndex].elementList.forEach(item => {
                                 item.animateList && item.animateList.length && startAnimate(item)
                             })
                         },
                     },
                 });
-                setTimeout(() => {
-                    pages[0].elementList.forEach(item => {
-                        item.animateList && item.animateList.length && startAnimate(item)
-                    })
+                pages[0].elementList.forEach(item => {
+                    item.animateList && item.animateList.length && startAnimate(item)
                 })
 
             })
@@ -160,26 +172,37 @@
         if (mode != 'edit') {
             visit(id)
         }
+        function getAnimationStyle(animate) {
+            const style = {}
+            if (animate.animateName) {
+                style.animationName = animate.animateName
+            }
+            if (animate.delay) {
+                style.animationDelay = animate.delay + "s"
+            }
+            if (animate.duration) {
+                style.animationDuration = animate.duration + "s"
+            }
+            if (animate.infinite) {
+                style.animationIterationCount = "infinite"
+            } else if (animate.iterationCount) {
+                style.animationIterationCount = animate.iterationCount + ""
+            }
+            return style
+        }
         function startAnimate(element) {
             if (!element.id) return
 
             const dom = document.getElementById("element-" + element.id)
             const animations = element.animateList
             let index = 0
-            dom?.classList.add("animate__animated")
+            dom.classList.add("animate__animated")
             const action = () => {
-                dom?.classList.add(animations[index].animateName)
+                dom.classList.add(animations[index].animateName)
                 if (dom) {
-                    if (animations[index].delay) {
-                        dom.style.animationDelay = animations[index].delay + "s"
-                    }
-                    if (animations[index].duration) {
-                        dom.style.animationDuration = animations[index].duration + "s"
-                    }
-                    if (animations[index].infinite) {
-                        dom.style.animationIterationCount = "infinite"
-                    } else if (animations[index].iterationCount) {
-                        dom.style.animationIterationCount = animations[index].iterationCount + ""
+                    const style = getAnimationStyle(animations[index])
+                    for (const i in style) {
+                        dom.style[i] = style[i]
                     }
                 }
                 const delay = animations[index].delay || 0
@@ -187,7 +210,7 @@
                 const time = (Number(duration) + Number(delay)) * 1000
                 setTimeout(() => {
                     index++
-                    dom?.classList.remove(animations[index - 1].animateName)
+                    dom.classList.remove(animations[index - 1].animateName)
                     if (index != animations.length) {
                         action()
                     }
