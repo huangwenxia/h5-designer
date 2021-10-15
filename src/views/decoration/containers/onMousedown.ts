@@ -1,6 +1,6 @@
 import { computed, Ref } from "vue"
 import { useStore, Store } from "vuex"
-import { ElementsType, StyleType } from "@/store/page"
+import { ElementsType } from "@/store/page"
 import { GlobalDataProps } from "@/store"
 let store: Store<GlobalDataProps>
 let moduleList: Ref<Array<ElementsType>>

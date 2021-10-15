@@ -37,6 +37,7 @@ export default function (): ReturnType {
                     const data = Utils.deepClone(moduledata.image)
                     data.id = "element_" + Utils.genNonDuplicateID(6)
                     data.attrs.src = files[0].url
+                    data.type = e.value
                     store.commit("elementAdd", data)
                 }
             })

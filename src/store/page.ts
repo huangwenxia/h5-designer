@@ -14,6 +14,7 @@ export interface ElementsType {
     text?: string
     attrs: { src?: string }
     animateList: Array<AnimateType>
+    hidden?: boolean
 }
 export interface StyleType {
     [key: string]: string | number | undefined
@@ -80,6 +81,10 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
         },
         setPageId: (state: PageStateProps, id: string) => {
             state.currentPageId = id
+        },
+        elementRemove(state: PageStateProps, id: string) {
+            const index = state.elements.findIndex((a) => a.id == id)
+            state.elements.splice(index, 1)
         }
     },
     getters: {

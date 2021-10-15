@@ -17,14 +17,14 @@ module.exports = {
         open: true,
         proxy: {
             public: {
-                // target: "http://h5.tucy.top",
-                target: "http://localhost:7010",
+                target: "http://h5.tucy.top",
+                // target: "http://localhost:7010",
                 ws: true,
                 changeOrigin: true
             },
             api: {
-                // target: "http://h5.tucy.top/api", //要代理的本地api地址，也可以换成线上测试地址
-                target: "http://localhost:7010",
+                target: "http://h5.tucy.top", //要代理的本地api地址，也可以换成线上测试地址
+                // target: "http://localhost:7010",
                 changeOrigin: true //允许跨域
                 // pathRewrite: { "^/api": "" } //将/api开头替换为/api
             }

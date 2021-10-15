@@ -1,26 +1,30 @@
 <template>
     <div class="mobile-box" id="mobileBox">
-        <div class="edit-element" v-for="(item, index) in elements" :class="{ active: currentId == item.id }" :key="index" :style="getElementStyle(item.style)">
-            <div class="element" :id="'element-' + item.id" @mousedown.stop :style="getTextStyle(item.style)">
-                <div v-if="item.type == 'text'">
-                    {{ item.text }}
+        <template v-for="(item, index) in elements" :key="index">
+            <div class="edit-element" v-if="!item.hidden" :class="{ active: currentId == item.id }" :style="getElementStyle(item.style)">
+                <div class="element" :id="item.id" @mousedown.stop :style="getTextStyle(item.style)">
+                    <div v-if="item.type == 'text'">
+                        {{ item.text }}
+                    </div>
+                    <template v-if="item.type == 'image'">
+                        <img :src="item.attrs.src" />
+                    </template>
+                    <video v-if="item.type == 'video'" :src="item.attrs.src"></video>
+                    <audio autoplay="autoplay" v-if="item.type == 'audio'" :src="item.attrs.src"></audio>
                 </div>
-                <template v-if="item.type == 'image'">
-                    <img :src="item.attrs.src" />
-                </template>
+                <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m" @contextmenu.stop="onContextMenu(item.id, index, $event)"></div>
+                <div class="ele-control" @mousedown.stop>
+                    <div class="ctl ele-control-n" @mousedown="onMousedown" :data-index="index" data-direction="n"></div>
+                    <div class="ctl ele-control-e" @mousedown="onMousedown" :data-index="index" data-direction="e"></div>
+                    <div class="ctl ele-control-s" @mousedown="onMousedown" :data-index="index" data-direction="s"></div>
+                    <div class="ctl ele-control-w" @mousedown="onMousedown" :data-index="index" data-direction="w"></div>
+                    <div class="ctl ele-control-nw" @mousedown="onMousedown" :data-index="index" data-direction="nw"></div>
+                    <div class="ctl ele-control-ne" @mousedown="onMousedown" :data-index="index" data-direction="ne"></div>
+                    <div class="ctl ele-control-se" @mousedown="onMousedown" :data-index="index" data-direction="se"></div>
+                    <div class="ctl ele-control-sw" @mousedown="onMousedown" :data-index="index" data-direction="sw"></div>
+                </div>
             </div>
-            <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m"></div>
-            <div class="ele-control" @mousedown.stop>
-                <div class="ctl ele-control-n" @mousedown="onMousedown" :data-index="index" data-direction="n"></div>
-                <div class="ctl ele-control-e" @mousedown="onMousedown" :data-index="index" data-direction="e"></div>
-                <div class="ctl ele-control-s" @mousedown="onMousedown" :data-index="index" data-direction="s"></div>
-                <div class="ctl ele-control-w" @mousedown="onMousedown" :data-index="index" data-direction="w"></div>
-                <div class="ctl ele-control-nw" @mousedown="onMousedown" :data-index="index" data-direction="nw"></div>
-                <div class="ctl ele-control-ne" @mousedown="onMousedown" :data-index="index" data-direction="ne"></div>
-                <div class="ctl ele-control-se" @mousedown="onMousedown" :data-index="index" data-direction="se"></div>
-                <div class="ctl ele-control-sw" @mousedown="onMousedown" :data-index="index" data-direction="sw"></div>
-            </div>
-        </div>
+        </template>
     </div>
 </template>
 
@@ -29,16 +33,18 @@ import { defineComponent, computed, onMounted } from "vue"
 import { useStore } from "vuex"
 import { StyleType } from "@/store/page"
 import { ElementsType } from "@/store/page"
-
-import { deepClone, styleToString, startAnimate } from "@/utils"
+import ContextMenu from "@/components/ContextMenu"
+import { deepClone, styleToString, startAnimate, genNonDuplicateID } from "@/utils"
 import mouseHook from "./onMousedown"
+import { ContextMenuItem } from "@/components/ContextMenu/MenuType"
 import "animate.css"
-
 export default defineComponent({
     setup() {
         const store = useStore()
         const elements = computed(() => store.state.page.elements)
         const excludes = ["top", "left", "transform"]
+        const currentId = computed(() => store.state.page.currentElementsId)
+
         const getElementStyle = (style: StyleType) => {
             let opt = { left: style.left, top: style.top, transform: style.transform }
             return styleToString(opt)
@@ -50,7 +56,6 @@ export default defineComponent({
             })
             return styleToString(opt)
         }
-        const currentId = computed(() => store.state.page.currentElementsId)
         const { onMousedown } = mouseHook()
 
         const getAnimate = async () => {
@@ -61,6 +66,54 @@ export default defineComponent({
         onMounted(() => {
             getAnimate()
         })
+        const onContextMenu = (id: string, index: number, e: MouseEvent) => {
+            if (index < 0) return
+            store.commit("setCurrent", id)
+            let zIndex = elements.value[index].style.zIndex || 50
+            e.preventDefault()
+            let list: Array<ContextMenuItem> = [
+                {
+                    title: "删除",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        // elements.value.splice(index, 1)
+                        store.commit("elementRemove", id)
+                    }
+                },
+                {
+                    title: "复制",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        var newEle = deepClone(elements.value[index])
+                        newEle.style.left = parseFloat(newEle.style.left) + 10
+                        newEle.style.top = parseFloat(newEle.style.top) + 20
+                        newEle.id = "element_" + genNonDuplicateID(6)
+                        store.commit("elementAdd", newEle)
+                    }
+                },
+                {
+                    title: "上移一层",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        elements.value[index].style.zIndex = ++zIndex
+                    }
+                },
+                {
+                    title: "下移一层",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        elements.value[index].style.zIndex = --zIndex
+                    }
+                }
+            ]
+            ContextMenu({
+                event: e,
+                contextMenuList: list,
+                success: () => {
+                    console.log("success")
+                }
+            })
+        }
         return {
             excludes,
             elements,
@@ -68,7 +121,8 @@ export default defineComponent({
             getElementStyle,
             getTextStyle,
             onMousedown,
-            getAnimate
+            getAnimate,
+            onContextMenu
         }
     }
 })
@@ -108,7 +162,8 @@ export default defineComponent({
         .element {
             position: relative;
             overflow: hidden;
-            img {
+            img,
+            video {
                 width: 100%;
                 height: 100%;
             }

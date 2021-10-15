@@ -12,25 +12,37 @@
         <div class="module-content" v-if="menutab == 0">
             <Pages></Pages>
         </div>
-        <div class="module-content" v-if="menutab == 1">图层</div>
+        <div class="module-content" v-if="menutab == 1">
+            <coverage></coverage>
+        </div>
+        <div class="module-content" v-if="menutab == 2">
+            <setPage></setPage>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue"
-import { FileTextOutlined, SwitcherOutlined } from "@ant-design/icons-vue"
+import { FileTextOutlined, SwitcherOutlined, SettingOutlined } from "@ant-design/icons-vue"
 import Pages from "./Pages.vue"
+import coverage from "./coverage.vue"
+import setPage from "./setPage.vue"
+
 export default defineComponent({
     components: {
         FileTextOutlined,
         SwitcherOutlined,
-        Pages
+        SettingOutlined,
+        Pages,
+        coverage,
+        setPage
     },
     setup() {
         const menutab = ref(0)
         const menuArray = ref([
             { name: "页面", icon: "FileTextOutlined" },
-            { name: "图层", icon: "SwitcherOutlined" }
+            { name: "图层", icon: "SwitcherOutlined" },
+            { name: "页面设置", icon: "SettingOutlined" }
         ])
         return {
             menutab,
