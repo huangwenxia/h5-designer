@@ -1,6 +1,6 @@
 <template>
-    <div class="mobile-box" id="mobileBox">
-        <template v-for="(item, index) in elements" :key="index">
+    <div class="mobile-box" id="mobileBox" :style="containerStyle(content.container.style)">
+        <template v-for="(item, index) in content.elements" :key="index">
             <div class="edit-element" v-if="!item.hidden" :class="{ active: currentId == item.id }" :style="getElementStyle(item.style)">
                 <div class="element" :id="item.id" @mousedown.stop :style="getTextStyle(item.style)">
                     <div v-if="item.type == 'text'">
@@ -41,7 +41,7 @@ import "animate.css"
 export default defineComponent({
     setup() {
         const store = useStore()
-        const elements = computed(() => store.state.page.elements)
+        const content = computed(() => store.state.page.content)
         const excludes = ["top", "left", "transform"]
         const currentId = computed(() => store.state.page.currentElementsId)
 
@@ -59,9 +59,12 @@ export default defineComponent({
         const { onMousedown } = mouseHook()
 
         const getAnimate = async () => {
-            elements.value.forEach((item: ElementsType) => {
+            content.value.elements.forEach((item: ElementsType) => {
                 item.animateList && item.animateList.length && startAnimate(item)
             })
+        }
+        const containerStyle = (style: StyleType) => {
+            return styleToString(style)
         }
         onMounted(() => {
             getAnimate()
@@ -69,14 +72,14 @@ export default defineComponent({
         const onContextMenu = (id: string, index: number, e: MouseEvent) => {
             if (index < 0) return
             store.commit("setCurrent", id)
-            let zIndex = elements.value[index].style.zIndex || 50
+            let zIndex = content.value.elements[index].style.zIndex || 50
             e.preventDefault()
             let list: Array<ContextMenuItem> = [
                 {
                     title: "删除",
                     // icon: 'el-icon-top',
                     click: function () {
-                        // elements.value.splice(index, 1)
+                        // content.value.splice(index, 1)
                         store.commit("elementRemove", id)
                     }
                 },
@@ -84,7 +87,7 @@ export default defineComponent({
                     title: "复制",
                     // icon: 'el-icon-top',
                     click: function () {
-                        var newEle = deepClone(elements.value[index])
+                        var newEle = deepClone(content.value.elements[index])
                         newEle.style.left = parseFloat(newEle.style.left) + 10
                         newEle.style.top = parseFloat(newEle.style.top) + 20
                         newEle.id = "element_" + genNonDuplicateID(6)
@@ -95,14 +98,14 @@ export default defineComponent({
                     title: "上移一层",
                     // icon: 'el-icon-top',
                     click: function () {
-                        elements.value[index].style.zIndex = ++zIndex
+                        content.value.elements[index].style.zIndex = ++zIndex
                     }
                 },
                 {
                     title: "下移一层",
                     // icon: 'el-icon-top',
                     click: function () {
-                        elements.value[index].style.zIndex = --zIndex
+                        content.value.elements[index].style.zIndex = --zIndex
                     }
                 }
             ]
@@ -116,13 +119,14 @@ export default defineComponent({
         }
         return {
             excludes,
-            elements,
+            content,
             currentId,
             getElementStyle,
             getTextStyle,
             onMousedown,
             getAnimate,
-            onContextMenu
+            onContextMenu,
+            containerStyle
         }
     }
 })

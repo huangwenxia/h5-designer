@@ -16,7 +16,7 @@
             <coverage></coverage>
         </div>
         <div class="module-content" v-if="menutab == 2">
-            <setPage></setPage>
+            <SetPage></SetPage>
         </div>
     </div>
 </template>
@@ -26,7 +26,7 @@ import { defineComponent, ref } from "vue"
 import { FileTextOutlined, SwitcherOutlined, SettingOutlined } from "@ant-design/icons-vue"
 import Pages from "./Pages.vue"
 import coverage from "./coverage.vue"
-import setPage from "./setPage.vue"
+import SetPage from "./SetPage.vue"
 
 export default defineComponent({
     components: {
@@ -35,7 +35,7 @@ export default defineComponent({
         SettingOutlined,
         Pages,
         coverage,
-        setPage
+        SetPage
     },
     setup() {
         const menutab = ref(0)

@@ -1,8 +1,7 @@
 import { Module } from "vuex"
 import { GlobalDataProps } from "./index"
-
 export interface PageStateProps {
-    elements: Array<ElementsType>
+    content: { elements: Array<ElementsType>; container: { style?: StyleType } }
     currentElementsId: string
     currentElement: ElementsType
     currentPageId: string
@@ -39,6 +38,7 @@ export interface StyleType {
     textAlignLast?: string
     fontStyle?: string
     transform?: string
+    background?: string
 }
 
 export interface AnimateType {
@@ -52,7 +52,12 @@ export interface AnimateType {
 }
 const editorModule: Module<PageStateProps, GlobalDataProps> = {
     state: {
-        elements: [],
+        content: {
+            elements: [],
+            container: {
+                style: {}
+            }
+        },
         currentElementsId: "",
         currentElement: {
             id: "",
@@ -66,30 +71,30 @@ const editorModule: Module<PageStateProps, GlobalDataProps> = {
     mutations: {
         // 修改 state数据     外部调用: store.commit('方法名','参数')
         elementAdd: (state: PageStateProps, data: ElementsType) => {
-            state.elements.push(data)
+            state.content.elements.push(data)
             state.currentElementsId = data.id
-            state.currentElement = state.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
+            state.currentElement = state.content.elements.find((a) => a.id == data.id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
         },
         setCurrent: (state: PageStateProps, id: string) => {
             state.currentElementsId = id
             if (id) {
-                state.currentElement = state.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
+                state.currentElement = state.content.elements.find((a) => a.id == id) || { id: "", type: "", style: {}, animateList: [], attrs: {} }
             }
         },
-        setElements: (state: PageStateProps, elements: Array<ElementsType>) => {
-            state.elements = elements
+        setElements: (state: PageStateProps, content: { elements: Array<ElementsType>; container: { style?: StyleType } }) => {
+            state.content = content
         },
         setPageId: (state: PageStateProps, id: string) => {
             state.currentPageId = id
         },
         elementRemove(state: PageStateProps, id: string) {
-            const index = state.elements.findIndex((a) => a.id == id)
-            state.elements.splice(index, 1)
+            const index = state.content.elements.findIndex((a) => a.id == id)
+            state.content.elements.splice(index, 1)
         }
     },
     getters: {
         getCurrentElement: (state) => {
-            return state.elements.find((module) => module.id === state.currentElementsId)
+            return state.content.elements.find((module) => module.id === state.currentElementsId)
         }
     }
 }

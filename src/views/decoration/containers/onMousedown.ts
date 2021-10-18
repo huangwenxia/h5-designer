@@ -84,7 +84,7 @@ type ReturnType = {
 }
 const mouseHook = (): ReturnType => {
     store = useStore()
-    moduleList = computed(() => store.state.page.elements)
+    moduleList = computed(() => store.state.page.content.elements)
 
     const app: HTMLElement | null = document.getElementById("app")
     app && app.addEventListener("mousedown", docMousedown)

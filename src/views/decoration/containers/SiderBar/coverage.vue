@@ -26,7 +26,7 @@ export default defineComponent({
     components: { EyeOutlined, EyeInvisibleOutlined, DeleteOutlined },
     setup() {
         const store = useStore()
-        const elements = computed(() => store.state.page.elements)
+        const elements = computed(() => store.state.page.content.elements)
         const currentId = computed(() => store.state.page.currentElementsId)
         const labelList: Array<LabelType> = [
             {

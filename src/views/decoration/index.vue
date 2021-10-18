@@ -15,8 +15,6 @@ import SiderBar from "./containers/SiderBar/index.vue"
 import MobileBox from "./containers/MobileBox.vue"
 import HeaderBar from "./containers/HeaderBar/index.vue"
 import { defineComponent, ref, Ref } from "vue"
-import { useStore, Store } from "vuex"
-import { GlobalDataProps } from "@/store"
 import editPanels from "./editPanels/index.vue"
 import file from "./components/file.vue"
 import * as I from "@/api/interface/index"
@@ -29,8 +27,6 @@ export default defineComponent({
         const route = useRoute()
         const visible = ref<boolean>(false)
         const modules = ref([])
-        const store: Store<GlobalDataProps> = useStore()
-        const moduleList = store.state.page.elements
         const handleOk = () => {
             visible.value = false
         }
@@ -56,7 +52,6 @@ export default defineComponent({
         getDetail()
         return {
             modules,
-            moduleList,
             visible,
             handleOk,
             detail

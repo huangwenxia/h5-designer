@@ -19,7 +19,7 @@ export default function (): ReturnType {
         const cover = container ? await Utils.convertToImage(container) : ""
         const opt = {
             id: +store.state.page.currentPageId,
-            elements: JSON.stringify(store.state.page.elements),
+            elements: JSON.stringify(store.state.page.content),
             cover
         }
         api.sceneApi.page.update(opt).then(() => {
