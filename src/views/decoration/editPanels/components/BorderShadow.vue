@@ -3,7 +3,7 @@
         <div class="edit-item" style="overflow: unset">
             <span class="label"> 颜色： </span>
             <div class="value">
-                <Color :color="shadow.color" @color-chenge="colorChenge"></Color>
+                <ColorPicker v-model="shadow.color" @change="toggleShadow"></ColorPicker>
             </div>
         </div>
 
@@ -53,7 +53,8 @@
 import { defineComponent, ref, Ref, computed } from "vue"
 import { useStore } from "vuex"
 import { ElementsType } from "@/store/page"
-import Color from "./Color.vue"
+import { ColorPicker } from "@tucy/vue3-color"
+
 interface shadowType {
     color?: string
     size?: number
@@ -66,7 +67,7 @@ interface colorType {
 }
 
 export default defineComponent({
-    components: { Color },
+    components: { ColorPicker },
     setup() {
         const store = useStore()
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))

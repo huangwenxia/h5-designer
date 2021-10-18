@@ -12,6 +12,12 @@
                         </div>
                         <Font></Font>
                         <div class="edit-item">
+                            <span class="label"> 颜色： </span>
+                            <div class="value">
+                                <ColorPicker v-model="data.style.color" @change="toggleShadow"></ColorPicker>
+                            </div>
+                        </div>
+                        <div class="edit-item">
                             <span class="label"> 行高： </span>
                             <div class="value">
                                 <a-slider id="test" v-model:value="data.style.lineHeight" :min="16" :max="parseInt(data.style.height) * 2" />
@@ -54,6 +60,18 @@
                     <template v-slot:阴影>
                         <BorderShadow></BorderShadow>
                     </template>
+                    <template v-slot:背景>
+                        <div class="edit-item">
+                            <span class="label"> 背景图： </span>
+                            <div class="value"><BackgroundImage v-model="data.style.background" @change="imgChange"></BackgroundImage></div>
+                        </div>
+                        <div class="edit-item">
+                            <span class="label"> 背景色： </span>
+                            <div class="value">
+                                <BackgroundColor v-model="data.style.backgroundColor" @change="onChange"></BackgroundColor>
+                            </div>
+                        </div>
+                    </template>
                 </Collapse>
             </template>
             <template v-slot:动画>
@@ -75,6 +93,9 @@ import Opacity from "./components/Opacity.vue"
 import Align from "./components/Align.vue"
 import BorderShadow from "./components/BorderShadow.vue"
 import Animation from "./components/Animation.vue"
+import BackgroundColor from "./components/BackgroundColor.vue"
+import BackgroundImage from "./components/BackgroundImage.vue"
+import { ColorPicker } from "@tucy/vue3-color"
 
 interface valueType {
     label: string
@@ -82,12 +103,12 @@ interface valueType {
 type MenuType = Array<valueType>
 
 export default defineComponent({
-    components: { Panel, Collapse, Font, Opacity, Border, Align, BorderShadow, Tabs, Animation },
+    components: { Panel, Collapse, Font, Opacity, Border, Align, BorderShadow, Tabs, Animation, BackgroundImage, BackgroundColor, ColorPicker },
 
     setup() {
         const store = useStore()
         const tabList: Ref<MenuType> = ref([{ label: "样式" }, { label: "动画" }])
-        const munList: Ref<MenuType> = ref([{ label: "常规设置" }, { label: "尺寸与位置" }, { label: "边框" }, { label: "阴影" }])
+        const munList: Ref<MenuType> = ref([{ label: "常规设置" }, { label: "尺寸与位置" }, { label: "边框" }, { label: "阴影" }, { label: "背景" }])
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
         const rotate = ref(0)
         const inputChenge = () => {
@@ -97,12 +118,28 @@ export default defineComponent({
                 delete data.value.style.transform
             }
         }
+        const onChange = (color: string) => {
+            if (!color || color == "rgba(0, 0, 0, 0)") {
+                data.value.style.backgroundColor = "#fff"
+            }
+        }
+        const imgChange = (url: string) => {
+            console.log(url, "url")
+            if (url) {
+                data.value.style.backgroundSize = "100% 100%"
+            } else {
+                delete data.value.style.backgroundSize
+                delete data.value.style.background
+            }
+        }
         return {
             tabList,
             munList,
             data,
             rotate,
-            inputChenge
+            inputChenge,
+            onChange,
+            imgChange
         }
     }
 })

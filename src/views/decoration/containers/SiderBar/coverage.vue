@@ -1,13 +1,13 @@
 <template>
     <div class="coverage">
-        <div v-for="(item, index) in elements" :key="index" :class="{ 'is-active': currentId == item.id }" @click="select(item.id)" class="coverage-item">
+        <div v-for="(item, index) in elements" :key="index" :class="{ 'is-active': currentId == item.id }" @contextmenu.stop="onContextMenu(item.id, index, $event)" @click.stop="select(item.id)" class="coverage-item">
             <div class="label white-space">
                 {{ getlabel(item) }}
             </div>
             <div class="icon">
                 <EyeInvisibleOutlined v-if="item.hidden" @click.stop="item.hidden = false" title="显示" />
                 <EyeOutlined v-else @click.stop="item.hidden = true" title="隐藏" />
-                <DeleteOutlined title="删除" @click.stop="remove(item.id)" />
+                <!-- <DeleteOutlined title="删除" @click.stop="remove(item.id)" /> -->
             </div>
         </div>
     </div>
@@ -16,6 +16,10 @@
 import { defineComponent, computed } from "vue"
 import { ElementsType } from "@/store/page"
 import { useStore } from "vuex"
+import ContextMenu from "@/components/ContextMenu"
+import { ContextMenuItem } from "@/components/ContextMenu/MenuType"
+import { deepClone, genNonDuplicateID } from "@/utils"
+
 import { EyeOutlined, EyeInvisibleOutlined, DeleteOutlined } from "@ant-design/icons-vue"
 interface LabelType {
     name: string
@@ -69,6 +73,55 @@ export default defineComponent({
         const select = (id: string) => {
             store.commit("setCurrent", id)
         }
+
+        const onContextMenu = (id: string, index: number, e: MouseEvent) => {
+            if (index < 0) return
+            store.commit("setCurrent", id)
+            let zIndex = elements.value[index].style.zIndex || 50
+            e.preventDefault()
+            let list: Array<ContextMenuItem> = [
+                {
+                    title: "删除",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        // content.value.splice(index, 1)
+                        store.commit("elementRemove", id)
+                    }
+                },
+                {
+                    title: "复制",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        var newEle = deepClone(elements.value[index])
+                        newEle.style.left = parseFloat(newEle.style.left) + 10
+                        newEle.style.top = parseFloat(newEle.style.top) + 20
+                        newEle.id = "element_" + genNonDuplicateID(6)
+                        store.commit("elementAdd", newEle)
+                    }
+                },
+                {
+                    title: "上移一层",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        elements.value[index].style.zIndex = ++zIndex
+                    }
+                },
+                {
+                    title: "下移一层",
+                    // icon: 'el-icon-top',
+                    click: function () {
+                        elements.value[index].style.zIndex = --zIndex
+                    }
+                }
+            ]
+            ContextMenu({
+                event: e,
+                contextMenuList: list,
+                success: () => {
+                    console.log("success")
+                }
+            })
+        }
         return {
             store,
             elements,
@@ -76,7 +129,8 @@ export default defineComponent({
             getlabel,
             labelList,
             remove,
-            select
+            select,
+            onContextMenu
         }
     }
 })
