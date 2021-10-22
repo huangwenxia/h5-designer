@@ -22,7 +22,7 @@
         <div class="edit-item">
             <span class="label"> 边框样式： </span>
             <div class="value">
-                <a-select ref="select" v-model:value="data.style.borderStyle" style="width: 188px" @change="handleChange">
+                <a-select ref="select" v-model:value="data.style.borderStyle" style="width: 180px" @change="handleChange">
                     <a-select-option value="">无</a-select-option>
                     <a-select-option value="solid">——————</a-select-option>
                     <a-select-option value="dashed">---------------</a-select-option>

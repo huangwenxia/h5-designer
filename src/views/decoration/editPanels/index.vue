@@ -1,6 +1,6 @@
 <template>
     <div class="edit-panel" id="edit-panel-content" @mousedown.stop>
-        <div class="element-panel" :class="{ 'element-active': currentElement && currentElement.id }" ref="panel">
+        <div class="element-panel" id="element-panel" :class="{ 'element-active': currentElement && currentElement.id }" ref="panel">
             <component :is="map[currentElement && currentElement.type]"></component>
         </div>
     </div>
@@ -10,6 +10,8 @@
 import { defineComponent, computed } from "vue"
 import TextPanel from "./TextPanel.vue"
 import ImagePanel from "./ImagePanel.vue"
+import VideoPanel from "./VideoPanel.vue"
+
 import { useStore } from "vuex"
 
 const PropsType = {
@@ -25,7 +27,8 @@ export default defineComponent({
         const store = useStore()
         const map = {
             text: TextPanel,
-            image: ImagePanel
+            image: ImagePanel,
+            video: VideoPanel
         }
         const currentElement = computed(() => store.getters.getCurrentElement)
         // console.log(elements, "elements")

@@ -81,7 +81,7 @@ export function styleToString(style: Style): string {
 export function startAnimate(element: ElementsType): void {
     if (!element.id) return
 
-    const dom = document.getElementById("element-" + element.id)
+    const dom = document.getElementById(element.id)
     const animations: Array<AnimateType> = element.animateList
     let index = 0
     dom?.classList.add("animate__animated")

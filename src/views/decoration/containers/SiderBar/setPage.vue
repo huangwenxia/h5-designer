@@ -64,9 +64,5 @@ export default defineComponent({
 <style lang="scss" scoped>
 .set-page {
     padding: 20px 0;
-    :deep(.file-upload) {
-        width: 100px;
-        height: 100px;
-    }
 }
 </style>

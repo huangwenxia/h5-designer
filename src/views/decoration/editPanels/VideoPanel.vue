@@ -1,27 +1,22 @@
 <template>
-    <Panel title="文本编辑">
+    <Panel title="图片编辑">
         <Tabs :list="tabList">
             <template v-slot:样式>
                 <Collapse :list="munList">
                     <template v-slot:常规设置>
-                        <div class="edit-item">
-                            <span class="label"> 文本： </span>
-                            <div class="value">
-                                <a-input v-model:value="data.text" aria-placeholder="文本内容" />
-                            </div>
-                        </div>
-                        <Font></Font>
-                        <div class="edit-item">
-                            <span class="label"> 颜色： </span>
-                            <div class="value">
-                                <ColorPicker v-model="data.style.color" @change="toggleShadow"></ColorPicker>
-                            </div>
+                        <div class="image-box">
+                            <VideoView v-model="data.attrs.src"></VideoView>
                         </div>
                         <div class="edit-item">
-                            <span class="label"> 行高： </span>
-                            <div class="value">
-                                <a-slider id="test" v-model:value="data.style.lineHeight" :min="16" :max="parseInt(data.style.height) * 2" />
-                            </div>
+                            <a-button @click="change">更换视频</a-button>
+                        </div>
+                        <div class="edit-item">
+                            <span class="label"> 循环播放： </span>
+                            <div class="value"><a-switch v-model:checked="data.attrs.loop" /></div>
+                        </div>
+                        <div class="edit-item">
+                            <span class="label"> 背景： </span>
+                            <div class="value"><ColorPicker v-model="data.style.backgroundColor"></ColorPicker></div>
                         </div>
                         <Opacity></Opacity>
                     </template>
@@ -60,18 +55,6 @@
                     <template v-slot:阴影>
                         <BorderShadow></BorderShadow>
                     </template>
-                    <template v-slot:背景>
-                        <div class="edit-item">
-                            <span class="label"> 背景图： </span>
-                            <div class="value"><BackgroundImage v-model="data.style.background" @change="imgChange"></BackgroundImage></div>
-                        </div>
-                        <div class="edit-item">
-                            <span class="label"> 背景色： </span>
-                            <div class="value">
-                                <BackgroundColor v-model="data.style.backgroundColor" @change="onChange"></BackgroundColor>
-                            </div>
-                        </div>
-                    </template>
                 </Collapse>
             </template>
             <template v-slot:动画>
@@ -87,28 +70,27 @@ import Collapse from "./Collapse.vue"
 import Tabs from "./Tabs.vue"
 import { useStore } from "vuex"
 import { ElementsType } from "@/store/page"
-import Font from "./components/Font.vue"
 import Border from "./components/Border.vue"
 import Opacity from "./components/Opacity.vue"
 import Align from "./components/Align.vue"
 import BorderShadow from "./components/BorderShadow.vue"
 import Animation from "./components/Animation.vue"
-import BackgroundColor from "./components/BackgroundColor.vue"
-import BackgroundImage from "./components/BackgroundImage.vue"
-import { ColorPicker } from "@tucy/vue3-color"
+import VideoView from "@/components/VideoView.vue"
 
+import FileService from "@/components/FileService"
+import { ColorPicker } from "@tucy/vue3-color"
 interface valueType {
     label: string
 }
 type MenuType = Array<valueType>
 
 export default defineComponent({
-    components: { Panel, Collapse, Font, Opacity, Border, Align, BorderShadow, Tabs, Animation, BackgroundImage, BackgroundColor, ColorPicker },
+    components: { Panel, Collapse, Opacity, Border, Align, BorderShadow, Tabs, Animation, ColorPicker, VideoView },
 
     setup() {
         const store = useStore()
         const tabList: Ref<MenuType> = ref([{ label: "样式" }, { label: "动画" }])
-        const munList: Ref<MenuType> = ref([{ label: "常规设置" }, { label: "尺寸与位置" }, { label: "边框" }, { label: "阴影" }, { label: "背景" }])
+        const munList: Ref<MenuType> = ref([{ label: "常规设置" }, { label: "尺寸与位置" }, { label: "边框" }, { label: "阴影" }])
         const data: Ref<ElementsType> = ref(computed(() => store.state.page.currentElement))
         const rotate = ref(0)
         const inputChenge = () => {
@@ -118,16 +100,13 @@ export default defineComponent({
                 delete data.value.style.transform
             }
         }
-        const onChange = (color: string) => {
-            if (!color || color == "rgba(0, 0, 0, 0)") {
-                data.value.style.backgroundColor = "#fff"
-            }
-        }
-        const imgChange = (url: string) => {
-            if (!url) {
-                delete data.value.style.backgroundSize
-                delete data.value.style.background
-            }
+        const change = () => {
+            FileService({
+                type: "video",
+                success: (files) => {
+                    data.value.attrs.src = files[0].url
+                }
+            })
         }
         return {
             tabList,
@@ -135,10 +114,25 @@ export default defineComponent({
             data,
             rotate,
             inputChenge,
-            onChange,
-            imgChange
+            change
         }
     }
 })
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.image-box {
+    background: url("../../../assets/images/bgblank.svg");
+    height: 100px;
+    margin-bottom: 10px;
+    border-radius: $radius;
+    border: 1px solid $color-border;
+    .img {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+}
+</style>

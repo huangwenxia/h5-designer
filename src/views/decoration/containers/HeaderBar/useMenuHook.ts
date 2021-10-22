@@ -33,8 +33,10 @@ export default function (): ReturnType {
             FileService({
                 type: e.value,
                 success: (files: Array<I.file.baseRow>) => {
-                    console.log("调了success", files)
-                    const data = Utils.deepClone(moduledata.image)
+                    let data = Utils.deepClone(moduledata.image)
+                    if (e.value == "video") {
+                        data = Utils.deepClone(moduledata.video)
+                    }
                     data.id = "element_" + Utils.genNonDuplicateID(6)
                     data.attrs.src = files[0].url
                     data.type = e.value

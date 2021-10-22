@@ -6,7 +6,8 @@
         <div class="file-content">
             <Spin :spinning="loading">
                 <div class="content">
-                    <ImageList :list="list" v-model="selectList" />
+                    <ImageList :list="list" v-model="selectList" v-if="type == 'image'" />
+                    <VideoList :list="list" v-model="selectList" v-if="type == 'video'" />
                     <Empty :image="simpleImage" v-if="!loading && !list.length" />
                 </div>
             </Spin>
@@ -23,9 +24,10 @@ import api from "@/api"
 import * as I from "@/api/interface/index"
 import BtnUpload from "@/components/upload/BtnUpload.vue"
 import ImageList from "./modules/ImageList.vue"
+import VideoList from "./modules/VideoList.vue"
 
 export default defineComponent({
-    components: { Modal, Pagination, Empty, Spin, BtnUpload, ImageList },
+    components: { Modal, Pagination, Empty, Spin, BtnUpload, ImageList, VideoList },
     props: {
         msg: String
     },

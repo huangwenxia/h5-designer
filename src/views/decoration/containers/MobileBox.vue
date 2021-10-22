@@ -9,8 +9,8 @@
                     <template v-if="item.type == 'image'">
                         <img :src="item.attrs.src" />
                     </template>
-                    <video v-if="item.type == 'video'" :src="item.attrs.src"></video>
-                    <audio autoplay="autoplay" v-if="item.type == 'audio'" :src="item.attrs.src"></audio>
+                    <VideoView v-model="item.attrs.src" v-if="item.type == 'video'"></VideoView>
+                    <audio autoplay="autoplay" v-if="item.type == 'audio'" :poster="item.attrs.poster" :loop="item.attrs.loop" :src="item.attrs.src"></audio>
                 </div>
                 <div class="ele-move" @mousedown.stop="onMousedown" :data-index="index" data-direction="m" @contextmenu.stop="onContextMenu(item.id, index, $event)"></div>
                 <div class="ele-control" @mousedown.stop>
@@ -36,9 +36,12 @@ import { ElementsType } from "@/store/page"
 import ContextMenu from "@/components/ContextMenu"
 import { deepClone, styleToString, startAnimate, genNonDuplicateID } from "@/utils"
 import mouseHook from "./onMousedown"
+import VideoView from "@/components/VideoView.vue"
+
 import { ContextMenuItem } from "@/components/ContextMenu/MenuType"
 import "animate.css"
 export default defineComponent({
+    components: { VideoView },
     setup() {
         const store = useStore()
         const content = computed(() => store.state.page.content)

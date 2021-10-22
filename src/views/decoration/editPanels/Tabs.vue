@@ -31,8 +31,10 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .tabs {
-    /deep/.ant-tabs-bar {
-        margin: 0;
+    :deep(.ant-tabs-tabpane) {
+        height: calc(100vh - 170px);
+        overflow-y: auto;
+        // overflow-x: hidden;
     }
 }
 </style>
