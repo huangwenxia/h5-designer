@@ -6,7 +6,7 @@
                 <span>上传中...</span>
             </a-space>
             <span v-else>上传</span>
-            <input type="file" @change="onUpload" />
+            <input type="file" :accept="acceptType + '/*'" @change="onUpload" :disabled="form.percent" />
             <div v-if="form.percent" class="bar" :style="{ width: form.percent + '%' }">{{ form.percent + " %" }}</div>
         </div>
     </div>
@@ -16,11 +16,20 @@ import { defineComponent } from "vue"
 import { useGlobalHook } from "@/hooks/useGlobalHook"
 import { reactive } from "vue"
 import { LoadingOutlined } from "@ant-design/icons-vue"
+import * as I from "@/api/interface"
 export interface FormType {
     percent: number
 }
 export default defineComponent({
     name: "BtnUpload",
+    props: {
+        acceptType: {
+            type: String,
+            default() {
+                return "image"
+            }
+        }
+    },
     components: { LoadingOutlined },
     setup(props, context) {
         const { api, message } = useGlobalHook()
@@ -55,6 +64,7 @@ export default defineComponent({
                 })
                 .catch(() => {
                     target.value = ""
+                    form.percent = 0
                 })
         }
         return { onUpload, form }

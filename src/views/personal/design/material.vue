@@ -1,11 +1,11 @@
 <template>
     <div class="my-works">
-        <a-tabs v-model:tabActiveKey="tabActiveKey">
-            <a-tab-pane key="1" tab="图片">
+        <a-tabs v-model:activeKey="listQuery.type" @change="onChange">
+            <a-tab-pane :key="tab.key" :tab="tab.title" v-for="tab in tabMap">
                 <div class="file-content">
                     <Spin :spinning="loading">
                         <div class="content">
-                            <ImageList :list="list" v-model="selectList" />
+                            <component :is="tab.component" :list="list" v-model="selectList"></component>
                             <Empty :image="simpleImage" v-if="!loading && !list.length" />
                         </div>
                     </Spin>
@@ -14,11 +14,9 @@
                     </div>
                 </div>
             </a-tab-pane>
-            <a-tab-pane key="2" tab="视屏">Content of Tab Pane 2</a-tab-pane>
-            <a-tab-pane key="3" tab="音乐">Content of Tab Pane 3</a-tab-pane>
             <template #tabBarExtraContent style="line-height: 1">
                 素材空间
-                <BtnUpload></BtnUpload>
+                <BtnUpload :acceptType="listQuery.type" @success="loadData"></BtnUpload>
             </template>
         </a-tabs>
     </div>
@@ -27,20 +25,39 @@
 <script lang="ts">
 import { defineComponent, onMounted, Ref, ref } from "vue"
 import { Pagination, Empty, Spin } from "ant-design-vue"
-import ImageList from "@/components/FileService/modules/ImageList.vue"
+import ImageList from "./worksList/ImageList.vue"
+import VideoList from "./worksList/VideoList.vue"
+import AudioList from "./worksList/AudioList.vue"
 import BtnUpload from "@/components/upload/BtnUpload.vue"
 import * as I from "@/api/interface"
 import api from "@/api"
 import { useListPageHook } from "@/hooks/useListPageHook"
 export default defineComponent({
     name: "material",
-    components: { BtnUpload, Pagination, Empty, Spin, ImageList },
+    components: { BtnUpload, Pagination, Empty, Spin, ImageList, VideoList, AudioList },
     setup() {
         const listQuery: Ref<I.scene.homelistparam> = ref({
             page: 1,
-            pageSize: 10
+            pageSize: 10,
+            type: "image"
         })
-
+        const tabMap = ref([
+            {
+                title: "图片",
+                key: "image",
+                component: "ImageList"
+            },
+            {
+                title: "视频",
+                key: "video",
+                component: "VideoList"
+            },
+            {
+                title: "音乐",
+                key: "audio",
+                component: "AudioList"
+            }
+        ])
         const { total, loading, list, loadData } = useListPageHook<I.file.baseRow, I.file.baseRowParams>({
             api: api.fileApi.fileList,
             params: listQuery.value
@@ -50,7 +67,9 @@ export default defineComponent({
                 loadData()
             })
         })
-
+        const onChange = ref(() => {
+            loadData()
+        })
         const selectList: Ref<Array<I.file.baseRow>> = ref([])
         return {
             tabActiveKey: ref("1"),
@@ -60,6 +79,8 @@ export default defineComponent({
             loading,
             listQuery,
             loadData,
+            tabMap,
+            onChange,
             simpleImage: Empty.PRESENTED_IMAGE_SIMPLE
         }
     }
