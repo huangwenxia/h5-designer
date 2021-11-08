@@ -12,7 +12,7 @@ export interface UploadResponseResult {
     createdAt: string
 }
 export interface baseRow {
-    id: string | number
+    id: number
     format: string
     url: string
     path: string
