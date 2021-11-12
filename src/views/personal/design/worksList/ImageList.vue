@@ -1,7 +1,7 @@
 <template>
     <div class="img-list" v-if="list.length">
         <div class="item" v-for="(item, i) in list" :key="i" :class="{ active: model.some((a) => a.id == item.id) }" @click="select(item)">
-            <Image
+            <a-image
                 :width="160"
                 :height="160"
                 :src="item.url"
@@ -15,7 +15,6 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from "vue"
 
-import { Image } from "ant-design-vue"
 import * as I from "@/api/interface"
 const Props = {
     list: {
@@ -32,7 +31,6 @@ const Props = {
     }
 }
 export default defineComponent({
-    components: { Image },
     props: Props,
     setup(props, context) {
         const model = ref(props.modelValue)

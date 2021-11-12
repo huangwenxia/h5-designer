@@ -6,7 +6,9 @@
                 <span class="txt">H5设计平台</span>
             </router-link>
         </div>
-        <div class="no-login" v-if="!userInfo.id"><a-button type="link" @click="login">登录</a-button>|<a-button type="link" @click="register">注册</a-button></div>
+        <div class="no-login" v-if="!userInfo.id">
+            <a-button type="link" @click="login">登录</a-button>|<a-button type="link" @click="register">注册</a-button>
+        </div>
         <div class="logged" v-if="userInfo.id">
             <a-dropdown>
                 <template #overlay>
@@ -31,7 +33,7 @@
                 <a-button class="logged-info" type="link" @click.stop="toUser">
                     <a-avatar>
                         <template #icon>
-                            <UserOutlined icon="" />
+                            <component :is="'UserOutlined'"></component>
                         </template>
                     </a-avatar>
                     <span class="user-name">{{ userInfo.name || userInfo.username }}</span>

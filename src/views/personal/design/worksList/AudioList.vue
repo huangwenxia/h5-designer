@@ -2,7 +2,7 @@
     <div class="audio-list" v-if="list.length">
         <div class="item" v-for="(item, i) in list" :key="i" :class="{ active: model.some((a) => a.id == item.id) }" @click="select(item)">
             <audio :id="'Music_' + item.id" controls v-show="false" :src="item.url" preload="auto"></audio>
-            <img :src="require('@/assets/images/music.jpg')" />
+            <a-image :src="require('@/assets/images/music.jpg')" />
             <span class="name" :title="item.name">{{ item.name }}</span>
             <component :is="payMap[item.id] ? 'PauseOutlined' : 'PlaySquareOutlined'" @click.stop="onMusic(item)" />
         </div>
@@ -67,7 +67,6 @@ export default defineComponent({
                 !payMap.value[item.id] && Audio.pause()
                 currAudio.value.audio = Audio
                 currAudio.value.id = item.id + ""
-            } else {
             }
         }
         watch(

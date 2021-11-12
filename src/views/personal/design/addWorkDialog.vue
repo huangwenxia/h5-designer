@@ -5,14 +5,14 @@
                 <a-form-item name="title" label="标题">
                     <a-input placeholder="请输入标题" v-model:value="formState.title" size="large">
                         <template #prefix>
-                            <user-outlined type="user" />
+                            <component :is="'UserOutlined'"></component>
                         </template>
                     </a-input>
                 </a-form-item>
                 <a-form-item name="desc" label="描述">
                     <a-input placeholder="请输入描述" v-model:value="formState.desc" size="large">
                         <template #prefix>
-                            <user-outlined type="user" />
+                            <component :is="'UserOutlined'"></component>
                         </template>
                     </a-input>
                 </a-form-item>
@@ -29,9 +29,9 @@ import { Modal, Spin, message } from "ant-design-vue"
 import api from "@/api"
 import * as I from "@/api/interface/index"
 import FileUpload from "@/components/upload/FileUpload.vue"
-
+import { UserOutlined } from "@ant-design/icons-vue"
 export default defineComponent({
-    components: { Modal, Spin, FileUpload },
+    components: { Modal, Spin, FileUpload ,UserOutlined},
     setup(props, context) {
         const visible = ref(false)
         const loading = ref(false)

@@ -113,6 +113,12 @@ const notfoundRoute: routeItem = {
 }
 router.addRoute(notfoundRoute)
 router.beforeEach((to, from, next) => {
+
+    store.commit("setSideBar", {
+        currentRoute:to.path,
+        currentMenu:to.matched.length==1?to.matched[0].path:to.matched[1].path,
+    })
+
     const whiteList = ["/login", "/home", "/401", "/404", "/403", "/register"] // 不需要重定向白名单
     // next();return;//暂时去掉登录拦截
     // initSideBar(to.path)
@@ -133,8 +139,8 @@ router.beforeEach((to, from, next) => {
                         replace: false
                     })
                 })
-                .catch((e) => {
-                    console.log(e)
+                .catch((err) => {
+                    console.error(err)
                     const path = "/login"
                     next({
                         path: path,
