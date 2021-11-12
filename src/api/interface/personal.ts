@@ -16,3 +16,8 @@ export interface baseRow {
 export interface baseRowParams extends ListQueryType {
     [key: string]: unknown
 }
+
+export interface favRow <T>{
+    count:number
+    rows:T
+}

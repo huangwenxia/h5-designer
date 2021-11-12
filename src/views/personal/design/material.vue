@@ -1,6 +1,6 @@
 <template>
     <div class="my-works">
-        <a-tabs v-model:activeKey="listQuery.type" @change="onChange">
+        <a-tabs v-model:activeKey="listQuery.type" @change="loadData">
             <a-tab-pane :key="tab.key" :tab="tab.title" v-for="tab in tabMap">
                 <div class="file-content">
                     <Spin :spinning="loading">
@@ -67,9 +67,6 @@ export default defineComponent({
                 loadData()
             })
         })
-        const onChange = ref(() => {
-            loadData()
-        })
         const selectList: Ref<Array<I.file.baseRow>> = ref([])
         return {
             tabActiveKey: ref("1"),
@@ -80,7 +77,6 @@ export default defineComponent({
             listQuery,
             loadData,
             tabMap,
-            onChange,
             simpleImage: Empty.PRESENTED_IMAGE_SIMPLE
         }
     }

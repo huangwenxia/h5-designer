@@ -11,6 +11,9 @@ import { BaseResponse, ListPageType } from "@/api/interface/base"
 const list = (): Promise<BaseResponse<ListPageType<I.personal.baseRow>>> => {
     return axios.get("/api/scene/list")
 }
+const listFav = (): Promise<BaseResponse<ListPageType<I.personal.favRow<I.personal.baseRow>>>> => {
+    return axios.get("/api/scene/fav/list")
+}
 // const login = (params: I.user.ILogin): Promise<BaseResponse<string | undefined>> => {
 //     return axios.post("/api/system/user/login", params)
 // }
@@ -25,4 +28,4 @@ const list = (): Promise<BaseResponse<ListPageType<I.personal.baseRow>>> => {
 // const userUpdate = (params: I.user.IUserUpdate): Promise<BaseResponse<string | undefined>> => {
 //     return axios.post("/api/system/user/update", params)
 // }
-export default { list }
+export default { list ,listFav}
