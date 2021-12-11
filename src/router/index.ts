@@ -113,10 +113,9 @@ const notfoundRoute: routeItem = {
 }
 router.addRoute(notfoundRoute)
 router.beforeEach((to, from, next) => {
-
     store.commit("setSideBar", {
-        currentRoute:to.path,
-        currentMenu:to.matched.length==1?to.matched[0].path:to.matched[1].path,
+        currentRoute: to.path,
+        currentMenu: to.matched.length == 1 ? to.matched[0].path : to.matched[1].path
     })
 
     const whiteList = ["/login", "/home", "/401", "/404", "/403", "/register"] // 不需要重定向白名单
